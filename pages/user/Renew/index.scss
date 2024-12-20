@@ -1,0 +1,142 @@
+.container{
+	height: 100vh;
+	background: url("http://47.119.182.138:89/images/userRenew1@2x.png") no-repeat;
+	background-color: #FAF5F8;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	.header{
+		height: 88rpx;
+		box-sizing: content-box;
+	}
+	.content{
+		flex: 1;
+		overflow: auto;
+	}
+}
+.content{
+	padding: 0 36rpx;
+}
+.contentBox{
+	min-height: 306rpx;
+	background: linear-gradient( 89deg, #FF718E 0%, #F64D70 100%);
+	border-radius: 32rpx;
+	margin-top: 28rpx;
+	.contentTop{
+		display: flex;
+		padding: 12rpx 32rpx;
+		align-items: center;
+		justify-content: space-between;
+		.img{
+			height: 60rpx;
+			width: 60rpx;
+			margin-right: 18rpx;
+		}
+		.hintTop{
+			font-size: 28rpx;
+			font-weight: bold;
+			color: white;
+		}
+		.hintBottom{
+			font-size: 24rpx;
+			color: white;
+		}
+		.btn{
+			width: 128rpx;
+			height: 52rpx;
+			background: #FFFFFF;
+			border-radius: 32rpx;
+			color: #F85174;
+			font-size: 24rpx;
+			line-height: 52rpx;
+			margin-right: 0;
+		}
+	}
+}
+.contentMain{
+	background: #FFFFFF;
+	box-shadow: 0rpx 0rpx 8rpx 0rpx rgba(0,0,0,0.06);
+	border-radius: 28rpx;
+	padding: 32rpx 24rpx;
+	.list{
+		display: flex;
+		.item{
+			flex: 1;
+			width: 194rpx;
+			height: 256rpx;
+			padding-top: 28rpx;
+			border-radius: 24rpx;
+			border: 2rpx solid #DFDFDF;
+			color: #333333;
+			font-size: 28rpx;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			text-align: center;
+			overflow: hidden;
+			&:nth-child(2){
+				margin: 0 24rpx;
+			}
+			&.selected{
+				background: rgba(234,54,91,0.08);
+				border: 2rpx solid #FA5E7E;
+				.hint{
+					background: #FA5E7F;
+				}
+			}
+			.month{
+				
+			}
+			.money{
+				.num{
+					font-size: 52rpx;
+				}
+			}
+			.hint{
+				height: 56rpx;
+				line-height: 56rpx;
+				text-align: center;
+				
+			}
+		}
+	}
+	.btn{
+		width: 598rpx;
+		height: 68rpx;
+		background: linear-gradient( 271deg, #F5496D 0%, #FF7592 100%);
+		border-radius: 200rpx;
+		margin: auto;
+		margin-top: 48rpx;
+		text-align: center;
+		line-height: 68rpx;
+		color: white;
+		font-size: 28rpx;
+		font-weight: bold;
+	}
+	.txt{
+		color: #666666;
+		text-align: center;
+		margin-top: 16rpx;
+	}
+}
+// <view class="contentMain">
+// 					<view class="list">
+// 						<view class="item">
+// 							<view class="month">12个月</view>
+// 							<view class="money">￥<text>388</text></view>
+// 							<view class="hint">日均1.06元</view>
+// 						</view>
+// 						<view class="item">
+// 							<view class="month">3个月</view>
+// 							<view class="money">￥<text>348</text></view>
+// 							<view class="hint">日均3.8元</view>
+// 						</view>
+// 						<view class="item">
+// 							<view class="month">1个月</view>
+// 							<view class="money">￥<text>248</text></view>
+// 							<view class="hint">日均8.2元</view>
+// 						</view>
+// 					</view>
+// 					<view class="bnt">立即开通</view>
+// 					<view class="txt">开通前请阅读《会员服务协议》</view>
+// 				</view>
