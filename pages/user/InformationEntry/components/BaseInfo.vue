@@ -37,6 +37,7 @@
 		<u-action-sheet :show="showSex" :actions="gender" title="请选择" @close="showSex = false" @select="sexSelect"></u-action-sheet>
 		<u-action-sheet :show="showLivingStatus" :actions="livingStatus" title="请选择" @close="showLivingStatus = false" @select="livingStatusSelect"></u-action-sheet>
 		<u-datetime-picker :show="datetimeShow" v-model="datetimeValue" mode="date" @confirm="Dateconfirm" @cancel="datetimeShow = false" ></u-datetime-picker>
+		
 		<barry-picker ref="placeDialog" @get-address="getPlace"></barry-picker>
 		<barry-picker ref="hometownDialog" @get-address="getHometown"></barry-picker>
 	</view>
@@ -189,18 +190,22 @@
 				uni.hideKeyboard()
 			},
 			getHometown(e){
+				console.log(e)
 				this.userInfo.hometown = e.value.join('-');
 				this.$nextTick(()=>{
 					this.$refs.forms.validateField('hometown');
 				})
 			},
 			getPlace(e){
+				
+				console.log(e)
 				this.userInfo.place = e.value.join('-')
 				this.$nextTick(()=>{
 					this.$refs.forms.validateField('place');
 				})
 			},
 			openHometown(){
+				console.log(this.$refs.hometownDialog)
 				this.$refs.hometownDialog.show = true;
 			},
 			openPlace(){

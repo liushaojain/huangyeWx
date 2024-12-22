@@ -45,7 +45,7 @@
 				
 			},
 			open() {
-				//this.$refs.dialog.show = true
+				this.$refs.dialog.show = true
 			},
 			getAddress(e) {
 				this.location = e

@@ -17,19 +17,23 @@
 							<navigator url="/pages/user/InformationEntry/index?pageIndex=0" hover-class="none" class="edit">编辑</navigator>
 						</view>
 						<view class="tagList">
-							<text class="tag">一周健身一次</text>
-							<text class="tag">偶尔喝酒</text>
-							<text class="tag">有猫有狗</text>
-							<text class="tag">不抽烟</text>
-							<text class="tag">期望一年内结婚</text>
-							<text class="tag">吸猫人</text>
+							<text class="tag">{{member_profiles.nick_name}}</text>
+							<text class="tag">{{member_profiles.height}}</text>
+							<text class="tag">{{member_profiles.gender}}</text>
+							<text class="tag">{{member_profiles.birth_date}}</text>
+							<text class="tag">{{member_profiles.place}}</text>
+							<text class="tag">{{member_profiles.hometown}}</text>
+							<text class="tag">{{member_profiles.work}}</text>
+							<text class="tag">{{member_profiles.living_status}}</text>
+							<text class="tag">{{member_profiles.weight}}</text>
+							<text class="tag">{{member_profiles.education}}</text>
 						</view>
 					</view>
 					
 					<view class="item">
 						<view class="titleBox">
 							<text class="title">婚姻资料</text>
-							<navigator hover-class="none" class="edit">编辑</navigator>
+							<navigator url="/pages/user/InformationEntry/index?pageIndex=1" hover-class="none" class="edit">编辑</navigator>
 						</view>
 						<view class="tagList">
 							<text class="tag">一周健身一次</text>
@@ -44,7 +48,7 @@
 					<view class="item">
 						<view class="titleBox">
 							<text class="title">生活爱好</text>
-							<navigator hover-class="none" class="edit">编辑</navigator>
+							<navigator url="/pages/user/InformationEntry/index?pageIndex=2" hover-class="none" class="edit">编辑</navigator>
 						</view>
 						<view class="tagList">
 							<text class="tag">一周健身一次</text>
@@ -59,7 +63,7 @@
 					<view class="item">
 						<view class="titleBox">
 							<text class="title">我理想中的TA</text>
-							<navigator hover-class="none" class="edit">编辑</navigator>
+							<navigator url="/pages/user/InformationEntry/index?pageIndex=3" hover-class="none" class="edit">编辑</navigator>
 						</view>
 						<view class="tagList">
 							<text class="tag">一周健身一次</text>
@@ -76,7 +80,7 @@
 					<view class="item">
 						<view class="titleBox">
 							<text class="title">关于我</text>
-							<navigator hover-class="none" class="edit">编辑</navigator>
+							<navigator url="/pages/user/InformationEntry/index?pageIndex=4" hover-class="none" class="edit">编辑</navigator>
 						</view>
 						<view class="aboutMe">这个是文本，这个是文本这个是文本，这个是文本这个是文本，这个是文本</view>
 					</view>
@@ -131,7 +135,11 @@
 				member_profiles:{
 					user_avatar:'../../../static/img/logo.png',
 					nick_name:'',
-				}
+				},
+				member_hobbies: {},
+				members: {},
+				member_marriage_infos: {},
+				expected_hims: {}
 			}
 		},
 		computed:{
@@ -156,7 +164,11 @@
 			async getBasic(){
 				const data = await this.$apis.uesrApi.basic()
 				if(data.status==1){
-					this.member_profiles = data.data.member_profiles
+					this.member_hobbies = data.data.member_hobbies;
+					this.members = data.data.members;
+					this.member_profiles = data.data.member_profiles;
+					this.member_marriage_infos = data.data.member_marriage_infos;
+					this.expected_hims = data.data.expected_hims;
 				}
 			}
 			

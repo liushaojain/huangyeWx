@@ -37,7 +37,7 @@
 							基本信息
 						</view>
 					</navigator>
-					<navigator class="item" hover-class="none">
+					<navigator class="item" url="/pages/authentication/index" hover-class="none">
 						<view class="icon">
 							<image class="img" :src="imgBaseUrl+'Group694@2x.png'" mode=""></image>
 						</view>
