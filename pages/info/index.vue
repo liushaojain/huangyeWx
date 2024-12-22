@@ -1,10 +1,8 @@
 <template>
 	<view class="message-list">
-		<!-- <u-navbar :is-fixed="false" back-icon-color="transparent" title="消息" bgColor='transparent'></u-navbar> -->
-		<view class="status-bar" :style="{ height: statusBarHeight + 'px' }"></view>
-		<view class="nav-bar" :style="[navbarInnerStyle]">消息{{totalUnreadCount}}</view>
+		<NavBar :showArrow="false" title="消息" />
 		<view class="group-list">
-			<view class="group-item" v-for="item in groupList" :key="item.text">
+			<view class="group-item" @tap="handleToPath(item.path)" v-for="item in groupList" :key="item.text">
 				<image :src="item.img" class="img"></image>
 				<view class="tex">{{ item.text }}</view>
 				<view class="unread-count" v-if="totalUnreadCount > 0 && item.text == '私信'">
@@ -12,7 +10,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="msg-list">
+		<view class="msg-list" v-if="isLogin">
 			<view class="msg-item" @tap="handlerConversation(item)" v-for="item in conversationList" :key="item.lastMessage.lastTime">
 				<view class="img"></view>
 				<view class="info">
@@ -24,67 +22,82 @@
 					<view v-if="item.unreadCount > 0" class="ext-noread">{{ item.unreadCount }}</view>
 				</view>
 			</view>
+			<view @tap="chatTest" class="empty-text">没有更多聊天记录</view>
 		</view>
+		<button v-else class="button" @click="handleLogin">去登录</button>
 	</view>
 </template>
 
 <script>
-let systemInfo = uni.getSystemInfoSync();
-let menuButtonInfo = {};
-// #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
-menuButtonInfo = uni.getMenuButtonBoundingClientRect();
-// #endif
 import ImManager from './utils/imManager.js'
+import NavBar from './components/nav-bar.vue'
+import { userStore } from "@/store/account/userInfo.js"
+
 export default {
 	components: {
+		NavBar
 	},
 	data() {
 		return {
-			menuButtonInfo: menuButtonInfo,
-			statusBarHeight: systemInfo.statusBarHeight,
 			groupList: [{
 				img: "https://oss.derucci-smart.com/images/upload/1000010536_1734760669796.png",
-				text: "私信"
+				text: "私信",
+				path: "/pages/info/private-chat"
 			}, {
 				img: "https://oss.derucci-smart.com/images/upload/1000010540_1734760721639.png",
-				text: "对我心动"
+				text: "对我心动",
+				path: "/pages/info/crush-on-me"
 			}, {
 				img: "https://oss.derucci-smart.com/images/upload/1000010537_1734760680670.png",
-				text: "我心动的"
+				text: "我心动的",
+				path: "/pages/info/my-crush"
 			}, {
 				img: "https://oss.derucci-smart.com/images/upload/1000010538_1734760714551.png",
-				text: "互相心动"
+				text: "互相心动",
+				path: "/pages/info/mutual-crush"
 			}, {
 				img: "https://oss.derucci-smart.com/images/upload/1000010539_1734760692039.png",
-				text: "访客"
+				text: "访客",
+				path: "/pages/info/visitor-record"
 			}],
 			conversationList: []
 		}
 	},
 	computed: {
-		navbarInnerStyle() {
-			let style = {};
-			style.height = this.navbarHeight + 'px';
-			console.log(style);
-			return style;
-		},
-		navbarHeight() {
-			// #ifdef APP-PLUS || H5
-			return this.height ? this.height : 44;
-			// #endif
-			// #ifdef MP
-			let height = systemInfo.platform == 'ios' ? 44 : 48;
-			return this.height ? this.height : height;
-			// #endif
-		},
 		totalUnreadCount() {
 			return this.conversationList.reduce((accumulator, item) => accumulator + item.unreadCount, 0);
+		},
+		isLogin() {
+			return !!userStore.state.token;
 		}
 	},
+	async onShow() {
+		if (!this.isLogin) return;
+		this.conversationList = await ImManager.getInstance().getConversationList();
+	},
 	methods: {
+		chatTest() {
+			uni.navigateTo({
+				url: "/pages/info/message?conversationID=C2C10"
+			})
+		},
 		handlerConversation(item) {
 			uni.navigateTo({
 				url: "/pages/info/message?conversationID=" + item.conversationID
+			})
+		},
+		handleLogin() {
+			uni.navigateTo({
+				url: "/pages/user/login/index"
+			})
+		},
+		handleToPath(url) {
+			if(!this.isLogin) {
+				this.showToast("您未登录，请先完成登录");
+				return;
+			}
+			uni.navigateTo({
+				url
 			})
 		},
 		onConversationList(e) {
@@ -95,7 +108,6 @@ export default {
 			const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 			const targetDate = new Date(timestamp * 1000);
 			const oneDayMs = 24 * 60 * 60 * 1000;
-
 			if (targetDate >= today && targetDate < new Date(today.getTime() + oneDayMs)) {
 				const hours = targetDate.getHours().toString().padStart(2, '0');
 				const minutes = targetDate.getMinutes().toString().padStart(2, '0');
@@ -111,10 +123,6 @@ export default {
 		}
 	},
 	created() {
-		ImManager.getInstance().init({
-			SDKAppID: "1600067113",
-			userID: "lxj2"
-		});
 		ImManager.getInstance().addObserver(this);
 	},
 	beforeDestroy() {
@@ -131,6 +139,26 @@ export default {
 	background-position: top;
 	background-repeat: no-repeat;
     background-size: 100% 107px;
+	.empty-text {
+		text-align: center;
+		line-height: 100rpx;
+		color: #999999;
+	}
+    .button {
+        position: fixed;
+        bottom: 130rpx;
+        left: 0;
+        right: 0;
+        width: 650rpx;
+        margin: auto;
+        height: 88rpx;
+        background: linear-gradient( 271deg, #F5496D 0%, #FF7592 100%);
+        border-radius: 200rpx 200rpx 200rpx 200rpx;
+        font-size: 36rpx;
+        color: #FFFFFF;
+        line-height: 88rpx;
+        text-align: center;
+    }
 	.status-bar {
 		width: 100%;
 	}

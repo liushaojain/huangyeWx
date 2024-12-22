@@ -5,7 +5,7 @@
             <view class="arrow-left" @tap="goBack">
                 <u-icon name="arrow-left" color="#8B8B8B" size="18"></u-icon>
             </view>
-            <view>xxxxx</view>
+            <view>{{toId}}</view>
         </view>
         <view class="box-1">
             <scroll-view scroll-y refresher-background="transparent" style="height: 100%;"
@@ -36,6 +36,20 @@
                             </view>
                         </view>
                     </view>
+                    <view class="private-msg">
+                        <view class="card">
+                            <view class="hea">
+                                <image class="img" src="https://oss.derucci-smart.com/images/upload/msg-icon_1734856784029.png" />
+                                <view class="tit">私信</view>
+                            </view>
+                            <view class="msg-info">
+                                接收信息开始聊天接收信息开始聊天接收信息开始聊天接收信息开始聊天
+                            </view>
+                            <view class="button">
+                                接收信息开始聊天
+                            </view>
+                        </view>
+                    </view>
                 </view>
             </scroll-view>
         </view>
@@ -50,20 +64,20 @@
                     <image src="https://oss.derucci-smart.com/images/upload/1000010550_1734762034676.png" mode="aspectFill" class="img"></image>
                 </view>
             </view>
-            <div class="other-msg-box" v-if="showOtherMsg">
-                <!-- <div class="other-msg-item" @tap="handleVideoClick">
+            <view class="other-msg-box" v-if="showOtherMsg">
+                <!-- <view class="other-msg-item" @tap="handleVideoClick">
                     <image src="https://oss.derucci-smart.com/images/upload/1000010547_1734762884136.png" class="icon" />
-                    <div class="text">拍照/相册</div>
-                </div> -->
-                <div class="other-msg-item" @tap="handleVideoClick">
+                    <view class="text">拍照/相册</view>
+                </view> -->
+                <view class="other-msg-item" @tap="handleVideoClick">
                     <image src="https://oss.derucci-smart.com/images/upload/1000010546_1734763455843.png" class="icon" />
-                    <div class="text">拍摄/相册</div>
-                </div>
-                <div class="other-msg-item" @tap="handleLocationClick">
+                    <view class="text">拍摄/相册</view>
+                </view>
+                <view class="other-msg-item" @tap="handleLocationClick">
                     <image src="https://oss.derucci-smart.com/images/upload/1000010545_1734763519731.png" class="icon" />
-                    <div class="text">位置</div>
-                </div>
-            </div>
+                    <view class="text">位置</view>
+                </view>
+            </view>
         </view>
     </view>
 </template>
@@ -99,7 +113,7 @@ export default {
             // 发送内容
             content: '',
             showOtherMsg: false,
-            to: ''
+            toId: ''
         }
     },
     computed: {
@@ -136,7 +150,7 @@ export default {
             console.error("缺少conversationID参数")
             return;
         }
-        this.to = conversationID.replace("C2C", '');
+        this.toId = conversationID.replace("C2C", '');
         // #ifdef H5
         this.scrollView.safeAreaHeight = uni.getSystemInfoSync().safeArea.height;
         // #endif
@@ -263,17 +277,17 @@ export default {
             });
             try {
                 if(type === 'text') {
-                    res = await ImManager.getInstance().createTextMessage(this.to, content);
+                    res = await ImManager.getInstance().createTextMessage(this.toId, content);
                 }
                 if(type === 'location') {
-                    res = await ImManager.getInstance().createLocationMessage(this.to, content);
+                    res = await ImManager.getInstance().createLocationMessage(this.toId, content);
                 }
                 if(type === 'image') {
-                    res = await ImManager.getInstance().createImageMessage(this.to, content);
+                    res = await ImManager.getInstance().createImageMessage(this.toId, content);
                 }
 
                 if(type === 'video') {
-                    res = await ImManager.getInstance().createVideoMessage(this.to, content);
+                    res = await ImManager.getInstance().createVideoMessage(this.toId, content);
                 }
                 if (res.code === 0) {
                     this.talkList.push(res.data.message);
@@ -299,6 +313,46 @@ export default {
 </script>
 
 <style lang="scss">
+.private-msg {
+    padding: 36rpx;
+    .card {
+        padding: 20rpx 40rpx;
+        width: 100%;
+        background: #FFFFFF;
+        box-shadow: 0rpx 0rpx 8rpx 0rpx rgba(0,0,0,0.12);
+        border-radius: 24rpx 24rpx 24rpx 24rpx;
+        .hea {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            .img {
+                width: 80rpx;
+                height: 80rpx;
+            }
+            .tit {
+                font-weight: bold;
+                font-size: 32rpx;
+                color: #333333;
+                padding-left: 16rpx;
+            }
+        }
+        .msg-info {
+            padding: 8rpx 0 28rpx;
+        }
+        .button {
+            width: 598rpx;
+            height: 68rpx;
+            background: linear-gradient( 271deg, #F5496D 0%, #FF7592 100%);
+            border-radius: 200rpx 200rpx 200rpx 200rpx;
+
+            font-weight: bold;
+            font-size: 28rpx;
+            color: #FFFFFF;
+            line-height: 68rpx;
+            text-align: center;
+        }
+    }
+}
 .status-bar {
     width: 100%;
     background-color: #f7f6fb;

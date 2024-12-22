@@ -42,6 +42,37 @@
 			}
 		},
 		{
+			"path": "pages/info/mutual-crush",
+			"style": {
+				"navigationStyle":"custom"
+			}
+		},
+		{
+			"path": "pages/info/my-crush",
+			"style": {
+				"navigationStyle":"custom"
+			}
+		},
+		{
+			"path": "pages/info/private-chat",
+			"style": {
+				"navigationStyle":"custom"
+			}
+		},
+		{
+			"path": "pages/info/visitor-record",
+			"style": {
+				"navigationStyle":"custom"
+			}
+		},
+		{
+			"path": "pages/info/crush-on-me",
+			"style": {
+				"navigationStyle":"custom"
+			}
+		},
+
+		{
 			"path": "pages/user/index",
 			"style": {
 				"navigationStyle":"custom"

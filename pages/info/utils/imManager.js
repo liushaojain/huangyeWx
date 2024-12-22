@@ -80,6 +80,15 @@ export default class ImManager extends ImObserver {
         });
     }
 
+    async getConversationList() {
+        const res = await this.chat.getConversationList();
+        if(res.code === 0) {
+            return res.data.conversationList
+        } else {
+            return []
+        }
+    }
+
     async getMessageList(conversationID) {
         if(!conversationID) {
             console.error("conversationID不能为空");
@@ -114,12 +123,25 @@ export default class ImManager extends ImObserver {
     }
 
     async createLocationMessage(to, payload) {
+        console.log(to, payload);
         let message = this.chat.createLocationMessage({
             to,
             conversationType: TencentCloudChat.TYPES.CONV_C2C,
-            payload
+            payload: {
+                ...payload,
+                longitude: this.toFixed(payload.longitude),
+                latitude: this.toFixed(payload.latitude),
+
+            }
         });
         return await this.chat.sendMessage(message);
+    }
+
+    toFixed(num) {
+        let multiplier = Math.pow(10, 10);
+        let rounded = Math.round(num * multiplier);
+        let result = rounded / multiplier;
+        return result;
     }
 
     async createImageMessage(to, file) {
@@ -157,7 +179,9 @@ export default class ImManager extends ImObserver {
             lxj: 'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwjkVWVDh4pTsxIKCzBQlK0MzAwMDM3NDQ2OITGpFQWZRKlDc1NTUCCgFES3JzAWJmRubmFkYmhuZQU3JTAeamh5clBdglG-hm*SYHRQSbu4daZpbnhNhGemXk16qHeyXXuaYbplqbOHmWmyrVAsAsuEwoA__',
             lxj1: 'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwjkVWYZQ8eKU7MSCgswUJStDMwMDAzNzQ0NjiExqRUFmUSpQ3NTU1AgoBREtycwFiZkbm5ibmFkYQkWLM9OBxuZaekc4VsboewZmZzubRPp4lLiW5RWlFuSFGUf4OWcl*Zk4lcfo*5oVmDtmZdsq1QIANb8xcg__',
             lxj2: 'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwjkVWUZQ8eKU7MSCgswUJStDMwMDAzNzQ0NjiExqRUFmUSpQ3NTU1AgoBREtycwFiZkbm5hZGBmbQUWLM9OBxhqaBYSVeZq6Gqc5OmrH6HsYVJo5*2tbxugnB-qUWOYnmuUYJgWGFmjnpbrlG9gq1QIA-tMv5A__',
-            lxj3: 'eJwtzEsOgjAUheG9dIohfTeQOAB14DMxsgGh1VwQJBW1wbh3KzA830n*D8p2p-BlLIoRDTGaDRu0aTq4wMA3V7LJH7o6ty1oFBOJMZaKEDY*xrVgjXchBPXXqB3Uf1OMKy5pJKcKXH12UbsgX9knHLPyvXFrfdj2e1ZUBnghdROIPjIiT9Jlep*j7w-nHTEY'
+            lxj3: 'eJwtzEsOgjAUheG9dIohfTeQOAB14DMxsgGh1VwQJBW1wbh3KzA830n*D8p2p-BlLIoRDTGaDRu0aTq4wMA3V7LJH7o6ty1oFBOJMZaKEDY*xrVgjXchBPXXqB3Uf1OMKy5pJKcKXH12UbsgX9knHLPyvXFrfdj2e1ZUBnghdROIPjIiT9Jlep*j7w-nHTEY',
+            '8': 'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwhZQweKU7MSCgswUJStDMwMDAzNzQ0NjiExqRUFmUSpQ3NTU1AgoBREtycwFiZkbm1iYGpuaWEJNyUwHmuliEhzuU2YY7O8eo58bVR7gnV9WVRHg7eEc4pJioO1W5RnlUlDk7usf6WaUbatUCwAz-i*Z',
+            '10': 'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwoYw0eKU7MSCgswUJStDMwMDAzNzQ0NjiExqRUFmUSpQ3NTU1AgoBREtycwFiZkbm1iYmlgYWkJNyUwHGmruWO7hnBeanFoQnOxeklnuZhLunq-tXJVs6e3j7JtsHKht4J1imRrpHFVsq1QLACjrL1U_'
         }
         return testMap[userID];
     }
