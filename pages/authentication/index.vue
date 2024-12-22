@@ -12,7 +12,7 @@
 							<image class="icon" :src="baseImg+'authentication(3).png'" mode=""></image>
 							实名认证	
 						</view>
-						<view class="status" @click="goPage()">已认证</view>
+						<view class="status"  @click="tpPage('/pages/authentication/user')">已认证</view>
 					</view>
 					<view class="itemContent">荒野是一个真人社交平台，我们需要确保你的真实信息，实名后匹配对象将会更精准</view>
 				</view>
@@ -22,7 +22,7 @@
 							<image class="icon" :src="baseImg+'authentication(4).png'" mode=""></image>
 							离婚认证	
 						</view>
-						<view class="status">已认证</view>
+						<view class="status"  @click="tpPage('/pages/authentication/matrimony')">已认证</view>
 					</view>
 					<view class="itemContent">荒野是专注离异群体的社交平台，进行婚姻认证将极大提高你的脱单效率</view>
 				</view>
@@ -35,7 +35,7 @@
 	 						<image class="icon" :src="baseImg+'authentication(5).png'" mode=""></image>
 	 						学历认证	
 	 					</view>
-	 					<view class="status">已认证</view>
+	 					<view class="status" @click="tpPage('/pages/authentication/Educational')">已认证</view>
 	 				</view>
 	 				<view class="itemContent">完成学历认证可以增加你的信誉，匹配对象将会更精准</view>
 	 			</view>
@@ -45,7 +45,7 @@
 	 						<image class="icon" :src="baseImg+'authentication(1).png'" mode=""></image>
 	 						房子认证	
 	 					</view>
-	 					<view class="status">已认证</view>
+	 					<view class="status" @click="tpPage('/pages/authentication/HouseProperty')">已认证</view>
 	 				</view>
 	 				<view class="itemContent">工作认证可以增加你的信誉，匹配对象将会更精准</view>
 	 			</view>
@@ -55,7 +55,7 @@
 							<image class="icon" :src="baseImg+'authentication(2).png'" mode=""></image>
 							车辆认证	
 						</view>
-						<view class="status status1">已认证</view>
+						<view class="status status1" @click="tpPage('/pages/authentication/vehicle')">已认证</view>
 					</view>
 					<view class="itemContent">工作认证可以增加你的信誉，匹配对象将会更精准</view>
 				</view>
@@ -72,8 +72,11 @@
 			}
 		},
 		methods:{
-			goPage(){
-				
+			tpPage(url){
+				console.log(url)
+				uni.navigateTo({
+					url
+				})
 			}
 		},
 		onShow() {

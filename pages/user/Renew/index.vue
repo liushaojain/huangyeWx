@@ -2,17 +2,17 @@
 	<view class="container">
 		<view class="header" :style="{'padding-top': statusBarHeight+'px'}">
 			<u-navbar class="uNavbar" @leftClick="leftClick" :autoBack="true" title="升级VIP提升聊天效率" :bgColor='bgColor'
-				:height="titleHeight"></u-navbar>
+				></u-navbar>
 		</view>
 		<view class="content">
 			<view class="contentBox">
 				<view class="contentTop">
-					<image class="img" :src="imgBaseUrl+'Group694@2x.png'" mode=""></image>
+					<image class='img' :src="imgBaseUrl+'Maskgroup10000000@2x.png'" mode=""></image>
 					<view class="hint">
 						<view class="hintTop">回复少？升级VIP更多曝光</view>
 						<view class="hintBottom">搭配曝光翻倍等权益，效果翻倍</view>
 					</view>
-					<button class="btn">去升级</button>
+					<!-- <button class="btn">去升级</button> -->
 				</view>
 				<view class="contentMain">
 					<view class="list">
@@ -37,31 +37,31 @@
 				</view>
 			</view>
 
-			<view class="item">
+			<view class="tabList">
 				<view class="title">荒野 VIP 尊贵权益</view>
 				<view class="list">
 					<view class="item">
-						<image :src="imgBaseUrl+'chongzhi.png1'" mode=""></image>
+						<image class='img' :src="imgBaseUrl+'Group1000010628@2x.png'" mode=""></image>
 						<text>更多筛选</text>
 					</view>
 					<view class="item">
-						<image :src="imgBaseUrl+'chongzhi.png2'" mode=""></image>
+						<image class='img' :src="imgBaseUrl+'Group1000010633@2x.png'" mode=""></image>
 						<text>更多嘉宾</text>
 					</view>
 					<view class="item">
-						<image :src="imgBaseUrl+'chongzhi.png7'" mode=""></image>
+						<image class='img' :src="imgBaseUrl+'Group1000010630@2x.png'" mode=""></image>
 						<text>更多曝光</text>
 					</view>
 					<view class="item">
-						<image :src="imgBaseUrl+'chongzhi.png5'" mode=""></image>
+						<image class='img' :src="imgBaseUrl+'Group1000010633@2x.png'" mode=""></image>
 						<text>访问特权</text>
 					</view>
 					<view class="item">
-						<image :src="imgBaseUrl+'chongzhi.png4'" mode=""></image>
+						<image class='img' :src="imgBaseUrl+'Group1000010632@2x.png'" mode=""></image>
 						<text>私信特权</text>
 					</view>
 					<view class="item">
-						<image :src="imgBaseUrl+'chongzhi.png6'" mode=""></image>
+						<image class='img' :src="imgBaseUrl+'Group1000010631@2x.png'" mode=""></image>
 						<text>回看特权</text>
 					</view>
 				</view>

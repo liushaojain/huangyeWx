@@ -16,7 +16,7 @@
 			<AboutMe ref="AboutMe" v-if="pageIndex===6"></AboutMe>
 		</view>
 		<view class="footer">
-			<view class="infoListPage">
+			<view class="infoListPage" v-if="type === 1">
 				<text v-for="(item,index) in pageList" :key="index" class="item" @click="pageIndex = index" :class="{'active':index===pageIndex}"></text>
 			</view>
 			<button class="confirmBtn" @click="formSubmit">确定</button>
@@ -49,7 +49,8 @@
 					{title: '上传生活照', ref:'LifePhoto'},
 					{title: '关于我', ref:'AboutMe'},
 				],
-				pageIndex: 2
+				pageIndex: 2,
+				type: 1
 			}
 		},
 		components:{
@@ -62,6 +63,13 @@
 			AboutMe
 		},
 		onShow() {
+			
+		},
+		onLoad(e) {
+			if(e.pageIndex){
+				this.type = 2
+			}
+			this.pageIndex = parseInt(e.pageIndex);
 			let that = this;
 			uni.getSystemInfo({
 			  success: function (info) {
@@ -72,9 +80,6 @@
 			uni.setNavigationBarTitle({
 				title: this.pageList[this.pageIndex]
 			})
-		},
-		onLoad() {
-			
 		},
 		onPageScroll(e) {
 			if(e.scrollTop >= 35){
@@ -90,15 +95,19 @@
 			async formSubmit(){
 				const activePage = this.pageList[this.pageIndex];
 				const ref = activePage.ref;
-				const data = await this.$refs[ref].submit()
-				console.log(data)
-				if(data && data.status==1 && this.pageIndex<6){
-					this.pageIndex++;
-				}else if(this.pageIndex==6){
-					uni.navigateTo({
-						url:'/pages/home/index'
-					})
+				const data = await this.$refs[ref].submit();
+				if(this.type === 1){
+					if(data && data.status==1 && this.pageIndex<6){
+						this.pageIndex++;
+					}else if(this.pageIndex==6){
+						uni.navigateTo({
+							url:'/pages/home/index'
+						})
+					}	
+				}else{
+					uni.navigateBack()
 				}
+				
 			}
 		}
 	}

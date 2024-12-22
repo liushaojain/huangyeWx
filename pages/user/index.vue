@@ -31,15 +31,15 @@
 				<view class="contentBodyBar">
 					<navigator class="item" url="/pages/user/userInfo/index" hover-class="none">
 						<view class="icon">
-							<image class="img" :src="imgBaseUrl+'Group694@2x.png'" mode=""></image>
+							<image class="img" :src="imgBaseUrl+'Group1000010633@2x.png'" mode=""></image>
 						</view>
 						<view class="label">
 							基本信息
 						</view>
 					</navigator>
-					<navigator class="item" hover-class="none">
+					<navigator class="item" url="/pages/authentication/index" hover-class="none">
 						<view class="icon">
-							<image class="img" :src="imgBaseUrl+'Group694@2x.png'" mode=""></image>
+							<image class="img" :src="imgBaseUrl+'Group1000010630@2x.png'" mode=""></image>
 						</view>
 						<view class="label">
 							认证信息
@@ -57,28 +57,28 @@
 				<view class="contentList">
 					<navigator hover-class="none" class="li">
 						<view class="listLeft">
-							<image class="img" :src="imgBaseUrl+'Group694@2x.png'" mode=""></image>
+							<image class="img" :src="imgBaseUrl+'my1.png'" mode=""></image>
 							推荐给好友
 						</view>
 						<u-icon name="arrow-right" color="#8B8B8B" size="18"></u-icon>
 					</navigator>
 					<navigator hover-class="none" class="li">
 						<view class="listLeft">
-							<image class="img" :src="imgBaseUrl+'Group694@2x.png'" mode=""></image>
+							<image class="img" :src="imgBaseUrl+'my2.png'" mode=""></image>
 							隐私保护政策
 						</view>
 						<u-icon name="arrow-right" color="#8B8B8B" size="18"></u-icon>
 					</navigator>
 					<navigator hover-class="none" class="li">
 						<view class="listLeft">
-							<image class="img" :src="imgBaseUrl+'Group694@2x.png'" mode=""></image>
+							<image class="img" :src="imgBaseUrl+'my3.png'" mode=""></image>
 							用户服务协议
 						</view>
 						<u-icon name="arrow-right" color="#8B8B8B" size="18"></u-icon>
 					</navigator>
 					<navigator hover-class="none" class="li">
 						<view class="listLeft">
-							<image class="img" :src="imgBaseUrl+'Group694@2x.png'" mode=""></image>
+							<image class="img" :src="imgBaseUrl+'my4.png'" mode=""></image>
 							联系我们
 						</view>
 						<u-icon name="arrow-right" color="#8B8B8B" size="18"></u-icon>
