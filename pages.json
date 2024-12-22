@@ -23,10 +23,22 @@
 		{
 			"path": "pages/info/index",
 			"style": {
-				"navigationBarTitleText": "消息"
+				"navigationStyle":"custom"
 			},
 			"meta": {
 				"isBaiduCount": true
+			}
+		},
+		{
+			"path": "pages/info/message",
+			"style": {
+				"navigationStyle":"custom"
+			}
+		},
+		
+		{
+			"path": "pages/info/video-page",
+			"style": {
 			}
 		},
 		{
