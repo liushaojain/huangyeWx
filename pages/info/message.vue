@@ -69,7 +69,6 @@
 </template>
 
 <script>
-import { getHistoryMsg } from "./history-msg.js";
 import { getCurrentLocationAddress } from './location.js'
 import ImManager from './imManager.js'
 
@@ -141,7 +140,6 @@ export default {
         // #ifdef H5
         this.scrollView.safeAreaHeight = uni.getSystemInfoSync().safeArea.height;
         // #endif
-        // this.getMessage();
         this.getHistoryMsg(conversationID);
 		ImManager.getInstance().addObserver(this);
         ImManager.getInstance().setMessageRead(conversationID);
@@ -158,7 +156,6 @@ export default {
         },
         // 下拉刷新
         refresherrefresh(e) {
-            // this.getMessage();
             this.scrollView.refresherTriggered = true;
         },
         async getHistoryMsg(conversationID) {
@@ -189,44 +186,6 @@ export default {
                     this.ajax.page++;
                 }
             })
-        },
-        // 获取历史消息
-        getMessage() {
-            if (!this.ajax.flag) {
-                return;
-            }
-
-            // 此处用到 ES7 的 async/await 知识，为使代码更加优美。不懂的请自行学习。
-            let get = async () => {
-                this.ajax.flag = false;
-                let data = await getHistoryMsg({
-                    page: this.ajax.page,
-                    rows: this.ajax.rows
-                });
-                this.scrollView.refresherTriggered = false;
-
-                // 获取待滚动元素选择器，解决插入数据后，滚动条定位时使用。取当前消息数据的第一条信息元素
-                const selector = `msg-${data?.[0]?.id}`;;
-
-                // 将获取到的消息数据合并到消息数组中
-                this.talkList = this.talkList.concat(data);
-
-                // 数据挂载后执行，不懂的请自行阅读 Vue.js 文档对 Vue.nextTick 函数说明。
-                this.$nextTick(() => {
-                    // 设置当前滚动的位置
-                    this.scrollView.intoView = selector;
-
-                    if (data.length < this.ajax.rows) {
-                        // 当前消息数据条数小于请求要求条数时，则无更多消息，不再允许请求。
-                        // 可在此处编写无更多消息数据时的逻辑
-                    } else {
-                        this.ajax.flag = true;
-                        this.ajax.page++;
-                    }
-
-                })
-            }
-            get();
         },
         openImage(item) {
             uni.previewImage({
