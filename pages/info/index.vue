@@ -34,7 +34,7 @@ let menuButtonInfo = {};
 // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
 menuButtonInfo = uni.getMenuButtonBoundingClientRect();
 // #endif
-import ImManager from './imManager.js'
+import ImManager from './utils/imManager.js'
 export default {
 	components: {
 	},

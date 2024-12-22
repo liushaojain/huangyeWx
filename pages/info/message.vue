@@ -69,8 +69,8 @@
 </template>
 
 <script>
-import { getCurrentLocationAddress } from './location.js'
-import ImManager from './imManager.js'
+import { getCurrentLocationAddress } from './utils/location.js'
+import ImManager from './utils/imManager.js'
 
 let systemInfo = uni.getSystemInfoSync();
 let menuButtonInfo = {};
