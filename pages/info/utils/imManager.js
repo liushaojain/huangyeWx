@@ -89,18 +89,30 @@ export default class ImManager extends ImObserver {
         }
     }
 
-    async getMessageList(conversationID) {
+    async getMessageList(conversationID, nextReqMessageID) {
         if(!conversationID) {
             console.error("conversationID不能为空");
             return;
         }
-        const imResponse = await this.chat.getMessageList({ conversationID });
-        return imResponse.data.messageList;
+        const imResponse = await this.chat.getMessageList({ conversationID, nextReqMessageID });
+        console.log({imResponse});
+        return imResponse.data;
         // promise.then((imResponse) => {
         //     const messageList = imResponse.data.messageList; // 消息列表。
         //     const nextReqMessageID = imResponse.data.nextReqMessageID; // 用于续拉，分页续拉时需传入该字段。
         //     const isCompleted = imResponse.data.isCompleted; // 表示是否已经拉完所有消息。
         // });
+    }
+
+    async getUserStatus(userID) {
+        // userID - 用户 ID
+        // statusType - 用户状态，枚举值及说明如下：
+        // TencentCloudChat.TYPES.USER_STATUS_UNKNOWN - 未知
+        // TencentCloudChat.TYPES.USER_STATUS_ONLINE - 在线
+        // TencentCloudChat.TYPES.USER_STATUS_OFFLINE - 离线
+        // TencentCloudChat.TYPES.USER_STATUS_UNLOGINED - 未登录
+        // customStatus - 用户自定义状态
+        return await this.chat.getUserStatus({userIDList: [`${userID}`]});
     }
 
     async createTextMessage(to, text) {

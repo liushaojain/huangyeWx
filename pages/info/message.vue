@@ -106,14 +106,15 @@ export default {
             talkList: [],
             // 请求参数
             ajax: {
-                rows: 20,	//每页数量
-                page: 1,	//页码
                 flag: true,	// 请求开关
             },
             // 发送内容
             content: '',
             showOtherMsg: false,
-            toId: ''
+            toId: '',
+            nextReqMessageID: undefined,
+            isCompleted: false,
+            conversationID: ''
         }
     },
     computed: {
@@ -150,6 +151,7 @@ export default {
             console.error("缺少conversationID参数")
             return;
         }
+        this.conversationID = conversationID;
         this.toId = conversationID.replace("C2C", '');
         // #ifdef H5
         this.scrollView.safeAreaHeight = uni.getSystemInfoSync().safeArea.height;
@@ -162,21 +164,30 @@ export default {
 		ImManager.getInstance().removeObserver(this);
 	},
     methods: {
-        onMessage(data) {
-            this.talkList = this.talkList.concat(data.data);
+        onMessage(msg) {
+            console.log(msg);
+            this.talkList = this.talkList.concat(msg.data.filter(ao => ao.from === this.toId));
         },
         goBack() {
             uni.navigateBack();
         },
         // 下拉刷新
         refresherrefresh(e) {
+            if (this.isCompleted) {
+                this.scrollView.refresherTriggered = false;
+                this.showToast("没有更多聊天记录了");
+                return
+            };
+            this.getHistoryMsg(this.conversationID);
             this.scrollView.refresherTriggered = true;
         },
         async getHistoryMsg(conversationID) {
             if (!this.ajax.flag) {
                 return;
             }
-            const data = await ImManager.getInstance().getMessageList(conversationID);
+            const {isCompleted, messageList: data, nextReqMessageID} = await ImManager.getInstance().getMessageList(conversationID, this.nextReqMessageID);
+            this.nextReqMessageID = nextReqMessageID;
+            this.isCompleted = isCompleted;
             console.log("获取历史消息");
             console.log(data);
             data.forEach(item => {
@@ -187,18 +198,11 @@ export default {
             // 获取待滚动元素选择器，解决插入数据后，滚动条定位时使用。取当前消息数据的第一条信息元素
             const selector = `msg-${data?.[data.length - 1]?.ID}`;
             // 将获取到的消息数据合并到消息数组中
-            this.talkList = this.talkList.concat(data);
+            this.talkList = data.concat(this.talkList);
             this.$nextTick(() => {
                 // 设置当前滚动的位置
                 this.scrollView.intoView = selector;
-
-                if (data.length < this.ajax.rows) {
-                    // 当前消息数据条数小于请求要求条数时，则无更多消息，不再允许请求。
-                    // 可在此处编写无更多消息数据时的逻辑
-                } else {
-                    this.ajax.flag = true;
-                    this.ajax.page++;
-                }
+                this.ajax.flag = true;
             })
         },
         openImage(item) {
@@ -262,13 +266,21 @@ export default {
             })
         },
         async handleLocationClick() {
-            try {
-                const res = await getCurrentLocationAddress();
-                // 发送位置信息
-                this.sendMessage(res, 'location');
-            } catch (e) {
-                console.log(e);
-            }
+            uni.showModal({
+                title: '温馨提示',
+                content: '是否向对方发送您所在的地理位置？',
+                success: async (result) => {
+                    if (result.confirm) {
+                        try {
+                            const res = await getCurrentLocationAddress();
+                            // 发送位置信息
+                            this.sendMessage(res, 'location');
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                }
+            });
         },
         async sendMessage(content, type = 'text') {
             let res = {};
@@ -285,7 +297,6 @@ export default {
                 if(type === 'image') {
                     res = await ImManager.getInstance().createImageMessage(this.toId, content);
                 }
-
                 if(type === 'video') {
                     res = await ImManager.getInstance().createVideoMessage(this.toId, content);
                 }
@@ -297,16 +308,6 @@ export default {
             } finally {
                 uni.hideLoading();
             }
-            
-            // 将当前发送信息 添加到消息列表。
-            // let data = {
-            //     "id": new Date().getTime(),
-            //     content,
-            //     type,
-            //     "type": 1,
-            //     "pic": "/static/logo.png"
-            // }
-            // this.talkList.unshift(data);
         }
     }
 }
