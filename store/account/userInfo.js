@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import ImManager from '../../pages/info/utils/imManager.js'
 
 Vue.use(Vuex)
 
@@ -7,6 +8,7 @@ const actions = {}
 const mutations = {
     setUserInfo: (state,userInfo) => {
         state.userInfo = userInfo
+		loginIM(userInfo.id);
 		uni.setStorageSync("userInfo",userInfo)
     },
 	setToken: (state,token) => {
@@ -37,4 +39,14 @@ const userStore = new Vuex.Store({
     state,
     getters
 })
+
+const loginIM = (id) => {
+	const userID = id || state.userInfo.id;
+	if (!userID) return;
+	ImManager.getInstance().init({
+		SDKAppID: "1600067113",
+		userID: `${userID}`
+	});
+}
+loginIM();
 export { userStore }

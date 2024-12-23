@@ -23,5 +23,21 @@ const homeApi = {
 			loadType: 2
 		});
 	},
+	like(guest_id) {
+		return http({
+			url: 'api/member/like',
+			data: { guest_id },
+			method: 'POST',
+			loadType: 2
+		});
+	},
+	dislike(guest_id) {
+		return http({
+			url: 'api/member/dislike',
+			data: { guest_id },
+			method: 'POST',
+			loadType: 2
+		});
+	}
 }
 export default homeApi

@@ -5,7 +5,7 @@
             <view class="arrow-left" @tap="goBack">
                 <u-icon name="arrow-left" color="#8B8B8B" size="18"></u-icon>
             </view>
-            <view>xxxxx</view>
+            <view>{{getNickName(toId)}}</view>
         </view>
         <view class="box-1">
             <scroll-view scroll-y refresher-background="transparent" style="height: 100%;"
@@ -13,7 +13,21 @@
                 :refresher-triggered="scrollView.refresherTriggered" :scroll-into-view="scrollView.intoView">
                 <view class="talk-list">
                     <view v-for="(item, index) in talkListForShow" :key="item.ID" :id="'msg-' + item.ID">
-                        <view class="item flex-col" :class="item.flow == 'out' ? 'push' : 'pull'">
+                        <view v-if="item.type === 'TIMCustomElem'" class="private-msg">
+                            <view class="card">
+                                <view class="hea">
+                                    <image class="img" src="https://oss.derucci-smart.com/images/upload/msg-icon_1734856784029.png" />
+                                    <view class="tit">私信</view>
+                                </view>
+                                <view class="msg-info">
+                                    {{item.payload.description || ""}}
+                                </view>
+                                <view @tap="acceptFriendApplication" class="button" v-if="item.flow === 'in' && !isFriend">
+                                    接收信息开始聊天
+                                </view>
+                            </view>
+                        </view>
+                        <view v-else class="item flex-col" :class="item.flow == 'out' ? 'push' : 'pull'">
                             <image :src="item.pic" mode="aspectFill" class="pic"></image>
                             <view class="content">
                                 <template v-if="item.type === 'TIMImageElem'">
@@ -39,39 +53,39 @@
                 </view>
             </scroll-view>
         </view>
-        <view class="box-2">
+        <view class="box-2" v-if="!hideInput">
             <view class="flex-col">
                 <view class="flex-grow" @tap="showOtherMsg = false">
                     <input type="text" class="content" v-model="content" placeholder="请输入聊天内容"
                         placeholder-style="color:#DDD;" :cursor-spacing="6">
                 </view>
                 <button class="send" v-if="content" @tap="handleSendClick">发送</button>
-                <view @tap="showOtherMsg = !showOtherMsg" class="other-msg" v-else>
+                <view v-show="talkList.length !== 0 && isFriend" @tap="showOtherMsg = !showOtherMsg" class="other-msg" v-else>
                     <image src="https://oss.derucci-smart.com/images/upload/1000010550_1734762034676.png" mode="aspectFill" class="img"></image>
                 </view>
             </view>
-            <div class="other-msg-box" v-if="showOtherMsg">
-                <!-- <div class="other-msg-item" @tap="handleVideoClick">
+            <view class="other-msg-box" v-if="showOtherMsg">
+                <!-- <view class="other-msg-item" @tap="handleVideoClick">
                     <image src="https://oss.derucci-smart.com/images/upload/1000010547_1734762884136.png" class="icon" />
-                    <div class="text">拍照/相册</div>
-                </div> -->
-                <div class="other-msg-item" @tap="handleVideoClick">
+                    <view class="text">拍照/相册</view>
+                </view> -->
+                <view class="other-msg-item" @tap="handleVideoClick">
                     <image src="https://oss.derucci-smart.com/images/upload/1000010546_1734763455843.png" class="icon" />
-                    <div class="text">拍摄/相册</div>
-                </div>
-                <div class="other-msg-item" @tap="handleLocationClick">
+                    <view class="text">拍摄/相册</view>
+                </view>
+                <view class="other-msg-item" @tap="handleLocationClick">
                     <image src="https://oss.derucci-smart.com/images/upload/1000010545_1734763519731.png" class="icon" />
-                    <div class="text">位置</div>
-                </div>
-            </div>
+                    <view class="text">位置</view>
+                </view>
+            </view>
         </view>
     </view>
 </template>
 
 <script>
-import { getCurrentLocationAddress } from './location.js'
-import ImManager from './imManager.js'
-
+import { getCurrentLocationAddress } from './utils/location.js'
+import ImManager from './utils/imManager.js'
+import TencentCloudChat from '@tencentcloud/chat';
 let systemInfo = uni.getSystemInfoSync();
 let menuButtonInfo = {};
 // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
@@ -92,17 +106,27 @@ export default {
             talkList: [],
             // 请求参数
             ajax: {
-                rows: 20,	//每页数量
-                page: 1,	//页码
                 flag: true,	// 请求开关
             },
             // 发送内容
             content: '',
             showOtherMsg: false,
-            to: ''
+            toId: '',
+            nextReqMessageID: undefined,
+            isCompleted: false,
+            conversationID: '',
+            isFriend: false
         }
     },
     computed: {
+		hideInput() {
+			const length = this.talkList.length;
+			if (length !== 1) return false;
+			const fristMsg = this.talkList[0] || {};
+			// 不是朋友，并且第一条消息是自定义消息，并且是对方发来的 那么需要隐藏
+            console.log(!this.isFriend, fristMsg.type === 'TIMCustomElem', fristMsg.from === this.toId);
+			return !this.isFriend && (fristMsg.type === 'TIMCustomElem') && fristMsg.from === this.toId;
+		},
         talkListForShow() {
             const list = JSON.parse(JSON.stringify(this.talkList))
             return list.reverse();
@@ -136,33 +160,59 @@ export default {
             console.error("缺少conversationID参数")
             return;
         }
-        this.to = conversationID.replace("C2C", '');
+        this.conversationID = conversationID;
+        this.toId = conversationID.replace("C2C", '');
         // #ifdef H5
         this.scrollView.safeAreaHeight = uni.getSystemInfoSync().safeArea.height;
         // #endif
         this.getHistoryMsg(conversationID);
 		ImManager.getInstance().addObserver(this);
         ImManager.getInstance().setMessageRead(conversationID);
+        this.checkFriend();
     },
 	beforeDestroy() {
 		ImManager.getInstance().removeObserver(this);
 	},
     methods: {
-        onMessage(data) {
-            this.talkList = this.talkList.concat(data.data);
+        async acceptFriendApplication() {
+            // 接受好友申请
+            await ImManager.getInstance().addFriend(this.toId, '', TencentCloudChat.TYPES.SNS_ADD_TYPE_BOTH);
+            this.checkFriend();
+            this.showToast("已接受好友申请，可以开始聊天啦");
+        },
+        async checkFriend() {
+            const isFriend = await ImManager.getInstance().checkFriend(this.toId);
+            this.isFriend = isFriend;
+        },
+		getAvatar(userID) {
+			return (ImManager.getInstance().userID2UserInfoMap[userID] || {}).user_avatar;
+		},
+		getNickName(userID) {
+			return (ImManager.getInstance().userID2UserInfoMap[userID] || {}).nick_name;
+		},
+        onMessage(msg) {
+            this.talkList = this.talkList.concat(msg.data.filter(ao => ao.from === this.toId));
         },
         goBack() {
             uni.navigateBack();
         },
         // 下拉刷新
         refresherrefresh(e) {
+            if (this.isCompleted) {
+                this.scrollView.refresherTriggered = false;
+                this.showToast("没有更多聊天记录了");
+                return
+            };
+            this.getHistoryMsg(this.conversationID);
             this.scrollView.refresherTriggered = true;
         },
         async getHistoryMsg(conversationID) {
             if (!this.ajax.flag) {
                 return;
             }
-            const data = await ImManager.getInstance().getMessageList(conversationID);
+            const {isCompleted, messageList: data, nextReqMessageID} = await ImManager.getInstance().getMessageList(conversationID, this.nextReqMessageID);
+            this.nextReqMessageID = nextReqMessageID;
+            this.isCompleted = isCompleted;
             console.log("获取历史消息");
             console.log(data);
             data.forEach(item => {
@@ -173,18 +223,11 @@ export default {
             // 获取待滚动元素选择器，解决插入数据后，滚动条定位时使用。取当前消息数据的第一条信息元素
             const selector = `msg-${data?.[data.length - 1]?.ID}`;
             // 将获取到的消息数据合并到消息数组中
-            this.talkList = this.talkList.concat(data);
+            this.talkList = data.concat(this.talkList);
             this.$nextTick(() => {
                 // 设置当前滚动的位置
                 this.scrollView.intoView = selector;
-
-                if (data.length < this.ajax.rows) {
-                    // 当前消息数据条数小于请求要求条数时，则无更多消息，不再允许请求。
-                    // 可在此处编写无更多消息数据时的逻辑
-                } else {
-                    this.ajax.flag = true;
-                    this.ajax.page++;
-                }
+                this.ajax.flag = true;
             })
         },
         openImage(item) {
@@ -248,13 +291,21 @@ export default {
             })
         },
         async handleLocationClick() {
-            try {
-                const res = await getCurrentLocationAddress();
-                // 发送位置信息
-                this.sendMessage(res, 'location');
-            } catch (e) {
-                console.log(e);
-            }
+            uni.showModal({
+                title: '温馨提示',
+                content: '是否向对方发送您所在的地理位置？',
+                success: async (result) => {
+                    if (result.confirm) {
+                        try {
+                            const res = await getCurrentLocationAddress();
+                            // 发送位置信息
+                            this.sendMessage(res, 'location');
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                }
+            });
         },
         async sendMessage(content, type = 'text') {
             let res = {};
@@ -262,43 +313,89 @@ export default {
                 title: '发送中'
             });
             try {
-                if(type === 'text') {
-                    res = await ImManager.getInstance().createTextMessage(this.to, content);
+                if(!this.isFriend) {
+                    await this.checkFriend();
                 }
-                if(type === 'location') {
-                    res = await ImManager.getInstance().createLocationMessage(this.to, content);
+                // 非好友，并且自己已经发送了一条信息，那么就不能再发送，需要等对方回复才可以
+                console.log(!this.isFriend, this.talkList.length, (this.talkList[0] || {}).from === ImManager.getInstance().userID)
+                if (!this.isFriend && this.talkList.length && this.talkList[0].from === ImManager.getInstance().userID) {
+                    uni.hideLoading();
+                    this.showToast("您已经发送私信给对方啦，请耐心等待对方回复");
+                    return;
                 }
-                if(type === 'image') {
-                    res = await ImManager.getInstance().createImageMessage(this.to, content);
-                }
-
-                if(type === 'video') {
-                    res = await ImManager.getInstance().createVideoMessage(this.to, content);
+                // 非好友，并且没有任何聊天记录，那么应该是第一次聊天，那么需要发送私信，并且请求添加为好友
+                if (!this.isFriend && this.talkList.length === 0) {
+                    console.log("发送私信");
+                    res = await ImManager.getInstance().createPrivateMessage(this.toId, content);
+                } else {
+                    if(type === 'text') {
+                        res = await ImManager.getInstance().createTextMessage(this.toId, content);
+                    }
+                    if(type === 'location') {
+                        res = await ImManager.getInstance().createLocationMessage(this.toId, content);
+                    }
+                    if(type === 'image') {
+                        res = await ImManager.getInstance().createImageMessage(this.toId, content);
+                    }
+                    if(type === 'video') {
+                        res = await ImManager.getInstance().createVideoMessage(this.toId, content);
+                    }
                 }
                 if (res.code === 0) {
                     this.talkList.push(res.data.message);
                 }
             } catch (e) {
+                console.error(e);
                 uni.hideLoading();
             } finally {
                 uni.hideLoading();
             }
-            
-            // 将当前发送信息 添加到消息列表。
-            // let data = {
-            //     "id": new Date().getTime(),
-            //     content,
-            //     type,
-            //     "type": 1,
-            //     "pic": "/static/logo.png"
-            // }
-            // this.talkList.unshift(data);
         }
     }
 }
 </script>
 
 <style lang="scss">
+.private-msg {
+    padding: 36rpx;
+    .card {
+        padding: 20rpx 40rpx;
+        width: 100%;
+        background: #FFFFFF;
+        box-shadow: 0rpx 0rpx 8rpx 0rpx rgba(0,0,0,0.12);
+        border-radius: 24rpx 24rpx 24rpx 24rpx;
+        .hea {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            .img {
+                width: 80rpx;
+                height: 80rpx;
+            }
+            .tit {
+                font-weight: bold;
+                font-size: 32rpx;
+                color: #333333;
+                padding-left: 16rpx;
+            }
+        }
+        .msg-info {
+            padding: 8rpx 0 28rpx;
+        }
+        .button {
+            width: 598rpx;
+            height: 68rpx;
+            background: linear-gradient( 271deg, #F5496D 0%, #FF7592 100%);
+            border-radius: 200rpx 200rpx 200rpx 200rpx;
+
+            font-weight: bold;
+            font-size: 28rpx;
+            color: #FFFFFF;
+            line-height: 68rpx;
+            text-align: center;
+        }
+    }
+}
 .status-bar {
     width: 100%;
     background-color: #f7f6fb;

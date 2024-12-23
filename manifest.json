@@ -61,6 +61,12 @@
         "optimzation" : {
             "subPackages" : true
         },
+        "permission": {
+            "scope.userLocation": {
+                "desc": "初始化时获取用户的位置信息用于外出打卡定位" 
+            }
+        },
+        "requiredPrivateInfos": ["getLocation", "chooseLocation"],
         "plugins" : {}
     },
     "mp-alipay" : {
