@@ -27,10 +27,15 @@ export default {
         };
     },
     onLoad(options) {
-        
+        this.getPrivateList();
     },
     methods: {
-        
+        async getPrivateList() {
+            await this.$apis.infoApi.privateList({
+                page: '1',
+                pageSize: '10'
+            })
+        }
     },
 };
 </script>

@@ -12,9 +12,11 @@
 		</view>
 		<view class="msg-list" v-if="isLogin">
 			<view class="msg-item" @tap="handlerConversation(item)" v-for="item in conversationList" :key="item.lastMessage.lastTime">
-				<view class="img"></view>
+				<view class="img">
+					<image :src="getAvatar(item.userProfile.userID)"></image>
+				</view>
 				<view class="info">
-					<view class="info-name">{{ item.userProfile.userID }}</view>
+					<view class="info-name">{{ getNickName(item.userProfile.userID) }}</view>
 					<view class="info-msg">{{item.lastMessage.messageForShow}}</view>
 				</view>
 				<view class="ext">
@@ -60,7 +62,8 @@ export default {
 				text: "访客",
 				path: "/pages/info/visitor-record"
 			}],
-			conversationList: []
+			conversationList: [],
+			userID2UserInfoMap: {}
 		}
 	},
 	computed: {
@@ -69,16 +72,23 @@ export default {
 		},
 		isLogin() {
 			return !!userStore.state.token;
-		}
+		},
 	},
 	async onShow() {
 		if (!this.isLogin) return;
 		this.conversationList = await ImManager.getInstance().getConversationList();
+		this.userID2UserInfoMap = await ImManager.getInstance().setUserID2UserInfoMap((this.conversationList || []).map(item => item.userProfile.userID));
 	},
 	methods: {
+		getAvatar(userID) {
+			return (this.userID2UserInfoMap[userID] || {}).user_avatar;
+		},
+		getNickName(userID) {
+			return (this.userID2UserInfoMap[userID] || {}).nick_name;
+		},
 		chatTest() {
 			uni.navigateTo({
-				url: "/pages/info/message?conversationID=C2C10"
+				url: "/pages/info/message?conversationID=C2C9"
 			})
 		},
 		handlerConversation(item) {
@@ -100,8 +110,9 @@ export default {
 				url
 			})
 		},
-		onConversationList(e) {
+		async onConversationList(e) {
 			this.conversationList = e.data;
+			this.userID2UserInfoMap = await ImManager.getInstance().setUserID2UserInfoMap((this.conversationList || []).map(item => item.userProfile.userID));
 		},
 		formatTimeStamp(timestamp) {
 			const now = new Date();
@@ -220,9 +231,13 @@ export default {
 			.img {
 				width: 98rpx;
 				height: 98rpx;
-				background-color: #333333;
+				background-color: #999;
 				border-radius: 50%;
 				margin-right: 16rpx;
+				image {
+					width: 100%;
+					height: 100%;
+				}
 			}
 
 			.info {

@@ -5,7 +5,7 @@
             <view class="arrow-left" @tap="goBack">
                 <u-icon name="arrow-left" color="#8B8B8B" size="18"></u-icon>
             </view>
-            <view>{{toId}}</view>
+            <view>{{getNickName(toId)}}</view>
         </view>
         <view class="box-1">
             <scroll-view scroll-y refresher-background="transparent" style="height: 100%;"
@@ -13,7 +13,21 @@
                 :refresher-triggered="scrollView.refresherTriggered" :scroll-into-view="scrollView.intoView">
                 <view class="talk-list">
                     <view v-for="(item, index) in talkListForShow" :key="item.ID" :id="'msg-' + item.ID">
-                        <view class="item flex-col" :class="item.flow == 'out' ? 'push' : 'pull'">
+                        <view v-if="item.type === 'TIMCustomElem'" class="private-msg">
+                            <view class="card">
+                                <view class="hea">
+                                    <image class="img" src="https://oss.derucci-smart.com/images/upload/msg-icon_1734856784029.png" />
+                                    <view class="tit">私信</view>
+                                </view>
+                                <view class="msg-info">
+                                    {{item.payload.description || ""}}
+                                </view>
+                                <view @tap="acceptFriendApplication" class="button" v-if="item.flow === 'in' && !isFriend">
+                                    接收信息开始聊天
+                                </view>
+                            </view>
+                        </view>
+                        <view v-else class="item flex-col" :class="item.flow == 'out' ? 'push' : 'pull'">
                             <image :src="item.pic" mode="aspectFill" class="pic"></image>
                             <view class="content">
                                 <template v-if="item.type === 'TIMImageElem'">
@@ -36,31 +50,17 @@
                             </view>
                         </view>
                     </view>
-                    <view class="private-msg">
-                        <view class="card">
-                            <view class="hea">
-                                <image class="img" src="https://oss.derucci-smart.com/images/upload/msg-icon_1734856784029.png" />
-                                <view class="tit">私信</view>
-                            </view>
-                            <view class="msg-info">
-                                接收信息开始聊天接收信息开始聊天接收信息开始聊天接收信息开始聊天
-                            </view>
-                            <view class="button">
-                                接收信息开始聊天
-                            </view>
-                        </view>
-                    </view>
                 </view>
             </scroll-view>
         </view>
-        <view class="box-2">
+        <view class="box-2" v-if="!hideInput">
             <view class="flex-col">
                 <view class="flex-grow" @tap="showOtherMsg = false">
                     <input type="text" class="content" v-model="content" placeholder="请输入聊天内容"
                         placeholder-style="color:#DDD;" :cursor-spacing="6">
                 </view>
                 <button class="send" v-if="content" @tap="handleSendClick">发送</button>
-                <view @tap="showOtherMsg = !showOtherMsg" class="other-msg" v-else>
+                <view v-show="talkList.length !== 0 && isFriend" @tap="showOtherMsg = !showOtherMsg" class="other-msg" v-else>
                     <image src="https://oss.derucci-smart.com/images/upload/1000010550_1734762034676.png" mode="aspectFill" class="img"></image>
                 </view>
             </view>
@@ -85,7 +85,7 @@
 <script>
 import { getCurrentLocationAddress } from './utils/location.js'
 import ImManager from './utils/imManager.js'
-
+import TencentCloudChat from '@tencentcloud/chat';
 let systemInfo = uni.getSystemInfoSync();
 let menuButtonInfo = {};
 // #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
@@ -114,10 +114,19 @@ export default {
             toId: '',
             nextReqMessageID: undefined,
             isCompleted: false,
-            conversationID: ''
+            conversationID: '',
+            isFriend: false
         }
     },
     computed: {
+		hideInput() {
+			const length = this.talkList.length;
+			if (length !== 1) return false;
+			const fristMsg = this.talkList[0] || {};
+			// 不是朋友，并且第一条消息是自定义消息，并且是对方发来的 那么需要隐藏
+            console.log(!this.isFriend, fristMsg.type === 'TIMCustomElem', fristMsg.from === this.toId);
+			return !this.isFriend && (fristMsg.type === 'TIMCustomElem') && fristMsg.from === this.toId;
+		},
         talkListForShow() {
             const list = JSON.parse(JSON.stringify(this.talkList))
             return list.reverse();
@@ -159,13 +168,29 @@ export default {
         this.getHistoryMsg(conversationID);
 		ImManager.getInstance().addObserver(this);
         ImManager.getInstance().setMessageRead(conversationID);
+        this.checkFriend();
     },
 	beforeDestroy() {
 		ImManager.getInstance().removeObserver(this);
 	},
     methods: {
+        async acceptFriendApplication() {
+            // 接受好友申请
+            await ImManager.getInstance().addFriend(this.toId, '', TencentCloudChat.TYPES.SNS_ADD_TYPE_BOTH);
+            this.checkFriend();
+            this.showToast("已接受好友申请，可以开始聊天啦");
+        },
+        async checkFriend() {
+            const isFriend = await ImManager.getInstance().checkFriend(this.toId);
+            this.isFriend = isFriend;
+        },
+		getAvatar(userID) {
+			return (ImManager.getInstance().userID2UserInfoMap[userID] || {}).user_avatar;
+		},
+		getNickName(userID) {
+			return (ImManager.getInstance().userID2UserInfoMap[userID] || {}).nick_name;
+		},
         onMessage(msg) {
-            console.log(msg);
             this.talkList = this.talkList.concat(msg.data.filter(ao => ao.from === this.toId));
         },
         goBack() {
@@ -288,22 +313,39 @@ export default {
                 title: '发送中'
             });
             try {
-                if(type === 'text') {
-                    res = await ImManager.getInstance().createTextMessage(this.toId, content);
+                if(!this.isFriend) {
+                    await this.checkFriend();
                 }
-                if(type === 'location') {
-                    res = await ImManager.getInstance().createLocationMessage(this.toId, content);
+                // 非好友，并且自己已经发送了一条信息，那么就不能再发送，需要等对方回复才可以
+                console.log(!this.isFriend, this.talkList.length, (this.talkList[0] || {}).from === ImManager.getInstance().userID)
+                if (!this.isFriend && this.talkList.length && this.talkList[0].from === ImManager.getInstance().userID) {
+                    uni.hideLoading();
+                    this.showToast("您已经发送私信给对方啦，请耐心等待对方回复");
+                    return;
                 }
-                if(type === 'image') {
-                    res = await ImManager.getInstance().createImageMessage(this.toId, content);
-                }
-                if(type === 'video') {
-                    res = await ImManager.getInstance().createVideoMessage(this.toId, content);
+                // 非好友，并且没有任何聊天记录，那么应该是第一次聊天，那么需要发送私信，并且请求添加为好友
+                if (!this.isFriend && this.talkList.length === 0) {
+                    console.log("发送私信");
+                    res = await ImManager.getInstance().createPrivateMessage(this.toId, content);
+                } else {
+                    if(type === 'text') {
+                        res = await ImManager.getInstance().createTextMessage(this.toId, content);
+                    }
+                    if(type === 'location') {
+                        res = await ImManager.getInstance().createLocationMessage(this.toId, content);
+                    }
+                    if(type === 'image') {
+                        res = await ImManager.getInstance().createImageMessage(this.toId, content);
+                    }
+                    if(type === 'video') {
+                        res = await ImManager.getInstance().createVideoMessage(this.toId, content);
+                    }
                 }
                 if (res.code === 0) {
                     this.talkList.push(res.data.message);
                 }
             } catch (e) {
+                console.error(e);
                 uni.hideLoading();
             } finally {
                 uni.hideLoading();

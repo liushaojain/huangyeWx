@@ -19,6 +19,7 @@ import NavBar from './components/nav-bar.vue'
 import AuthTip from './components/auth-tip.vue'
 import TextTip from './components/text-tip.vue'
 import Card from './components/card.vue'
+
 export default {
     components: {
 		NavBar,
@@ -28,13 +29,20 @@ export default {
 	},
     data() {
         return {
+            myCrushList: []
         };
     },
     onLoad(options) {
-        
+        this.getMyCrush();
     },
     methods: {
-        
+        async getMyCrush() {
+            const res = await this.$apis.infoApi.myLove({
+                page: '1',
+                pageSize: '10'
+            });
+            console.log(res);
+        }
     },
 };
 </script>

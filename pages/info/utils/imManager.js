@@ -1,6 +1,6 @@
 import TencentCloudChat from '@tencentcloud/chat';
 import TIMUploadPlugin from 'tim-upload-plugin';
-
+import infoApi from '../../../Api/info.js';
 class ImObserver {
     constructor() {
         this.observers = [];
@@ -43,11 +43,14 @@ export default class ImManager extends ImObserver {
         this.chat = TencentCloudChat.create({
             SDKAppID
         });
+        this.userID = userID;
+        this.SDKAppID = SDKAppID;
     	this.chat.setLogLevel(0); // 普通级别，日志量较多，接入时建议使用
         this.chat.registerPlugin({'tim-upload-plugin': TIMUploadPlugin});
+        const userSig = await this.genUserSig(userID);
         await this.chat.login({
             userID,
-            userSig: this.genUserSig(userID)
+            userSig
         });
         this.chat.on(TencentCloudChat.EVENT.SDK_READY, () => {
             // SDK 准备就绪
@@ -168,6 +171,23 @@ export default class ImManager extends ImObserver {
         return await this.chat.sendMessage(message);
     }
 
+    async createPrivateMessage(to, text) {
+        let message = this.chat.createCustomMessage({
+            to,
+            conversationType: TencentCloudChat.TYPES.CONV_C2C,
+            payload: {
+                data: 'privateMessage', // 用于标识该消息是骰子类型消息
+                description: text, // 获取骰子点数
+                extension: to
+            }
+        });
+        const res = await this.chat.sendMessage(message);
+        console.log("createPrivateMessage", res);
+        // 发送私信后，需要默认添加对方为好友
+        this.addFriend(to, text);
+        return res;
+    }
+
 
     async createVideoMessage(to, file) {
         let message = this.chat.createVideoMessage({
@@ -186,16 +206,71 @@ export default class ImManager extends ImObserver {
     }
     
     // 获取userSig
-    genUserSig(userID) {
-        const testMap = {
-            lxj: 'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwjkVWVDh4pTsxIKCzBQlK0MzAwMDM3NDQ2OITGpFQWZRKlDc1NTUCCgFES3JzAWJmRubmFkYmhuZQU3JTAeamh5clBdglG-hm*SYHRQSbu4daZpbnhNhGemXk16qHeyXXuaYbplqbOHmWmyrVAsAsuEwoA__',
-            lxj1: 'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwjkVWYZQ8eKU7MSCgswUJStDMwMDAzNzQ0NjiExqRUFmUSpQ3NTU1AgoBREtycwFiZkbm5ibmFkYQkWLM9OBxuZaekc4VsboewZmZzubRPp4lLiW5RWlFuSFGUf4OWcl*Zk4lcfo*5oVmDtmZdsq1QIANb8xcg__',
-            lxj2: 'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwjkVWUZQ8eKU7MSCgswUJStDMwMDAzNzQ0NjiExqRUFmUSpQ3NTU1AgoBREtycwFiZkbm5hZGBmbQUWLM9OBxhqaBYSVeZq6Gqc5OmrH6HsYVJo5*2tbxugnB-qUWOYnmuUYJgWGFmjnpbrlG9gq1QIA-tMv5A__',
-            lxj3: 'eJwtzEsOgjAUheG9dIohfTeQOAB14DMxsgGh1VwQJBW1wbh3KzA830n*D8p2p-BlLIoRDTGaDRu0aTq4wMA3V7LJH7o6ty1oFBOJMZaKEDY*xrVgjXchBPXXqB3Uf1OMKy5pJKcKXH12UbsgX9knHLPyvXFrfdj2e1ZUBnghdROIPjIiT9Jlep*j7w-nHTEY',
-            '8': 'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwhZQweKU7MSCgswUJStDMwMDAzNzQ0NjiExqRUFmUSpQ3NTU1AgoBREtycwFiZkbm1iYGpuaWEJNyUwHmuliEhzuU2YY7O8eo58bVR7gnV9WVRHg7eEc4pJioO1W5RnlUlDk7usf6WaUbatUCwAz-i*Z',
-            '10': 'eJyrVgrxCdYrSy1SslIy0jNQ0gHzM1NS80oy0zLBwoYw0eKU7MSCgswUJStDMwMDAzNzQ0NjiExqRUFmUSpQ3NTU1AgoBREtycwFiZkbm1iYmlgYWkJNyUwHGmruWO7hnBeanFoQnOxeklnuZhLunq-tXJVs6e3j7JtsHKht4J1imRrpHFVsq1QLACjrL1U_'
-        }
-        return testMap[userID];
+    async genUserSig(userID) {
+        const res = await infoApi.getUserSig(userID);
+        return res.data.user_sig;
     }
+
+    userID2UserInfoMap = {}
+
+    async setUserID2UserInfoMap(id_list) {
+        if(id_list && id_list.length > 0) {
+            const res = await infoApi.getUserList(id_list);
+            console.log("res", res);
+            const data = res.data;
+            data.forEach(item => {
+                this.userID2UserInfoMap[item.id] = {
+                    ...item,
+                    nick_name: '未命名-' + item.id,
+                };
+            });
+        }
+        return this.userID2UserInfoMap;
+    }
+
+    async addFriend(to, wording, type) {
+        await this.chat.addFriend({
+            to,
+            source: 'AddSource_Type_Web',
+            wording,
+            type: type || TencentCloudChat.TYPES.SNS_ADD_TYPE_SINGLE,
+        });
+    }
+
+    async checkFriend(id) {
+        const imResponse = await this.chat.checkFriend({
+            userIDList: [id],
+            type: TencentCloudChat.TYPES.SNS_CHECK_TYPE_BOTH,
+        });
+        console.log({imResponse});
+        const { successUserIDList, failureUserIDList } = imResponse.data;
+        let isFriend = false;
+        // 校验成功的 userIDList
+        successUserIDList.forEach((item) => {
+            const { userID, code, relation } = item; // 此时 code 始终为0
+            // 单向校验好友关系时可能的结果有：
+            // - relation: TencentCloudChat.TYPES.SNS_TYPE_NO_RELATION A 的好友表中没有 B，但无法确定 B 的好友表中是否有 A
+            // - relation: TencentCloudChat.TYPES.SNS_TYPE_A_WITH_B A 的好友表中有 B，但无法确定 B 的好友表中是否有 A
+            // 双向校验好友关系时可能的结果有：
+            // - relation: TencentCloudChat.TYPES.SNS_TYPE_NO_RELATION A 的好友表中没有 B，B 的好友表中也没有 A
+            // - relation: TencentCloudChat.TYPES.SNS_TYPE_A_WITH_B A 的好友表中有 B，但 B 的好友表中没有 A
+            // - relation: TencentCloudChat.TYPES.SNS_TYPE_B_WITH_A A 的好友表中没有 B，但 B 的好友表中有 A
+            // - relation: TencentCloudChat.TYPES.SNS_TYPE_BOTH_WAY A 的好友表中有 B，B 的好友表中也有 A
+            if(relation === TencentCloudChat.TYPES.SNS_TYPE_BOTH_WAY) {
+                // 双向校验好友关系成功，此时 A 和 B 互为好友
+                isFriend = true;
+            }
+        });
+        return isFriend;
+    }
+
+    async acceptFriendApplication(userID) {
+        await this.chat.acceptFriendApplication({
+            userID,
+            remark: '',
+            type: TencentCloudChat.TYPES.SNS_APPLICATION_AGREE_AND_ADD
+        });
+    }
+
 
 }
