@@ -4,9 +4,7 @@
         <AuthTip authType="ws" v-if="false" />
         <TextTip path="https://oss.derucci-smart.com/images/upload/tip2_1734851238472.png" height="69rpx" width="586rpx" />
         <div class="col">
-            <Card />
-            <Card />
-            <Card />
+            <Card :data="item" v-for="item in myCrushList" :key="item.id" />
         </div>
         <div class="button">
             开通荒野会员，解锁嘉宾资料
@@ -41,7 +39,8 @@ export default {
                 page: '1',
                 pageSize: '10'
             });
-            console.log(res);
+            this.myCrushList = res.data.data;
+            console.log("getMyCrush", res);
         }
     },
 };
@@ -52,7 +51,7 @@ export default {
 .my-crush-page {
     padding-left: 48rpx;
 	padding-right: 48rpx;
-	padding-bottom: 48rpx;
+	padding-bottom: 248rpx;
 	background-image: url("https://oss.derucci-smart.com/images/upload/info-bg_1734751826957.png");
 	background-position: top;
 	background-repeat: no-repeat;

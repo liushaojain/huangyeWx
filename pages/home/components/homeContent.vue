@@ -241,7 +241,8 @@
 				memberList: [],
 				MemberMarriageInfo: {},
 				memberHobbiesEnum: {},
-				expectedHimEnum: {}
+				expectedHimEnum: {},
+				memberIndex: 0
 			}
 		},
 		computed: {
@@ -270,8 +271,33 @@
 			this.MemberMarriageInfo = Enum.MemberMarriageInfo
 			this.memberHobbiesEnum = Enum.MemberHobbie
 			this.expectedHimEnum = Enum.ExpectedHim
+
+			EventBus.$on('like', this.like);
+			EventBus.$on('dislike', this.dislike);
 		},
 		methods: {
+			async like() {
+				await this.$apis.homeApi.like(this.memberInfo.id);
+				this.showToast("已标记为喜欢");
+				console.log("like");
+				console.log(this.memberInfo);
+				this.nextMember();
+			},
+            async dislike() {
+				console.log("dislike");
+				console.log(this.memberInfo);
+				await this.$apis.homeApi.dislike(this.memberInfo.id);
+				this.showToast("已标记为不喜欢");
+				this.nextMember();
+			},
+			nextMember() {
+				this.memberInfo = this.memberList[this.memberIndex];
+				this.memberIndex += 1;
+				if(this.memberIndex >= this.memberList.length) {
+					this.memberIndex = 0;
+				}
+				EventBus.$emit('laod_basic_member', this.memberInfo);
+			},
 			change(e) {
 				this.current = e.detail.current;
 			},
@@ -284,12 +310,10 @@
 			async getmember() {
 				const memberList = await this.$apis.homeApi.memberIndex({
 					page: '1',
-					pageSize: '10'
+					pageSize: '100'
 				});
 				this.memberList = memberList.data.data;
-				this.memberInfo = this.memberList[0]
-				console.log(memberInfo.photo)
-				EventBus.$emit('laod_basic_member', this.memberInfo)
+				this.nextMember();
 			},
 			openOtherInfo() {
 				EventBus.$emit('message-event', 'Hello from Brother A!');

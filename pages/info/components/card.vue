@@ -14,8 +14,8 @@
             访问了你 X 次
         </div>
         <div class="info">
-            <div class="name">小小</div>
-            <div class="age">18</div>
+            <div class="name">{{data.guest.nick_name}}</div>
+            <div class="age">{{data.guest.age || ''}}</div>
             <div class="state"></div>
         </div>
         <div class="address">
@@ -26,7 +26,6 @@
         </div>
         <div class="send-smg" v-if="type === 'private'" v-show="true">发私信</div>
         <div class="no-send-smg" v-if="type === 'private'" v-show="true">今日私信额度已使用</div>
-
     </view>
 </template>
 
@@ -48,6 +47,12 @@ export default {
         type: {
             type: String,
             default: ''
+        },
+        data: {
+            type: Object,
+            default(){
+                return {}
+            }
         }
     },
     data() {

@@ -12,13 +12,12 @@
 		<otherInfo></otherInfo>
 		<view class="footerBtn">
 			<view class="item">
-				<image class="img" :src="imgBaseUrl+'Group713@2x.png'" mode=""></image>
+				<image class="img" @tap="handleNext" :src="imgBaseUrl+'Group713@2x.png'" mode=""></image>
 			</view>
 			<view class="item">
-				<image class="img" :src="imgBaseUrl+'Group714@2x.png'" mode=""></image>
+				<image class="img" @tap="handleLove" :src="imgBaseUrl+'Group714@2x.png'" mode=""></image>
 			</view>
 		</view>
-
 
 
 	</view>
@@ -64,12 +63,18 @@
 		},
 		onLoad() {
 			 EventBus.$on('laod_basic_member', (data) => {
-			      console.log('接收到事件传递的数据:', data);
-				  this.memberInfo =data
-			      // 在这里可以根据接收到的数据进行相应的业务逻辑处理，比如更新组件内的数据、改变DOM显示等
-			    });
+				console.log('接收到事件传递的数据:', data);
+				this.memberInfo = data;
+				// 在这里可以根据接收到的数据进行相应的业务逻辑处理，比如更新组件内的数据、改变DOM显示等
+			});
 		},
 		methods: {
+			handleNext() {
+				EventBus.$emit('dislike');
+			},
+			handleLove() {
+				EventBus.$emit('like');
+			},
 			getmember() {
 				const memberList = this.$apis.homeApi.memberIndex({
 					page: '1',
