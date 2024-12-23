@@ -6,6 +6,7 @@
         <div class="col">
             <Card :data="item" v-for="item in myCrushList" :key="item.id" />
         </div>
+        <view class="empty-text">没有更多记录了</view>
         <div class="button">
             开通荒野会员，解锁嘉宾资料
         </div>
@@ -76,6 +77,7 @@ export default {
         color: #FFFFFF;
         line-height: 88rpx;
         text-align: center;
+        z-index: 1000;
     }
 }
 </style>

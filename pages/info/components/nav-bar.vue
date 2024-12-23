@@ -2,7 +2,7 @@
     <view class="info-nav-bar">
         <view class="status-bar" :style="{ height: statusBarHeight + 'px' }"></view>
 		<view class="nav-bar" :style="[navbarInnerStyle]">
-			<view v-show="showArrow" class="arrow-left" @tap="goBack">
+			<view v-if="showArrow" class="arrow-left" @tap="goBack">
                 <u-icon name="arrow-left" color="#8B8B8B" size="18"></u-icon>
             </view>
             <view>{{title}}</view>

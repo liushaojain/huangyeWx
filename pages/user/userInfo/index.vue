@@ -166,7 +166,7 @@
 				if(data.status==1){
 					this.member_hobbies = data.data.member_hobbies;
 					this.members = data.data.members;
-					this.member_profiles = data.data.member_profiles;
+					this.member_profiles = data.data.profile;
 					this.member_marriage_infos = data.data.member_marriage_infos;
 					this.expected_hims = data.data.expected_hims;
 				}

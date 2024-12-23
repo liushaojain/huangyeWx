@@ -18,10 +18,10 @@
             </swiper-item>
         </swiper>
         <view @tap="preItem" class="arrow left">
-            <image src="https://oss.derucci-smart.com/images/upload/xindong_1734917767332.png" />
+            <image src="https://oss.derucci-smart.com/images/upload/left_1734961671209.png" />
         </view>
         <view @tap="nextItem" class="arrow right">
-            <image src="https://oss.derucci-smart.com/images/upload/xindong_1734917767332.png" />
+            <image src="https://oss.derucci-smart.com/images/upload/right_1734961713931.png" />
         </view>
     </view>
 </template>
@@ -131,7 +131,6 @@ export default {
         position: absolute;
         width: 60rpx;
         height: 60rpx;
-        background-color: #000;
         top: 0;
         bottom: 0;
         margin: auto;

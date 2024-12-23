@@ -8,6 +8,7 @@
             <Card type="record" />
             <Card type="record" />
         </div>
+        <view class="empty-text">没有更多记录了</view>
         <div class="button">
             开通荒野会员，解锁嘉宾资料
         </div>

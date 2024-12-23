@@ -772,6 +772,7 @@ page {
             height: 92rpx;
             border-radius: 50%;
             border: #fff solid 1px;
+            background-color: #999;
         }
 
         .content {

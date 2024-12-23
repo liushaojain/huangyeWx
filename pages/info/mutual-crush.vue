@@ -5,6 +5,7 @@
         <TextTip />
         <view class="swiper-content">
             <MutualCrushSwiper />
+            <view v-if="false" class="empty-text">没有更多记录了</view>
         </view>
         <view class="match-tip">
             <view class="title">匹配成功！</view>

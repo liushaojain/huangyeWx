@@ -150,11 +150,7 @@ export default {
 	background-position: top;
 	background-repeat: no-repeat;
     background-size: 100% 107px;
-	.empty-text {
-		text-align: center;
-		line-height: 100rpx;
-		color: #999999;
-	}
+	
     .button {
         position: fixed;
         bottom: 130rpx;

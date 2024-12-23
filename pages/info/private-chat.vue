@@ -7,6 +7,7 @@
             <Card type="private"/>
             <Card type="private"/>
         </div>
+        <view class="empty-text">没有更多记录了</view>
     </view>
 </template>
 
