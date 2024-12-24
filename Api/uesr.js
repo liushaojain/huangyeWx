@@ -93,5 +93,13 @@ const uesrApi = {
 			loadType: 1
 		});
 	},
+
+	getPhoto() {
+		return http({
+			url: 'api/member/getPhoto',
+			method: 'POST',
+			loadType: 1
+		});
+	}
 }
 export default uesrApi

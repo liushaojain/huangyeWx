@@ -8,12 +8,12 @@
 		</view>
 		<view class="content">
 			<BaseInfo :infoData="infoData" ref="BaseInfo" v-if="pageIndex===0"></BaseInfo>
-			<MaritalStatus ref="MaritalStatus" v-if="pageIndex===1"></MaritalStatus>
-			<BeFondOf ref="BeFondOf" v-if="pageIndex===2"></BeFondOf>			
-			<Expects ref="Expects" v-if="pageIndex===3"></Expects>
+			<MaritalStatus :infoData="infoData" ref="MaritalStatus" v-if="pageIndex===1"></MaritalStatus>
+			<BeFondOf :infoData="infoData" ref="BeFondOf" v-if="pageIndex===2"></BeFondOf>			
+			<Expects :infoData="infoData" ref="Expects" v-if="pageIndex===3"></Expects>
 			<Avatar ref="Avatar" v-if="pageIndex===4"></Avatar>
 			<LifePhoto ref="LifePhoto" v-if="pageIndex===5"></LifePhoto>
-			<AboutMe ref="AboutMe" v-if="pageIndex===6"></AboutMe>
+			<AboutMe :infoData="infoData" ref="AboutMe" v-if="pageIndex===6"></AboutMe>
 		</view>
 		<view class="footer">
 			<view class="infoListPage" v-if="type === 1">

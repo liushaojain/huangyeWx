@@ -1,16 +1,13 @@
 <template>
 	<view>
 		<view class="uploadBox">
-			<!-- <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple :maxCount="1"> -->
+			<u-upload :fileList="fileList" @afterRead="afterRead" @delete="deletePic" name="1" multiple :maxCount="12">
 				<view class="imgUpload">
-					<view class="imgList">
-						<image class="img" :src="imgBaseUrl+'Maskgroup_setInfo@2x.png'" mode="widthFix"></image>
+					<view style="width: 170rpx;height: 170rpx;">
+						<image style="width: 100%;height: 100%;" src="https://oss.derucci-smart.com/images/upload/ad_1735047303362.png" mode="widthFix"></image>
 					</view>
-					<text class="mt10">照片越多，缘分越多</text>
 				</view>
-
-			<!-- </u-upload> -->
-			
+			</u-upload>
 			
 			<view class="footer">
 				<view class="txtCenter mb10">以下照片不能通过审核</view>
@@ -20,10 +17,6 @@
 					<image class="img" :src="imgBaseUrl+'Group1000010717@2x.png'" mode="widthFix"></image>
 					<image class="img" :src="imgBaseUrl+'Group1000010718@2x.png'" mode="widthFix"></image>
 				</view>
-				<u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple :maxCount="12">
-					<button class="uploadBtn">去相册选择</button>
-				</u-upload>
-				
 			</view>
 		</view>
 
@@ -37,11 +30,24 @@
 		data() {
 			return {
 				imgBaseUrl: this.imgBaseUrl,
-				fileList1: []
+				fileList: []
 			}
+		},
+		created() {
+			this.getPhoto();
 		},
 		methods: {
 			get_file_name,
+			
+            async getPhoto() {
+				const data = await this.$apis.uesrApi.getPhoto()
+				this.fileList = data.data.map(item => {
+					return {
+						...item,
+						url: item.photo_path
+					}
+				});
+			},
 			// 删除图片
 			deletePic(event) {
 				this[`fileList${event.name}`].splice(event.index, 1)
@@ -54,7 +60,7 @@
 					const result = await this.uploadFilePromise(lists[i].url)
 					console.log(result)
 					if(result.success ==true){
-						this.fileList1.push({
+						this.fileList.push({
 							status: 'success',
 							message: '',
 							url: result.data
@@ -63,9 +69,9 @@
 				}
 			},
 			async submit(){
-				if(this.fileList1.length>=1){
+				if(this.fileList.length>=1){
 					const data =  this.$apis.uesrApi.uploadPhoto({
-						file:this.fileList1.map(function(item){
+						file:this.fileList.map(function(item){
 							return item.url
 						})
 					})
@@ -121,6 +127,7 @@
 		color: #666666;
 		.imgList{
 			display: flex;
+			justify-content: space-around;
 			.img{
 				height: 136rpx;
 				width: 136rpx;
@@ -135,7 +142,7 @@
 		margin: 0 36rpx;
 		background: white;
 		border-radius: 28rpx;
-		padding: 42rpx;
+		padding: 42rpx 0;
 	}
 	
 	.footer{

@@ -1,7 +1,9 @@
 <template>
 	<view class="container" :style="{paddingTop: statusBarHeight+'px'}">
 		<view class="header">
-			<image class="img" src="userAvart" mode="aspectFill"></image>
+			<navigator url="/pages/user/InformationEntry/index?pageIndex=4" hover-class="none" class="edit">
+				<image class="img" :src="member_profiles.user_avatar" mode="aspectFill"></image>
+			</navigator>
 			{{memberInfo.nick_name}}
 		</view>
 		<view class="Records">
@@ -94,7 +96,8 @@
 		data(){
 			return {
 				statusBarHeight: 20,
-				memberInfo:{}
+				memberInfo:{},
+				member_profiles: {}
 			}
 		},
 		computed:{
@@ -106,7 +109,6 @@
 			}
 		},
 		onLoad(e) {
-			this.getBasic()
 		},
 		onShow() {
 			let that = this;
@@ -116,12 +118,20 @@
 					that.statusBarHeight = statusBarHeight;
 				}
 			});
+			this.getSimple();
+			this.getBasic();
 		},
 		methods:{
-			async getBasic(){
+			async getSimple(){
 				const simple = await this.$apis.uesrApi.simple()
 				if(simple.status ==1){
 					this.memberInfo = simple.data
+				}
+			},
+			async getBasic(){
+				const data = await this.$apis.uesrApi.basic()
+				if(data.status==1){
+					this.member_profiles = data.data.profile || {};
 				}
 			},
 			goPage(url){

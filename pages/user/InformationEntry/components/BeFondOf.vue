@@ -5,38 +5,38 @@
 			<u-form-item label="运动频率" prop="exercise_frequency" borderBottom ref="item1"
 				@click="exercise_frequencyShow = true; hideKeyboard()">
 				<u--input suffixIcon="arrow-right" inputAlign="right" disabled disabledColor="transparent"
-					placeholder="请选择" v-model="userInfo.exercise_frequency" border="none"></u--input>
+					placeholder="请选择" :value="formatEnum('MemberHobbie.exercise_frequency', userInfo.exercise_frequency)" border="none"></u--input>
 			</u-form-item>
 			<u-form-item label="抚养宠物" prop="pet" borderBottom ref="item1" @click="petShow = true">
-				<u--input inputAlign="right" v-model="userInfo.pet" disabled disabledColor="transparent"
+				<u--input inputAlign="right" :value="formatEnum('MemberHobbie.pet', userInfo.pet)" disabled disabledColor="transparent"
 					placeholder="请选择" border="none"></u--input>
 				<u-icon slot="right" name="arrow-right"></u-icon>
 			</u-form-item>
 			<u-form-item label="是否抽烟" prop="smoking" borderBottom ref="item1" @click="smokingShow = true">
 				<u--input suffixIcon="arrow-right" inputAlign="right" disabled disabledColor="transparent"
-					placeholder="请选择" v-model="userInfo.smoking" border="none"></u--input>
+					placeholder="请选择" :value="formatEnum('MemberHobbie.smoking', userInfo.smoking)" border="none"></u--input>
 			</u-form-item>
 			<u-form-item label="是否喝酒" prop="drinking" borderBottom ref="item1"
 				@click="drinkingShow=true">
 				<u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled
-					disabledColor="transparent" border="none" v-model="userInfo.drinking"></u--input>
+					disabledColor="transparent" border="none" :value="formatEnum('MemberHobbie.drinking', userInfo.drinking)"></u--input>
 			</u-form-item>
 			<u-form-item label="旅游频率" prop="travel_frequency" borderBottom ref="item1"
 				@click="travel_frequencyShow=true">
 				<u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled
-					disabledColor="transparent" border="none" v-model="userInfo.travel_frequency"></u--input>
+					disabledColor="transparent" border="none" :value="formatEnum('MemberHobbie.travel_frequency', userInfo.travel_frequency)"></u--input>
 			</u-form-item>
 			<u-form-item label="收入分配" prop="income_distribution" borderBottom ref="item1" @click="Income_distributionShow=true" >
 				<u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled
-					disabledColor="transparent" border="none" v-model="userInfo.income_distribution"></u--input>
+					disabledColor="transparent" border="none" :value="formatEnum('MemberHobbie.income_distribution', userInfo.income_distribution)"></u--input>
 			</u-form-item>
 			<u-form-item label="家务分工" prop="housework_division" borderBottom ref="item1" @click="housework_divisionShow = true">
 				<u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled
-					disabledColor="transparent" border="none" v-model="userInfo.housework_division"></u--input>
+					disabledColor="transparent" border="none" :value="formatEnum('MemberHobbie.housework_division', userInfo.housework_division)"></u--input>
 			</u-form-item>
 			<u-form-item label="会不会做饭" prop="can_cook" borderBottom ref="item1" class="textareaItem" @click="can_cookShow = true">
 				<u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled
-					disabledColor="transparent" border="none" v-model="userInfo.can_cook"></u--input>
+					disabledColor="transparent" border="none" :value="formatEnum('MemberHobbie.can_cook', userInfo.can_cook)"></u--input>
 			</u-form-item>
 		</u--form>
 		<u-action-sheet :show="exercise_frequencyShow" :actions="exercise_frequency" title="运动频率"
@@ -71,6 +71,14 @@
 		dateFormat
 	} from '@/utils/util.js'
 	export default {
+		props: {
+			infoData: {
+				type: Object,
+				default() {
+					return {}
+				}
+			}
+		},
 		data() {
 			return {
 				exercise_frequency: [],
@@ -91,16 +99,6 @@
 				housework_divisionShow: false,
 				can_cookShow: false,
 				userInfo: {
-					exercise_frequency: "",
-					pet: '',
-					smoking: '',
-					drinking: '',
-					travel_frequency: '',
-					income_distribution: '',
-					housework_division: '',
-					can_cook: '',
-				},
-				selectInfo:{
 					exercise_frequency: "",
 					pet: '',
 					smoking: '',
@@ -178,8 +176,7 @@
 		methods: {
 			dateFormat,
 			Select(e, key) {
-				this.userInfo[key] = e.name
-				this.selectInfo[key] = e.key
+				this.userInfo[key] = e.key
 				this.$refs.forms.validateField(key)
 			},
 			getselectData(Enum, index) {
@@ -206,7 +203,7 @@
 			async submit() {
 				try{
 					await this.$refs.forms.validate()
-					const update = Object.assign({},this.userInfo,this.selectInfo)
+					const update = Object.assign({},this.userInfo)
 					const data = await this.$apis.uesrApi.setMemberHobbies(update)
 					return data
 				}catch(e){
@@ -250,7 +247,12 @@
 			this.income_distribution = this.getselectData(Enum, 'income_distribution');
 			this.education = this.getselectData(Enum, 'education');
 			this.livingStatus = this.getselectData(Enum, 'living_status');
-		
+			
+			this.userInfo = {
+				...this.userInfo,
+				...(this.infoData.member_hobbies || {}),
+			}
+
 			this.$nextTick(() => {
 				this.$refs.forms.setRules(this.rules)
 			})

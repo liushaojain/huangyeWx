@@ -6,16 +6,27 @@
 
 <script>
 	export default {
+		props: {
+			infoData: {
+				type: Object,
+				default() {
+					return {}
+				}
+			}
+		},
 		data(){
 			return {
-				aboutMe: ''
+				aboutMe: ""
 			}
+		},
+		mounted() {
+			this.aboutMe = this.infoData.profile.about_me;
 		},
 		methods:{
 			async submit(){
 				if(this.aboutMe){
 					return this.$apis.uesrApi.updateProfile({
-						about_me:this.aboutMe
+						about_me: this.aboutMe
 					})
 				}
 			}

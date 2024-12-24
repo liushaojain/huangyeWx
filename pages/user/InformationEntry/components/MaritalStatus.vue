@@ -2,35 +2,35 @@
 	<view class="form">
 		<u--form labelPosition="left" :borderBottom='false' :model="userInfo" :rules="rules" ref="forms" label-width="120">
 			<u-form-item label="婚姻状态" prop="marital_status" borderBottom ref="item1" @click="maritalStatusShow = true; hideKeyboard()">
-				<u--input suffixIcon="arrow-right" inputAlign="right" disabled disabledColor="transparent" placeholder="请选择" v-model="userInfo.marital_status" border="none"></u--input>
+				<u--input suffixIcon="arrow-right" inputAlign="right" disabled disabledColor="transparent" placeholder="请选择" :value="formatEnum('MemberMarriageInfo.marital_status', userInfo.marital_status)" border="none"></u--input>
 			</u-form-item>
 			<!-- <u-form-item label="是否有孩子" prop="height" borderBottom ref="item1">
 				 <u--input suffixIcon="arrow-right" inputAlign="right" disabled disabledColor="transparent" placeholder="请选择" v-model="userInfo.height" border="none"></u--input>
 			</u-form-item> -->
 			<u-form-item label="孩子抚养情况" prop="child_status" borderBottom ref="item1" @click="childStatusShow = true">
-				<u--input inputAlign="right" v-model="userInfo.child_status" disabled disabledColor="transparent" placeholder="请选择" border="none"></u--input>
+				<u--input inputAlign="right" :value="formatEnum('MemberMarriageInfo.child_status', userInfo.child_status)" disabled disabledColor="transparent" placeholder="请选择" border="none"></u--input>
 				<u-icon slot="right" name="arrow-right"></u-icon>				
 			</u-form-item>
 			<u-form-item label="抚养费支出" prop="alimony_payment" borderBottom ref="item1"  @click="alimonyPaymentShow = true">
-				 <u--input suffixIcon="arrow-right" inputAlign="right" v-model="userInfo.alimony_payment" disabled disabledColor="transparent" placeholder="请选择" border="none"></u--input>
+				 <u--input suffixIcon="arrow-right" inputAlign="right" :value="formatEnum('MemberMarriageInfo.alimony_payment', userInfo.alimony_payment)" disabled disabledColor="transparent" placeholder="请选择" border="none"></u--input>
 			</u-form-item>
 			<u-form-item label="家庭背景" prop="family_background" borderBottom ref="item1" @click="familyBackgroundShow=true">
-				 <u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled  disabledColor="transparent" border="none" v-model="userInfo.family_background"></u--input>
+				 <u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled  disabledColor="transparent" border="none" :value="formatEnum('MemberMarriageInfo.family_background', userInfo.family_background)"></u--input>
 			</u-form-item>
 		<!-- 	<u-form-item label="探望子女周期" prop="child_visit_cycle" borderBottom ref="item1" @click="childVisitCycleShow=true">
 				 <u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled  disabledColor="transparent" border="none" v-model="userInfo.child_visit_cycle"></u--input>
 			</u-form-item> -->
 			<u-form-item label="离异时间" prop="divorce_time" borderBottom ref="item1" @click="datetimeShow = true">
-				 <u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled  disabledColor="transparent" border="none" v-model="userInfo.divorce_time"></u--input>
+				 <u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled  disabledColor="transparent" border="none" :value="userInfo.divorce_time"></u--input>
 			</u-form-item>
 			<u-form-item label="交友目的" prop="dating_purpose" borderBottom ref="item1" @click="datingPurposeShow = true">
-				 <u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled  disabledColor="transparent" border="none" v-model="userInfo.dating_purpose"></u--input>
+				 <u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled  disabledColor="transparent" border="none" :value="formatEnum('MemberMarriageInfo.dating_purpose', userInfo.dating_purpose)"></u--input>
 			</u-form-item>
 			<u-form-item label="期望结婚时间" prop="expected_marriage_time" borderBottom ref="item1" @click="timeShow = true">
-				<u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled  disabledColor="transparent" border="none" v-model="userInfo.expected_marriage_time"></u--input>
+				<u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled  disabledColor="transparent" border="none" :value="formatEnum('MemberMarriageInfo.expected_marriage_time', userInfo.expected_marriage_time)"></u--input>
 			</u-form-item>
 			<u-form-item label="是否打算要孩子" prop="intention_to_have_children" borderBottom ref="item1" @click="intentionToHaveChildrenShow=true">
-				 <u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled  disabledColor="transparent" border="none" v-model="userInfo.intention_to_have_children" ></u--input>
+				 <u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请选择" disabled  disabledColor="transparent" border="none" :value="formatEnum('MemberMarriageInfo.intention_to_have_children', userInfo.intention_to_have_children)" ></u--input>
 			</u-form-item>
 			<u-form-item label="为什么离异" prop="divorce_reason" borderBottom ref="item1" class="textareaItem" labelPosition ="top">
 				<u--textarea class="textarea" border="none" v-model="userInfo.divorce_reason" placeholder="请输入" maxlength="300" count></u--textarea>
@@ -57,6 +57,14 @@
 <script>
 	import {dateFormat} from '@/utils/util.js'
 	export default {
+		props: {
+			infoData: {
+				type: Object,
+				default() {
+					return {}
+				}
+			}
+		},
 		data() {
 			return {
 				maritalStatusShow: false,
@@ -74,28 +82,14 @@
 				
 				userInfo: {
 					marital_status: '',
-					// is_childer: '',
 					child_status: '',
 					alimony_payment: '',
 					family_background: '',
-					// child_visit_cycle: '',
 					divorce_time: '',
 					dating_purpose: '',
 					expected_marriage_time: '',
 					intention_to_have_children: '',
 					divorce_reason: ''
-				},
-				selectInfo:{
-					marital_status: '',
-					// is_childer: '',
-					child_status: '',
-					alimony_payment: '',
-					family_background: '',
-					// child_visit_cycle: '',
-					divorce_time: '',
-					dating_purpose: '',
-					expected_marriage_time: '',
-					intention_to_have_children: '',
 				},
 				
 				rules: {
@@ -184,8 +178,7 @@
 		methods: {
 			dateFormat,
 			Select(e,key) {
-				this.userInfo[key] = e.name;
-				this.selectInfo[key] = e.key;
+				this.userInfo[key] = e.key;
 				this.$refs.forms.validateField(key)
 			},
 			getselectData(Enum,index){
@@ -212,7 +205,7 @@
 			async submit(){
 				try{
 					await this.$refs.forms.validate()
-					let postData = Object.assign({},this.userInfo,this.selectInfo)
+					let postData = Object.assign({},this.userInfo)
 					const data = this.$apis.uesrApi.setMarryInfo(postData)
 					return data;
 				}catch(e){
@@ -258,6 +251,12 @@
 			
 			this.education = this.getselectData(Enum,'education');
 			this.livingStatus = this.getselectData(Enum,'living_status');
+
+			this.userInfo = {
+				...this.userInfo,
+				...(this.infoData.marriage_info || {}),
+			}
+			console.log(this.userInfo);
 			this.$nextTick(()=>{
 				this.$refs.forms.setRules(this.rules)
 			})
