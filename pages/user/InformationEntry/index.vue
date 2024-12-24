@@ -7,7 +7,7 @@
 			<image class="img" :src="imgBaseUrl+'loginText.png'" mode=""></image>
 		</view>
 		<view class="content">
-			<BaseInfo ref="BaseInfo" v-if="pageIndex===0"></BaseInfo>
+			<BaseInfo :infoData="infoData" ref="BaseInfo" v-if="pageIndex===0"></BaseInfo>
 			<MaritalStatus ref="MaritalStatus" v-if="pageIndex===1"></MaritalStatus>
 			<BeFondOf ref="BeFondOf" v-if="pageIndex===2"></BeFondOf>			
 			<Expects ref="Expects" v-if="pageIndex===3"></Expects>
@@ -50,7 +50,8 @@
 					{title: '关于我', ref:'AboutMe'},
 				],
 				pageIndex: 2,
-				type: 1
+				type: 1,
+				infoData: {}
 			}
 		},
 		components:{
@@ -80,6 +81,7 @@
 			uni.setNavigationBarTitle({
 				title: this.pageList[this.pageIndex]
 			})
+			this.getBasic();
 		},
 		onPageScroll(e) {
 			if(e.scrollTop >= 35){
@@ -89,6 +91,12 @@
 			}
 		},
 		methods:{
+			async getBasic(){
+				const data = await this.$apis.uesrApi.basic()
+				if (data.status == 1){
+					this.infoData = data.data;
+				}
+			},
 			leftClick(){
 				uni.navigateBack();
 			},

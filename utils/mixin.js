@@ -1,11 +1,29 @@
 import common from './common.js';
+import {
+	userStore
+} from "@/store/account/userInfo.js"
 export default {
 	data(){
 		return{
-			imgBaseUrl:this.imgBaseUrl
+			imgBaseUrl: this.imgBaseUrl,
 		}
 	},
     methods: {
+		formatEnum(path, key) {
+			if (typeof path ==='string') {
+				path = path.split('.');
+			}
+			let result = userStore.state.Enum || {};
+			console.log(result, path, key)
+			for (let part of path) {
+				if (result[part] === undefined) {
+					return '';
+				}
+				result = result[part];
+			}
+			console.log("结果：", result[key] || '');
+			return result[key] || '';
+		},
 		async to(url){
 			if(url=='plugin://myPlugin/chat'){
 				var userInfo=await this.apis.get_userInfo({});

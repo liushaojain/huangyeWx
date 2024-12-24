@@ -8,28 +8,28 @@
 				 <u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请输入" v-model="userInfo.height" border="none"></u--input>
 			</u-form-item>
 			<u-form-item label="性别" prop="gender" borderBottom @click="showSex = true; hideKeyboard()" ref="item1">
-				<u--input suffixIcon="arrow-right" inputAlign="right" v-model="userInfo.gender" disabled disabledColor="transparent" placeholder="请选择" border="none"></u--input>			
+				<u--input suffixIcon="arrow-right" inputAlign="right" :value="formatEnum('MemberProfile.gender', userInfo.gender)" disabled disabledColor="transparent" placeholder="请选择" border="none"></u--input>			
 			</u-form-item>
 			<u-form-item label="生日" prop="birth_date" borderBottom ref="item1"  @click="datetimeShow = true">
 				 <u--input suffixIcon="arrow-right" inputAlign="right" v-model="userInfo.birth_date" disabled disabledColor="transparent" placeholder="请选择" border="none"></u--input>
 			</u-form-item>
 			<u-form-item label="居住地" prop="place" borderBottom ref="item1" @click="openPlace">
-				 <u--input suffixIcon="arrow-right" inputAlign="right" disabled disabledColor="transparent" placeholder="请选择" border="none" v-model="userInfo.place"></u--input>
+				 <u--input suffixIcon="arrow-right" inputAlign="right" disabled disabledColor="transparent" placeholder="请选择" border="none" :value="(userInfo.place || []).join('/')"></u--input>
 			</u-form-item>
 			<u-form-item label="家乡" prop="hometown" borderBottom ref="item1" @click="openHometown">
-				 <u--input suffixIcon="arrow-right" inputAlign="right" disabled  disabledColor="transparent" placeholder="请选择" border="none" v-model="userInfo.hometown"></u--input>
+				 <u--input suffixIcon="arrow-right" inputAlign="right" disabled  disabledColor="transparent" placeholder="请选择" border="none" :value="(userInfo.hometown || []).join('/')"></u--input>
 			</u-form-item>
 			<u-form-item label="职业" prop="work" borderBottom ref="item1">
 				 <u--input suffixIcon="arrow-right" inputAlign="right" border="none" v-model="userInfo.work" placeholder="请输入"></u--input>
 			</u-form-item>
 			<u-form-item label="居住状态" prop="living_status" borderBottom ref="item1" @click="showLivingStatus = true">
-				 <u--input suffixIcon="arrow-right" inputAlign="right" disabled  disabledColor="transparent" placeholder="请选择" border="none" v-model="userInfo.living_status"></u--input>
+				 <u--input suffixIcon="arrow-right" inputAlign="right" disabled  disabledColor="transparent" placeholder="请选择" border="none" :value="formatEnum('MemberProfile.living_status', userInfo.living_status)"></u--input>
 			</u-form-item>
 			<u-form-item label="体重" prop="weight" borderBottom ref="item1">
 				 <u--input suffixIcon="arrow-right" inputAlign="right" border="none" v-model="userInfo.weight" placeholder="请输入"></u--input>
 			</u-form-item>
 			<u-form-item label="学历" prop="education" borderBottom ref="item1"  @click="showEducation = true">
-				 <u--input suffixIcon="arrow-right" inputAlign="right" border="none" v-model="userInfo.education" disabled disabledColor="transparent" placeholder="请选择" ></u--input>
+				 <u--input suffixIcon="arrow-right" inputAlign="right" border="none" :value="formatEnum('MemberProfile.education', userInfo.education)" disabled disabledColor="transparent" placeholder="请选择" ></u--input>
 			</u-form-item>
 			
 		</u--form>
@@ -46,23 +46,36 @@
 <script>
 	import {dateFormat} from '@/utils/util.js'
 	export default {
+		props: {
+			infoData: {
+				type: Object,
+				default() {
+					return {}
+				}
+			}
+		},
 		data() {
 			return {
 				showSex: false,
 				showEducation: false,
 				showLivingStatus: false,
 				userInfo: {
-					nick_name: '',
-					height: '',
-					gender: '',
-					birth_date: '',
-					place: '',
-					hometown: '',
-					education: '',
-					work: '',
-					occupation: '',
-					living_status: '',
-					weight: ''
+					about_another: "",
+					about_me: "",
+					birth_date: "",
+					child_status: "",
+					education: "",
+					gender: "",
+					height: "",
+					hometown: [],
+					location_coordinates: "",
+					living_status: "",
+					marital_status: "",
+					place: [],
+					user_avatar: "",
+					weight: "",
+					work: "",
+					nick_name: ""
 				},
 				gender: [],
 				education:[],
@@ -75,7 +88,7 @@
 						trigger: ['blur', 'change']
 					}],
 					'height': [{
-						type: 'string',
+						type: 'any',
 						required: true,
 						message: '请填写',
 						trigger: ['blur', 'change']
@@ -93,13 +106,13 @@
 						trigger: ['blur', 'change']
 					}],
 					'place': [{
-						type: 'string',
+						type: 'array',
 						required: false,
 						message: '请选择',
 						trigger: ['blur', 'change']
 					}],
 					'hometown': [{
-						type: 'string', 
+						type: 'array', 
 						required: false,
 						message: '请选择',
 						trigger: ['blur', 'change']
@@ -117,7 +130,7 @@
 						trigger: ['blur', 'change']
 					}],
 					'weight': [{
-						type: 'string',
+						type: 'any',
 						required: true,
 						message: '请输入',
 						trigger: ['blur', 'change']
@@ -133,14 +146,19 @@
 		methods: {
 			dateFormat,
 			sexSelect(e) {
-				this.userInfo.gender = e.name;
+				console.log({e});
+				this.userInfo.gender = e.key;
+				console.log(this.userInfo);
+				console.log(this.userInfo);
 				this.$refs.forms.validateField('gender')
 			},
 			educationSelect(e){
+				console.log({e});
 				this.userInfo.education = e.name;
 				this.$refs.forms.validateField('education')
 			},
 			livingStatusSelect(e){
+				console.log({e});
 				this.userInfo.living_status = e.name;
 				this.$refs.forms.validateField('living_status')
 			},
@@ -191,15 +209,14 @@
 			},
 			getHometown(e){
 				console.log(e)
-				this.userInfo.hometown = e.value.join('-');
+				this.userInfo.hometown = e.value || [];
 				this.$nextTick(()=>{
 					this.$refs.forms.validateField('hometown');
 				})
 			},
 			getPlace(e){
-				
 				console.log(e)
-				this.userInfo.place = e.value.join('-')
+				this.userInfo.place = e.value || [];
 				this.$nextTick(()=>{
 					this.$refs.forms.validateField('place');
 				})
@@ -221,18 +238,12 @@
 			this.education = this.getselectData(Enum,'education');
 			this.livingStatus = this.getselectData(Enum,'living_status');
 			this.userInfo = {
-					nick_name: 'baby',
-					height: '170',
-					gender: 'femal',
-					birth_date: '2014-10-01',
-					place: '',
-					hometown: '',
-					education: '高中',
-					work: '护士',
-					occupation: '',
-					living_status: '',
-					weight: '170'
-				}
+				...this.userInfo,
+				...(this.infoData.profile || {}),
+				nick_name: this.infoData.member.nick_name,
+				place: [this.infoData.profile.province, this.infoData.profile.city],
+				hometown: [this.infoData.profile.hometown_province, this.infoData.profile.hometown_city],
+			}
 			this.$nextTick(()=>{
 				this.$refs.forms.setRules(this.rules)
 			})

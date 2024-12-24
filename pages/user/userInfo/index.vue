@@ -17,16 +17,15 @@
 							<navigator url="/pages/user/InformationEntry/index?pageIndex=0" hover-class="none" class="edit">编辑</navigator>
 						</view>
 						<view class="tagList">
-							<text class="tag">{{member_profiles.nick_name}}</text>
-							<text class="tag">{{member_profiles.height}}</text>
-							<text class="tag">{{member_profiles.gender}}</text>
-							<text class="tag">{{member_profiles.birth_date}}</text>
-							<text class="tag">{{member_profiles.place}}</text>
-							<text class="tag">{{member_profiles.hometown}}</text>
-							<text class="tag">{{member_profiles.work}}</text>
-							<text class="tag">{{member_profiles.living_status}}</text>
-							<text class="tag">{{member_profiles.weight}}</text>
-							<text class="tag">{{member_profiles.education}}</text>
+							<text v-if="member_profiles.nick_name" class="tag">{{member_profiles.nick_name}}</text>
+							<text v-if="member_profiles.height" class="tag">{{member_profiles.height}}</text>
+							<text v-if="member_profiles.gender" class="tag">{{formatEnum('MemberProfile.gender', member_profiles.gender)}}</text>
+							<text v-if="member_profiles.birth_date" class="tag">{{member_profiles.birth_date}}</text>
+							<text v-if="this.infoData.profile.province" class="tag">{{this.infoData.profile.province}}/{{this.infoData.profile.city}}</text>
+							<text v-if="member_profiles.work" class="tag">{{member_profiles.work}}</text>
+							<text v-if="member_profiles.living_status" class="tag">{{formatEnum('MemberProfile.living_status', member_profiles.living_status)}}</text>
+							<text v-if="member_profiles.weight" class="tag">{{member_profiles.weight}}kg</text>
+							<text v-if="member_profiles.education" class="tag">{{formatEnum('MemberProfile.education', member_profiles.education)}}</text>
 						</view>
 					</view>
 					
