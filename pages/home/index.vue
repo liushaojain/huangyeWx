@@ -4,11 +4,10 @@
 			:style="{paddingTop: statusBarHeight+'px',height:titleHeight+'px',background:bgColor}">
 			<text class="txt">荒野</text>
 			<navigator class="search" url="/pages/home/search/index" hover-class="none">
-				<image class="img" :src="avartImage" mode=""></image>
+				<image class="img" src="https://marries.oss-cn-beijing.aliyuncs.com/life_photo/AEK1PLYDwdoFb6ad46b79acd577983ed3d413c45510b.png" mode=""></image>
 			</navigator>
 		</view>
 		<homeContent></homeContent>
-
 		<otherInfo></otherInfo>
 		<view class="footerBtn">
 			<view class="item">

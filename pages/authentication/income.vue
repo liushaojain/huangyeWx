@@ -9,14 +9,14 @@
 				荒野是一个真人社交平台，我们需要确保你的真实信息，实名后匹配对象将会更精准
 			</view>
 			<view class="mt10">
-				<u-upload max-count='1' :action="action" :file-list="fileList" ></u-upload>
+				<u-upload :fileList="fileList" @afterRead="afterRead" @delete="deletePic" multiple :maxCount="4"></u-upload>
 			</view>
 			<view class="txt">
 				可上传个税App内的年度收入截图，您的信息将不会被泄露，如果你选择展示个人收入，平台将以范围的形式展示
 			</view>
 		</view>
 		<view class="footer">
-			<view class="btnSubmit">
+			<view class="btnSubmit" @tap="onSubmit">
 				立即认证
 			</view>
 			<view class="text1">
@@ -30,19 +30,26 @@
 </template>
 
 <script>
+	import { multipleUpload } from "@/utils/util.js"
 	export default {
 		data(){
 			return {
 				baseImg: this.imgBaseUrl,
-				// 演示地址，请勿直接使用
-				action: 'http://www.example.com/upload',
 				fileList: []
 			}
 		},
 		methods:{
-			goPage(){
-				
-			}
+			async onSubmit() {
+				const res = await this.$apis.uesrApi.identificationIncome(this.fileList.map(item => item.url));
+			},
+			// 删除图片
+			deletePic(event) {
+				this.fileList.splice(event.index, 1)
+			},
+			// 新增图片
+			async afterRead(event) {
+				multipleUpload(event.file, this.fileList);
+			},
 		},
 		onShow() {
 			

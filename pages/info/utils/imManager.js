@@ -100,11 +100,6 @@ export default class ImManager extends ImObserver {
         const imResponse = await this.chat.getMessageList({ conversationID, nextReqMessageID });
         console.log({imResponse});
         return imResponse.data;
-        // promise.then((imResponse) => {
-        //     const messageList = imResponse.data.messageList; // 消息列表。
-        //     const nextReqMessageID = imResponse.data.nextReqMessageID; // 用于续拉，分页续拉时需传入该字段。
-        //     const isCompleted = imResponse.data.isCompleted; // 表示是否已经拉完所有消息。
-        // });
     }
 
     async getUserStatus(userID) {
@@ -216,12 +211,11 @@ export default class ImManager extends ImObserver {
     async setUserID2UserInfoMap(id_list) {
         if(id_list && id_list.length > 0) {
             const res = await infoApi.getUserList(id_list);
-            console.log("res", res);
             const data = res.data;
             data.forEach(item => {
                 this.userID2UserInfoMap[item.id] = {
                     ...item,
-                    nick_name: '未命名-' + item.id,
+                    nick_name: item.nick_name || '未命名-' + item.id,
                 };
             });
         }

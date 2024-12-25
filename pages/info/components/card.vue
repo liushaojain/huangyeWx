@@ -1,5 +1,5 @@
 <template>
-    <view class="info-card">
+    <view class="info-card" @tap="click">
         <div class="bg">
             <image mode="aspectFill" src="https://oss.derucci-smart.com/images/upload/1_1734844642484.jpg" alt="" />
         </div>
@@ -62,7 +62,9 @@ export default {
     
 	
     methods: {
-        
+        click() {
+            this.$emit("click", this.data)
+        }
     },
 };
 </script>

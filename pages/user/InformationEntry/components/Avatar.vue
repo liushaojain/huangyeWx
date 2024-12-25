@@ -1,15 +1,10 @@
 <template>
 	<view>
 		<view class="uploadBox">
-			<!-- <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple :maxCount="1"> -->
 			<view class="imgUpload">
-				<image class="img" :src="avart" mode="widthFix"></image>
+				<image class="img" :src="avart" mode="aspectFill"></image>
 				<text class="mt10">请上传本人照片，需看清长相</text>
 			</view>
-
-			<!-- </u-upload> -->
-
-
 			<view class="footer">
 				<view class="txtCenter mb10">以下照片不能通过审核</view>
 				<view class="imgList">
@@ -18,10 +13,9 @@
 					<image class="img" :src="imgBaseUrl+'Group1000010717@2x.png'" mode="widthFix"></image>
 					<image class="img" :src="imgBaseUrl+'Group1000010718@2x.png'" mode="widthFix"></image>
 				</view>
-				<u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple :maxCount="1">
+				<u-upload :fileList="fileList" @afterRead="afterRead" @delete="deletePic" name="1" multiple :maxCount="1">
 					<button class="uploadBtn">去相册选择</button>
 				</u-upload>
-				
 			</view>
 		</view>
 
@@ -35,22 +29,33 @@
 	} from '@/utils/util.js'
 	import {updAvatar} from '@/Api/uesr.js'
 	export default {
+		props: {
+			infoData: {
+				type: Object,
+				default() {
+					return {}
+				}
+			}
+		},
 		data() {
 			return {
 				imgBaseUrl: this.imgBaseUrl,
-				fileList1: [],
+				fileList: [],
 				avart :'',
-				defaultAvart:'Maskgroup_setInfo@2x.png'
+				defaultAvart: 'Maskgroup_setInfo@2x.png'
 			}
 		},
 		mounted() {
 			this.avart = this.imgBaseUrl+'/'+this.defaultAvart;
+			if ((this.infoData.profile || {}).user_avatar) {
+				this.avart = this.infoData.profile.user_avatar;
+			}
 		},
 		methods: {
 			get_file_name,
 			// 删除图片
 			deletePic(event) {
-				this[`fileList${event.name}`].splice(event.index, 1)
+				this.fileList.splice(event.index, 1)
 			},
 			// 新增图片
 			async afterRead(event) {
@@ -73,7 +78,7 @@
 			async submit(){
 				if(this.avart){
 					const data = this.$apis.uesrApi.updAvatar({
-						file:this.avart
+						file: this.avart
 					})
 					return data
 				}else{
@@ -123,6 +128,7 @@
 		.img{
 			width: 244rpx;
 			height: 244rpx;
+			border-radius: 20rpx;
 		}
 	}
 	.uploadBox{

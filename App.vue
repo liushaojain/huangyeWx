@@ -1,8 +1,9 @@
 <script>
-	import {userStore} from "@/store/account/userInfo.js"
+	import { userStore } from "@/store/account/userInfo.js"
 	export default {
-		onLaunch: function(e) {
-			
+		onLaunch: async function(e) {
+			const res = await this.$apis.uesrApi.enum();
+			userStore.commit('setEnum',res.data);
 		},
 		onShow:async function(e) {
 			

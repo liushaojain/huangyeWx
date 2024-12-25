@@ -230,6 +230,8 @@ export default {
 				background-color: #999;
 				border-radius: 50%;
 				margin-right: 16rpx;
+				overflow: hidden;
+				border-radius: 50%;
 				image {
 					width: 100%;
 					height: 100%;

@@ -28,7 +28,7 @@
                             </view>
                         </view>
                         <view v-else class="item flex-col" :class="item.flow == 'out' ? 'push' : 'pull'">
-                            <image :src="item.pic" mode="aspectFill" class="pic"></image>
+                            <image :src="item.flow == 'out' ? myAvatar : toAvatar" mode="aspectFill" class="pic"></image>
                             <view class="content">
                                 <template v-if="item.type === 'TIMImageElem'">
                                     <image :src="item.payload.imageInfoArray[0].url" mode="widthFix" @tap="openImage(item.payload.imageInfoArray[0].url)" style="width: 400rpx;"></image>
@@ -112,6 +112,8 @@ export default {
             content: '',
             showOtherMsg: false,
             toId: '',
+            toAvatar: '',
+            myAvatar: '',
             nextReqMessageID: undefined,
             isCompleted: false,
             conversationID: '',
@@ -169,11 +171,19 @@ export default {
 		ImManager.getInstance().addObserver(this);
         ImManager.getInstance().setMessageRead(conversationID);
         this.checkFriend();
+        this.toAvatar = this.getAvatar(this.toId);
+        this.getBasic();
     },
 	beforeDestroy() {
 		ImManager.getInstance().removeObserver(this);
 	},
     methods: {
+        async getBasic(){
+            const data = await this.$apis.uesrApi.basic()
+            if (data.status == 1){
+                this.myAvatar = (data.data.profile || {}).user_avatar || '';
+            }
+        },
         async acceptFriendApplication() {
             // 接受好友申请
             await ImManager.getInstance().addFriend(this.toId, '', TencentCloudChat.TYPES.SNS_ADD_TYPE_BOTH);
@@ -325,7 +335,7 @@ export default {
                 }
                 // 非好友，并且没有任何聊天记录，那么应该是第一次聊天，那么需要发送私信，并且请求添加为好友
                 if (!this.isFriend && this.talkList.length === 0) {
-                    console.log("发送私信");
+                    console.log("发送私信", this.toId, content);
                     res = await ImManager.getInstance().createPrivateMessage(this.toId, content);
                 } else {
                     if(type === 'text') {

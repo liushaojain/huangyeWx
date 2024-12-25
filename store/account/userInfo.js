@@ -21,9 +21,9 @@ const mutations = {
 	}
 }
 const state = {
-    userInfo:uni.getStorageSync("userInfo")||{},
-	token:uni.getStorageSync("token")||"",
-	Enum:uni.getStorageSync("Enum")||"",
+    userInfo: uni.getStorageSync("userInfo") || {},
+	token:uni.getStorageSync("token") || "",
+	Enum:uni.getStorageSync("Enum") || "",
 	
 }
 // getters 只会依赖 state 中的成员去更新
@@ -41,7 +41,10 @@ const userStore = new Vuex.Store({
 })
 
 const loginIM = (id) => {
+	console.log("初始化IM-1", id);
+	console.log("初始化IM-1", state);
 	const userID = id || state.userInfo.id;
+	console.log("初始化IM-2", userID);
 	if (!userID) return;
 	ImManager.getInstance().init({
 		SDKAppID: "1600067113",

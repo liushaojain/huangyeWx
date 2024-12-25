@@ -100,6 +100,62 @@ const uesrApi = {
 			method: 'POST',
 			loadType: 1
 		});
-	}
+	},
+
+	// 学历认证
+	identificationEducation(files_list){
+		return http({
+			url: 'api/identification/education',
+			data: { files_list },
+			method: 'POST',
+			loadType: 1
+		});
+	},
+	// 房产认证
+	identificationHourse(files_list){
+		return http({
+			url: 'api/identification/hourse',
+			data: { files_list },
+			method: 'POST',
+			loadType: 1
+		});
+	},
+	// 车辆认证
+	identificationCar(files_list){
+		return http({
+			url: 'api/identification/car',
+			data: { files_list },
+			method: 'POST',
+			loadType: 1
+		});
+	},
+	// 婚姻认证
+	identificationMarriage(files_list){
+		return http({
+			url: 'api/identification/marriage',
+			data: { files_list },
+			method: 'POST',
+			loadType: 1
+		});
+	},
+	// 工作认证
+	identificationWork(files_list){
+		return http({
+			url: 'api/identification/work',
+			data: { files_list },
+			method: 'POST',
+			loadType: 1
+		});
+	},
+
+	// 收入认证
+	identificationIncome(files_list){
+		return http({
+			url: 'api/identification/income',
+			data: { files_list },
+			method: 'POST',
+			loadType: 1
+		});
+	},
 }
 export default uesrApi

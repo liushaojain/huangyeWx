@@ -6,12 +6,12 @@
 		<view class="hintImg">
 			<image class="img" :src="imgBaseUrl+'loginText.png'" mode=""></image>
 		</view>
-		<view class="content">
+		<view class="content" v-if="isLoaded">
 			<BaseInfo :infoData="infoData" ref="BaseInfo" v-if="pageIndex===0"></BaseInfo>
 			<MaritalStatus :infoData="infoData" ref="MaritalStatus" v-if="pageIndex===1"></MaritalStatus>
 			<BeFondOf :infoData="infoData" ref="BeFondOf" v-if="pageIndex===2"></BeFondOf>			
 			<Expects :infoData="infoData" ref="Expects" v-if="pageIndex===3"></Expects>
-			<Avatar ref="Avatar" v-if="pageIndex===4"></Avatar>
+			<Avatar :infoData="infoData" ref="Avatar" v-if="pageIndex===4"></Avatar>
 			<LifePhoto ref="LifePhoto" v-if="pageIndex===5"></LifePhoto>
 			<AboutMe :infoData="infoData" ref="AboutMe" v-if="pageIndex===6"></AboutMe>
 		</view>
@@ -51,7 +51,8 @@
 				],
 				pageIndex: 2,
 				type: 1,
-				infoData: {}
+				infoData: {},
+				isLoaded: false
 			}
 		},
 		components:{
@@ -93,6 +94,7 @@
 		methods:{
 			async getBasic(){
 				const data = await this.$apis.uesrApi.basic()
+				this.isLoaded = true;
 				if (data.status == 1){
 					this.infoData = data.data;
 				}

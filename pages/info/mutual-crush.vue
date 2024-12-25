@@ -11,7 +11,6 @@
             <view class="title">匹配成功！</view>
             <view class="text">你们俩来自同一个城市深圳。她身高168cm，她在你打招呼的39分钟就对你心动了，抓住机会，不要错过缘分</view>
         </view>
-        
         <view class="button" @tap="test">
             开始聊天
         </view>
@@ -38,36 +37,7 @@ export default {
         };
     },
     onLoad(options) {
-        // this.getMutualCrush();
-        wx.getSetting({
-            withSubscriptions: true,
-            success (res) {
-                console.log(res.authSetting)
-                // res.authSetting = {
-                //   "scope.userInfo": true,
-                //   "scope.userLocation": true
-                // }
-                console.log(res.subscriptionsSetting)
-                wx.openSetting({
-                    success (res) {
-                        console.log(res.authSetting)
-                        // res.authSetting = {
-                        //   "scope.userInfo": true,
-                        //   "scope.userLocation": true
-                        // }
-                    }
-                })
-                // res.subscriptionsSetting = {
-                //   mainSwitch: true, // 订阅消息总开关
-                //   itemSettings: {   // 每一项开关
-                //     SYS_MSG_TYPE_INTERACTIVE: 'accept', // 小游戏系统订阅消息
-                //     SYS_MSG_TYPE_RANK: 'accept'
-                //     zun-LzcQyW-edafCVvzPkK4de2Rllr1fFpw2A_x0oXE: 'reject', // 普通一次性订阅消息
-                //     ke_OZC_66gZxALLcsuI7ilCJSP2OJ2vWo2ooUPpkWrw: 'ban',
-                //   }
-                // }
-            }
-        })
+      
     },
     methods: {
         test() {
@@ -75,10 +45,6 @@ export default {
                 withSubscriptions: true,
                 success (res) {
                     console.log(res.authSetting)
-                    // res.authSetting = {
-                    //   "scope.userInfo": true,
-                    //   "scope.userLocation": true
-                    // }
                 }
             })
         }

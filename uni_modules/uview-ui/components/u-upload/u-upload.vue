@@ -60,8 +60,8 @@
 						<view class="u-upload__deletable__icon">
 							<u-icon
 							    name="close"
-							    color="#ffffff"
-							    size="10"
+							    color="red"
+							    size="14"
 							></u-icon>
 						</view>
 					</view>
@@ -423,6 +423,7 @@
 				position: relative;
 				overflow: hidden;
 				@include flex;
+				border-radius: 20rpx;
 
 				&__image {
 					width: $u-upload-image-width;
@@ -449,7 +450,6 @@
 
 		&__deletable {
 			position: absolute;
-			top: $u-upload-deletable-top;
 			right: $u-upload-deletable-right;
 			background-color: $u-upload-deletable-bgColor;
 			height: $u-upload-deletable-height;
@@ -460,6 +460,15 @@
 			justify-content: center;
 			z-index: $u-upload-deletable-zIndex;
 
+			border: 1rpx solid red;
+			bottom: 10rpx;
+			right: 10rpx;
+			border-radius: 50%;
+			width: 40rpx;
+			height: 40rpx;
+			background: #fff;
+			color: red;
+
 			&__icon {
 				position: absolute;
 				transform: scale(0.7);
@@ -469,6 +478,11 @@
 				top: $u-upload-icon-h5-top;
 				right: $u-upload-icon-h5-right;
 				/* #endif */
+				transform: scale(0.8);
+				width: 100%;
+				height: 100%;
+				justify-content: center;
+				align-items: center;
 			}
 		}
 
@@ -489,7 +503,7 @@
 			align-items: center;
 			justify-content: center;
 			/* #endif */
-
+			display: none;
 			&__icon {
 				/* #ifndef APP-NVUE */
 				position: absolute;
@@ -534,7 +548,7 @@
 			width: $u-upload-button-width;
 			height: $u-upload-button-height;
 			background-color: $u-upload-button-bgColor;
-			border-radius: $u-upload-button-border-radius;
+			border-radius: 20rpx;
 			margin: $u-upload-botton-margin;
 			/* #ifndef APP-NVUE */
 			box-sizing: border-box;

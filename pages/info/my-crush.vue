@@ -4,7 +4,7 @@
         <AuthTip authType="ws" v-if="false" />
         <TextTip path="https://oss.derucci-smart.com/images/upload/tip2_1734851238472.png" height="69rpx" width="586rpx" />
         <div class="col">
-            <Card :data="item" v-for="item in myCrushList" :key="item.id" />
+            <Card @click="onClick" :data="item" v-for="item in myCrushList" :key="item.id" />
         </div>
         <view class="empty-text">没有更多记录了</view>
         <div class="button">
@@ -42,6 +42,12 @@ export default {
             });
             this.myCrushList = res.data.data;
             console.log("getMyCrush", res);
+        },
+        onClick(item) {
+            console.log(item);
+			uni.navigateTo({
+				url: `/pages/info/message?conversationID=C2C${item.guest.id}`
+			})
         }
     },
 };

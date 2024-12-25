@@ -25,7 +25,7 @@
 </template>
 
 <script>
-	import {basehost,get_file_name} from "@/utils/util.js"
+	import { multipleUpload } from "@/utils/util.js"
 	export default {
 		data() {
 			return {
@@ -37,8 +37,6 @@
 			this.getPhoto();
 		},
 		methods: {
-			get_file_name,
-			
             async getPhoto() {
 				const data = await this.$apis.uesrApi.getPhoto()
 				this.fileList = data.data.map(item => {
@@ -50,27 +48,15 @@
 			},
 			// 删除图片
 			deletePic(event) {
-				this[`fileList${event.name}`].splice(event.index, 1)
+				this.fileList.splice(event.index, 1)
 			},
 			// 新增图片
 			async afterRead(event) {
-				// 当设置 multiple 为 true 时, file 为数组格式，否则为对象格式
-				let lists = [].concat(event.file)
-				for (let i = 0; i < lists.length; i++) {
-					const result = await this.uploadFilePromise(lists[i].url)
-					console.log(result)
-					if(result.success ==true){
-						this.fileList.push({
-							status: 'success',
-							message: '',
-							url: result.data
-						})
-					}
-				}
+				multipleUpload(event.file, this.fileList);
 			},
 			async submit(){
 				if(this.fileList.length>=1){
-					const data =  this.$apis.uesrApi.uploadPhoto({
+					const data = this.$apis.uesrApi.uploadPhoto({
 						file:this.fileList.map(function(item){
 							return item.url
 						})
@@ -78,42 +64,6 @@
 					return data
 				}
 			},
-			async uploadFilePromise(url) {
-				const sign =await this.$apis.uesrApi.getOss()
-				let fileName = this.get_file_name(url)
-				if(sign.status==1){
-					return this.upload(sign,url,fileName)
-				}
-				return Promise.reject(new Error("上传失败"));
-			},
-			async upload(sign,url,fileName){
-				return new Promise((resolve,reject)=>{
-				let key='life_photo/'+fileName;
-				uni.uploadFile({
-					url: sign.data.host, // 仅为示例，非真实的接口地址
-					filePath: url,
-					name: 'file',
-					formData: {
-						name:fileName,
-						key,
-						policy:sign.data.policy,
-						OSSAccessKeyId:sign.data.ossAccessKeyId,
-						success_action_status: '200',
-						signature:sign.data.signature
-					},
-					success: (res) => {
-						if(res.statusCode==200){
-							resolve({success: true, data: sign.data.host+'/'+key,iamgeUrl:key})
-						 }else{
-							  reject({success: false, data: '上传失败'})
-						 }
-					},
-					fail: () => {
-					  reject({success: false, data: '上传失败'})
-					}
-				});
-				})
-			}
 		}
 	}
 </script>

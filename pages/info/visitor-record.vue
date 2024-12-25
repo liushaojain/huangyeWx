@@ -4,9 +4,7 @@
         <AuthTip authType="ws" v-if="false" />
         <TextTip />
         <div class="col">
-            <Card type="record" />
-            <Card type="record" />
-            <Card type="record" />
+            <Card type="record" v-for="item in visitLogList" :key="item.id" />
         </div>
         <view class="empty-text">没有更多记录了</view>
         <div class="button">
@@ -29,13 +27,21 @@ export default {
 	},
     data() {
         return {
+            visitLogList: []
         };
     },
     onLoad(options) {
-        
+        this.getVisitLog();
     },
     methods: {
-        
+        async getVisitLog() {
+            const res = await this.$apis.infoApi.visitLog({
+                page: '1',
+                pageSize: '10'
+            });
+            this.visitLogList = res.data.data || [];
+            console.log("visitLogList", res);
+        }
     },
 };
 </script>

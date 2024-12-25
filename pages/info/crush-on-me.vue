@@ -4,9 +4,7 @@
         <AuthTip authType="ws" v-if="false" />
         <TextTip />
         <div class="col">
-            <Card />
-            <Card />
-            <Card />
+            <Card @click="onClick" v-for="item in loveMeList" :key="item.id" />
         </div>
         <view class="empty-text">没有更多记录了</view>
         <div class="button">
@@ -20,6 +18,7 @@ import NavBar from './components/nav-bar.vue'
 import AuthTip from './components/auth-tip.vue'
 import TextTip from './components/text-tip.vue'
 import Card from './components/card.vue'
+
 export default {
     components: {
 		NavBar,
@@ -29,13 +28,24 @@ export default {
 	},
     data() {
         return {
+            loveMeList: []
         };
     },
     onLoad(options) {
-        
+        this.loveMe();
     },
     methods: {
-        
+        async loveMe() {
+            const res = await this.$apis.infoApi.loveMe({
+                page: '1',
+                pageSize: '10'
+            });
+            this.loveMeList = res.data.data || [];
+            console.log("loveMeList", res);
+        },
+        onClick(item) {
+            console.log(item);
+        }
     },
 };
 </script>

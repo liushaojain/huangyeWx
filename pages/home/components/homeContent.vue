@@ -1,13 +1,13 @@
 <template>
 	<view class="homeContent">
 		<view class="hreader mt94">
-			<uni-swiper-dot :info="list" :current="current" field="content" :mode="mode" :dotsStyles='dotsStyles'>
-				<swiper :style="{paddingTop: headHeight+'px'}" class="swiper" circular :autoplay="autoplay"
+			<uni-swiper-dot :info="memberInfo.photo" :current="current" field="content" :mode="mode" :dotsStyles='dotsStyles'>
+				<swiper :style="{paddingTop: headHeight + 'px'}" class="swiper" circular :autoplay="autoplay"
 					:interval="interval" @change="change" :indicator-dots="false" :duration="duration">
-					<swiper-item v-for="(item,index) in list" :key="index">
+					<swiper-item v-for="(item,index) in memberInfo.photo" :key="index">
 						<view class="swiper-item uni-bg-red">
 							<view class="bg">
-								<image class="img" :src="item.image" mode=""></image>
+								<image class="img" :src="item.photo_path" mode="aspectFill"></image>
 							</view>
 						</view>
 					</swiper-item>
@@ -18,18 +18,21 @@
 			<view class="cHead">
 				<view class="cHeadLine1">
 					<view class="name">{{memberInfo.nick_name}}</view>
-					<image class="img" :src="memberInfo.profile.user_avatar" mode=""></image>
+					<image class="img" 
+						:src="memberInfo.profile.gender === 'female' ? 'https://oss.derucci-smart.com/images/upload/w_1735117411126.png' : 'https://oss.derucci-smart.com/images/upload/m_1735117399439.png'"
+					 	mode=""
+					></image>
 					<view class="msg" @click="openOtherInfo">已认证信息</view>
 				</view>
 				<view class="cHeadLine2">
 					<view class="txt">
-						<view class="txtItem">{{memberInfo.profile.age||''}}岁</view>
-						<view class="txtItem">99年</view>
-						<view class="txtItem">巨蟹座</view>
+						<view v-if="memberInfo.profile" class="txtItem">{{ memberInfo.profile.age }}岁</view>
+						<view v-if="memberInfo.profile" class="txtItem">{{ getGeneration(memberInfo.profile.birth_date) }}</view>
+						<view v-if="memberInfo.profile" class="txtItem">{{ getZodiacFromDate(memberInfo.profile.birth_date) }}</view>
 					</view>
 					<view class="txt">
-						<view class="txtItem">{{memberInfo.profile.height || ''}}cm</view>
-						<view class="txtItem">{{memberInfo.profile.weight || ''}}kg</view>
+						<view v-if="memberInfo.profile" class="txtItem">{{memberInfo.profile.height || ''}}cm</view>
+						<view v-if="memberInfo.profile" class="txtItem">{{memberInfo.profile.weight || ''}}kg</view>
 					</view>
 				</view>
 				<view class="cHeadLine3">
@@ -114,7 +117,7 @@
 					<text class="txt">{{profile.living_status[memberInfo.profile.living_status]}}</text>
 				</view>
 				<view class="li">
-					<text class="label">房产情况??:</text>
+					<text class="label">房产情况:</text>
 					<text class="txt">{{profile.living_status[memberInfo.profile.living_status]}}</text>
 				</view>
 				<view class="li">
@@ -189,7 +192,7 @@
 					{{memberInfo.expected_him.description || ''}}
 				</view>
 				<view class="imgs" v-if="memberInfo.photo">
-					<image class="img" v-for="(item,index) in memberInfo.photo" :key="index"   :src="item.photo_path" mode=""></image>
+					<image class="img" v-for="(item,index) in memberInfo.photo" :key="index" :src="item.photo_path" mode="aspectFill"></image>
 				</view>
 				<view v-else>
 					<image class="img" :src="imgBaseUrl+'Group718@2x.png'" mode=""></image>
@@ -200,9 +203,8 @@
 </template>
 
 <script>
-	import {
-		EventBus
-	} from './eventBus.js';
+	import { EventBus } from './eventBus.js';
+	import { getZodiacFromDate, getGeneration } from '../../../utils/util.js';
 	export default {
 		data() {
 			return {
@@ -212,16 +214,7 @@
 				autoplay: false,
 				interval: 2000,
 				duration: 500,
-				list: [{
-						image: '../../../static/img/loginBg.png',
-					},
-					{
-						image: '../../../static/img/loginBg.png',
-					},
-					{
-						image: '../../../static/img/loginBg.png',
-					},
-				],
+				lifePhoneList: [],
 				current: 0,
 				mode: 'round',
 				dotsStyles: {
@@ -248,7 +241,7 @@
 		computed: {
 			birthDay() {
 				if (this.memberInfo.hasOwnProperty('profile')) {
-					return this.formatBirthday(this.memberInfo.profile.birth_date)
+					return this.formatBirthday((this.memberInfo.profile || {}).birth_date)
 				}
 				return '';
 			}
@@ -276,16 +269,15 @@
 			EventBus.$on('dislike', this.dislike);
 		},
 		methods: {
+			getZodiacFromDate,
+			getGeneration,
 			async like() {
 				await this.$apis.homeApi.like(this.memberInfo.id);
 				this.showToast("已标记为喜欢");
-				console.log("like");
-				console.log(this.memberInfo);
 				this.nextMember();
 			},
             async dislike() {
 				console.log("dislike");
-				console.log(this.memberInfo);
 				await this.$apis.homeApi.dislike(this.memberInfo.id);
 				this.showToast("已标记为不喜欢");
 				this.nextMember();
@@ -302,6 +294,7 @@
 				this.current = e.detail.current;
 			},
 			formatBirthday(dateStr) {
+				if (!dateStr) return '';
 				const parts = dateStr.split('-');
 				const month = parts[1];
 				const day = parts[2];
