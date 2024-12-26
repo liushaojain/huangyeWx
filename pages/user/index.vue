@@ -22,7 +22,7 @@
 			</view>
 			<view class="item">
 				<text class="num">{{ memberInfo.recent_visitors_count || 0 }}</text>
-				<text class="label">最近采访</text>
+				<text class="label">最近来访</text>
 			</view>
 		</view>
 		<view class="contentBox">

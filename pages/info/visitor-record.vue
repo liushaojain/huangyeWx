@@ -2,15 +2,18 @@
     <view class="visitor-record-page">
         <NavBar title="访客记录" />
         <view class="container">
-            <AuthTip authType="ws" v-if="false" />
-            <TextTip />
-            <view class="col">
-                <Card type="record" v-for="item in visitLogList" :key="item.id" />
-            </view>
-            <view class="empty-text">没有更多记录了</view>
-            <view class="button">
-                开通荒野会员，解锁嘉宾资料
-            </view>
+            <AuthTip authType="ws" v-if="isProfileCmpletion === false" />
+            <AuthTip authType="rz" v-else-if="isCertificationCmpletion === false" />
+            <template v-else>
+                <TextTip />
+                <view class="col">
+                    <Card type="record" v-for="item in visitLogList" :key="item.id" />
+                </view>
+                <view class="empty-text">没有更多记录了</view>
+                <view @tap="to('/pages/user/Renew/index')" v-if="!isVip" class="button">
+                    开通荒野会员，解锁嘉宾资料
+                </view>
+            </template>
         </view>
     </view>
 </template>

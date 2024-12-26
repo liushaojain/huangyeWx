@@ -2,15 +2,18 @@
     <view class="my-crush-page">
         <NavBar title="我心动的" />
         <view class="container">
-            <AuthTip authType="ws" v-if="false" />
-            <TextTip path="https://oss.derucci-smart.com/images/upload/tip2_1734851238472.png" height="69rpx" width="586rpx" />
-            <view class="col">
-                <Card @click="onClick" :data="item" v-for="item in myCrushList" :key="item.id" />
-            </view>
-            <view class="empty-text">没有更多记录了</view>
-            <view class="button">
-                开通荒野会员，解锁嘉宾资料
-            </view>
+            <AuthTip authType="ws" v-if="isProfileCmpletion === false" />
+            <AuthTip authType="rz" v-else-if="isCertificationCmpletion === false" />
+            <template v-else>
+                <TextTip path="https://oss.derucci-smart.com/images/upload/tip2_1734851238472.png" height="69rpx" width="586rpx" />
+                <view class="col">
+                    <Card @click="onClick" :data="item" v-for="item in myCrushList" :key="item.id" />
+                </view>
+                <view class="empty-text">没有更多记录了</view>
+                <view @tap="to('/pages/user/Renew/index')" v-if="!isVip" class="button">
+                    开通荒野会员，解锁嘉宾资料
+                </view>
+            </template>
         </view>
     </view>
 </template>

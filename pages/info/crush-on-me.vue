@@ -2,15 +2,18 @@
     <view class="crush-on-me-page">
         <NavBar title="对我心动的" />
         <view class="container">
-            <AuthTip authType="ws" v-if="false" />
-            <TextTip />
-            <view class="col">
-                <Card @click="onClick" v-for="item in loveMeList" :key="item.id" />
-            </view>
-            <view class="empty-text">没有更多记录了</view>
-            <view class="button">
-                开通荒野会员，解锁嘉宾资料
-            </view>
+            <AuthTip authType="ws" v-if="isProfileCmpletion === false" />
+            <AuthTip authType="rz" v-else-if="isCertificationCmpletion === false" />
+            <template v-else>
+                <TextTip />
+                <view class="col">
+                    <Card @click="onClick" v-for="item in loveMeList" :key="item.id" />
+                </view>
+                <view class="empty-text">没有更多记录了</view>
+                <view @tap="to('/pages/user/Renew/index')" v-if="!isVip" class="button">
+                    开通荒野会员，解锁嘉宾资料
+                </view>
+            </template>
         </view>
     </view>
 </template>
@@ -33,8 +36,10 @@ export default {
             loveMeList: []
         };
     },
-    onLoad(options) {
-        this.loveMe();
+    onShow(options) {
+        if(this.isProfileCmpletion && this.isCertificationCmpletion) {
+            this.loveMe();
+        }
     },
     methods: {
         async loveMe() {

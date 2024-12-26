@@ -59,7 +59,7 @@
 			}
 		},
 		created() {
-			EventBus.$on('message-event', (data) => {
+			EventBus.$on('certification-event', (data) => {
 				console.log(data)
 				this.infoData = data;
 				this.show = true;

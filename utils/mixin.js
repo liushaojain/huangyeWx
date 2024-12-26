@@ -32,7 +32,7 @@ export default {
             const data = await this.$apis.uesrApi.basic()
             if (data.status == 1){
 				this.basicInfoData = data.data;
-				return this.data.data;
+				return data.data;
             }
 			return {};
         },

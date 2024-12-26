@@ -9,6 +9,7 @@
 		</view>
 		<homeContent v-if="isLogin"></homeContent>
 		<otherInfo v-if="isLogin"></otherInfo>
+		<mutualCrush v-if="isLogin"> </mutualCrush>
 		<view class="footerBtn" v-if="isLogin">
 			<view class="item">
 				<image class="img" @tap="handleNext" :src="imgBaseUrl+'Group713@2x.png'" mode=""></image>
@@ -27,11 +28,14 @@
 <script>
 	import homeContent from './components/homeContent.vue'
 	import otherInfo from './components/otherInfo.vue'
+	import mutualCrush from './components/mutualCrush.vue'
+	
 	import { EventBus } from './components/eventBus'
 	export default {
 		components: {
 			homeContent,
-			otherInfo
+			otherInfo,
+			mutualCrush
 		},
 		data() {
 			return {

@@ -318,7 +318,9 @@
 				this.nextMember();
 			},
 			openOtherInfo() {
-				EventBus.$emit('message-event', this.memberInfo);
+				// EventBus.$emit('certification-event', this.memberInfo);
+				EventBus.$emit('crush-event', this.memberInfo);
+				
 			},
 
 		}

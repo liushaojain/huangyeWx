@@ -5,12 +5,12 @@
             <image class="img" src="https://oss.derucci-smart.com/images/upload/2_1734844677659.jpg" style="transform: translateX(0rpx);" />
             <image class="img" src="https://oss.derucci-smart.com/images/upload/3_1734844688797.jpg" style="transform: translateX(-40rpx);" />
         </view>
-        <div class="tip">
+        <view class="tip">
             {{map[authType].tip}}
-        </div>
-        <div class="button">
+        </view>
+        <view class="button" @tap="to(map[authType].path)">
             {{map[authType].button}}
-        </div>
+        </view>
     </view>
 </template>
 
@@ -18,11 +18,13 @@
 const map = {
     'ws': {
         tip: "完善资料认证后可查看访客记录",
-        button: "立刻完善"
+        button: "立刻完善",
+        path: '/pages/user/userInfo/index'
     },
     'rz': {
         tip: "Ta 们设置了仅允许已认证用户发送心动快去认证，让对方看到你的消息",
-        button: "立刻认证"
+        button: "立刻认证",
+        path: '/pages/authentication/index'
     }
 }
 export default {
