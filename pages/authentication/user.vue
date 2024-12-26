@@ -8,7 +8,7 @@
 			<view class="txt">
 				荒野是一个真人社交平台，我们需要确保你的真实信息，实名后匹配对象将会更精准，实名配对成功率提高50%
 			</view>
-			<view class="mt10">
+			<!-- <view class="mt10">
 				<u--form labelPosition="top" :model="formData" :rules="rules" ref="forms" label-width="80">
 					<u-form-item label="姓名" prop="name" ref="item1" border-bottom>
 						<u--input placeholder="请输入" v-model="formData.name" border="none"></u--input>
@@ -17,11 +17,11 @@
 						<u--input placeholder="请输入" v-model="formData.card" border="none"></u--input>
 					</u-form-item>
 				</u--form>	
-			</view>
+			</view> -->
 		</view>
 		<view class="footer">
-			<view class="btnSubmit">
-				立即认证
+			<view class="btnSubmit" @tap="getFaceSign">
+				立即去认证
 			</view>
 			<view class="text1">
 				百分百隐私安全
@@ -49,8 +49,8 @@
 			}
 		},
 		methods:{
-			goPage(){
-				
+			getFaceSign(){
+				this.$apis.uesrApi.getFaceSign({});
 			}
 		},
 		onShow() {

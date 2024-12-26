@@ -120,6 +120,7 @@
 				.listLeft{
 					display: flex;
 					align-items: center;
+					font-size: 24rpx;
 				}
 				.img{
 					width: 36rpx;
@@ -133,6 +134,20 @@
 		}
 	}
 }
+
+.custom-button {
+	background-color: transparent;
+	border-radius: 0;
+	height: auto;
+	color: inherit;
+	line-height: inherit;
+    border: 0 none;
+    padding: 0;
+	&::after {
+	  border: none;
+	}
+  }
+  
 // <view class="contentList">
 // 					<navigator class="li">
 // 						<view class="listLeft">

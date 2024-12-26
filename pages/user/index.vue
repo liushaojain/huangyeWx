@@ -64,21 +64,21 @@
 
 				</view>
 				<view class="contentList">
-					<view hover-class="none" class="li">
+					<button open-type="share" hover-class="none" class="li custom-button">
 						<view class="listLeft">
 							<image class="img" :src="imgBaseUrl + 'my1.png'" mode=""></image>
 							推荐给好友
 						</view>
 						<u-icon name="arrow-right" color="#8B8B8B" size="18"></u-icon>
-					</view>
-					<view hover-class="none" class="li">
+					</button>
+					<view hover-class="none" class="li" @tap="handleWeb(1)">
 						<view class="listLeft">
 							<image class="img" :src="imgBaseUrl + 'my2.png'" mode=""></image>
 							隐私保护政策
 						</view>
 						<u-icon name="arrow-right" color="#8B8B8B" size="18"></u-icon>
 					</view>
-					<view hover-class="none" class="li">
+					<view hover-class="none" class="li" @tap="handleWeb(2)">
 						<view class="listLeft">
 							<image class="img" :src="imgBaseUrl + 'my3.png'" mode=""></image>
 							用户服务协议
@@ -131,6 +131,16 @@ export default {
 		}
 	},
 	methods: {
+		handleWeb(type) {
+			let url = ''
+			if(type === 1) {
+				url = 'https://www.baidu.com/';
+			}
+			if(type === 2) {
+				url = 'https://www.baidu.com/';
+			}
+			this.to(`/pages/common/web-view?url=${encodeURIComponent(url)}`);
+		},
 		handleUserInfo(url) {
 			if (!this.isLogin) {
 				this.handleLogin();

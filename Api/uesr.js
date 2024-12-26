@@ -157,5 +157,18 @@ const uesrApi = {
 			loadType: 1
 		});
 	},
+
+
+	// 人脸验证
+	getFaceSign(data){
+		return http({
+			url: 'api/config/getFaceSign',
+			data,
+			method: 'POST',
+			loadType: 1
+		});
+	},
+
+	
 }
 export default uesrApi
