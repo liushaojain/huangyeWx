@@ -5,7 +5,7 @@ const homeApi = {
 			url: 'api/member/index',
 			data,
 			method: 'POST',
-			loadType: 2
+			loadType: 1
 		});
 	},
 	matchSet(data){
@@ -13,14 +13,14 @@ const homeApi = {
 			url: 'api/member/matchSet',
 			data,
 			method: 'POST',
-			loadType: 2
+			loadType: 1
 		});
 	},
 	getMatchSet(){
 		return http({
 			url: 'api/member/getMatchSet',
 			method: 'POST',
-			loadType: 2
+			loadType: 1
 		});
 	},
 	like(guest_id) {
@@ -28,7 +28,7 @@ const homeApi = {
 			url: 'api/member/like',
 			data: { guest_id },
 			method: 'POST',
-			loadType: 2
+			loadType: 1
 		});
 	},
 	dislike(guest_id) {
@@ -36,7 +36,7 @@ const homeApi = {
 			url: 'api/member/dislike',
 			data: { guest_id },
 			method: 'POST',
-			loadType: 2
+			loadType: 1
 		});
 	}
 }

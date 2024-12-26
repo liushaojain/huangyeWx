@@ -247,36 +247,45 @@
 			}
 		},
 		created() {
-			let that = this;
 			uni.getSystemInfo({
-				success: function(info) {
+				success: (info) => {
 					var statusBarHeight = info.statusBarHeight;
-					that.statusBarHeight = statusBarHeight;
-					that.headHeight = info.statusBarHeight + that.titleHeight;
+					this.statusBarHeight = statusBarHeight;
+					this.headHeight = info.statusBarHeight + this.titleHeight;
 				}
 			});
-			this.getmember();
-			let Enum = uni.getStorageSync('Enum');
-			if (typeof(Enum) !== 'object') {
-				Enum = JSON.parse(Enum)
-			}
-			this.profile = Enum.MemberProfile
-			this.MemberMarriageInfo = Enum.MemberMarriageInfo
-			this.memberHobbiesEnum = Enum.MemberHobbie
-			this.expectedHimEnum = Enum.ExpectedHim
-
-			EventBus.$on('like', this.like);
-			EventBus.$on('dislike', this.dislike);
+			this.init();
 		},
 		methods: {
 			getZodiacFromDate,
 			getGeneration,
+			init() {
+				this.getmember();
+				let Enum = uni.getStorageSync('Enum');
+				if (typeof(Enum) !== 'object') {
+					Enum = JSON.parse(Enum)
+				}
+				this.profile = Enum.MemberProfile
+				this.MemberMarriageInfo = Enum.MemberMarriageInfo
+				this.memberHobbiesEnum = Enum.MemberHobbie
+				this.expectedHimEnum = Enum.ExpectedHim
+				EventBus.$on('like', this.like);
+				EventBus.$on('dislike', this.dislike);
+			},
 			async like() {
+				if (!this.isLogin) {
+					this.handleLogin();
+					return;
+				}
 				await this.$apis.homeApi.like(this.memberInfo.id);
 				this.showToast("已标记为喜欢");
 				this.nextMember();
 			},
             async dislike() {
+				if (!this.isLogin) {
+					this.handleLogin();
+					return;
+				}
 				console.log("dislike");
 				await this.$apis.homeApi.dislike(this.memberInfo.id);
 				this.showToast("已标记为不喜欢");

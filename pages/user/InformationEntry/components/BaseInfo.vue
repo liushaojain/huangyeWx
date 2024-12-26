@@ -38,6 +38,8 @@
 		<u-action-sheet :show="showLivingStatus" :actions="livingStatus" title="请选择" @close="showLivingStatus = false" @select="livingStatusSelect"></u-action-sheet>
 		<u-datetime-picker :show="datetimeShow" v-model="datetimeValue" mode="date" @confirm="Dateconfirm" @cancel="datetimeShow = false" ></u-datetime-picker>
 		
+		<!-- <barry-picker ref="placeDialog" @get-address="getPlace"></barry-picker>
+		<barry-picker ref="hometownDialog" @get-address="getHometown"></barry-picker> -->
 		<cityPicker v-if="hometownVisible" :column="3" :default-value="userInfo.hometown || []" :mask-close-able="true" @confirm="getHometown" @cancel="hometownVisible = false" :visible="hometownVisible"/>
 		<cityPicker v-if="placeVisible" :column="3" :default-value="userInfo.place || []" :mask-close-able="true" @confirm="getPlace" @cancel="placeVisible = false" :visible="placeVisible"/>
 	</view>
@@ -154,18 +156,16 @@
 			sexSelect(e) {
 				console.log({e});
 				this.userInfo.gender = e.key;
-				console.log(this.userInfo);
-				console.log(this.userInfo);
 				this.$refs.forms.validateField('gender')
 			},
 			educationSelect(e){
 				console.log({e});
-				this.userInfo.education = e.name;
+				this.userInfo.education = e.key;
 				this.$refs.forms.validateField('education')
 			},
 			livingStatusSelect(e){
 				console.log({e});
-				this.userInfo.living_status = e.name;
+				this.userInfo.living_status = e.key;
 				this.$refs.forms.validateField('living_status')
 			},
 			getselectData(Enum,index){

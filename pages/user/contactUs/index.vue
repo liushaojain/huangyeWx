@@ -57,7 +57,7 @@
 			width: 100%;
 		}
 		.content{
-            padding-top: 200rpx;
+            padding-top: 100rpx;
             display: flex;
             justify-content: center;
             align-items: center;

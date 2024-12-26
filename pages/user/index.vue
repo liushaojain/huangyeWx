@@ -54,7 +54,7 @@
 					</view>
 
 					<view class="item">
-						<view class="icon" @tap="handleUserInfo('/pages/user/userInfo/index')">
+						<view class="icon" @tap="handleUserInfo('/pages/home/search/index')">
 							<image class="img" :src="imgBaseUrl + 'Group694@2x.png'" mode=""></image>
 						</view>
 						<view class="label">
