@@ -6,14 +6,36 @@ export default {
 	data(){
 		return{
 			imgBaseUrl: this.imgBaseUrl,
+			basicInfoData: {}
 		}
 	},
 	computed: {
+		// 是否登录
 		isLogin() {
 			return !!userStore.state.token;
 		},
+		// 是否是vip
+		isVip() {
+			return (this.basicInfoData.member || {}).is_vip === 1;
+		},
+		// 是否完善资料
+		isProfileCmpletion() {
+			return (this.basicInfoData.member || {}).profile_completion_status === 'completed';
+		},
+		// 是否认证完成
+		isCertificationCmpletion() {
+			return (this.basicInfoData.member || {}).certification_status === 'success';
+		}
 	},
     methods: {
+        async getBasicInfoData(){
+            const data = await this.$apis.uesrApi.basic()
+            if (data.status == 1){
+				this.basicInfoData = data.data;
+				return this.data.data;
+            }
+			return {};
+        },
 		handleLogin() {
 			uni.navigateTo({
 				url: "/pages/user/login/index"

@@ -95,11 +95,9 @@
 		},
 		methods:{
 			async getBasic(){
-				const data = await this.$apis.uesrApi.basic()
+				const data = await this.getBasicInfoData();
 				this.isLoaded = true;
-				if (data.status == 1){
-					this.infoData = data.data;
-				}
+				this.infoData = data;
 			},
 			leftClick(){
 				uni.navigateBack();

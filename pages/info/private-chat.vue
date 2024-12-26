@@ -1,13 +1,15 @@
 <template>
     <view class="private-chat-page">
         <NavBar title="私聊" />
-        <AuthTip authType="ws" v-if="false" />
-        <div class="col">
-            <Card type="private"/>
-            <Card type="private"/>
-            <Card type="private"/>
-        </div>
-        <view class="empty-text">没有更多记录了</view>
+        <view class="container">
+            <AuthTip authType="ws" v-if="false" />
+            <view class="col">
+                <Card type="private"/>
+                <Card type="private"/>
+                <Card type="private"/>
+            </view>
+            <view class="empty-text">没有更多记录了</view>
+        </view>
     </view>
 </template>
 
@@ -44,13 +46,15 @@ export default {
 <style lang="scss">
 
 .private-chat-page {
-    padding-left: 48rpx;
-	padding-right: 48rpx;
-	padding-bottom: 48rpx;
 	background-image: url("https://oss.derucci-smart.com/images/upload/info-bg_1734751826957.png");
 	background-position: top;
 	background-repeat: no-repeat;
     background-size: 100% 107px;
+    .container {
+        padding-left: 48rpx;
+        padding-right: 48rpx;
+        padding-bottom: 248rpx;
+    }
     .col {
         display: flex;
         flex-wrap: wrap;

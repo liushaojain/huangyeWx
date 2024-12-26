@@ -171,14 +171,12 @@
 				this.current = item.index;
 			},
 			async getBasic(){
-				const data = await this.$apis.uesrApi.basic()
-				if(data.status==1){
-					this.member_hobbies = data.data.member_hobbies || {};
-					this.member = data.data.member || {};
-					this.member_profiles = data.data.profile || {};
-					this.marriage_info = data.data.marriage_info || {};
-					this.expected_him = data.data.expected_him || {};
-				}
+				const data = await this.getBasicInfoData();
+				this.member_hobbies = data.member_hobbies || {};
+				this.member = data.member || {};
+				this.member_profiles = data.profile || {};
+				this.marriage_info = data.marriage_info || {};
+				this.expected_him = data.expected_him || {};
 			}
 			
 		}

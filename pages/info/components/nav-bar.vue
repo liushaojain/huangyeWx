@@ -80,7 +80,9 @@ export default {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			margin-left: 10rpx;
+			padding: 20rpx;
+			padding-right: 40rpx;
+			padding-left: 30rpx;
 		}
 	}
 }

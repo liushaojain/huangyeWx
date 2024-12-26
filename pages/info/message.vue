@@ -179,10 +179,8 @@ export default {
 	},
     methods: {
         async getBasic(){
-            const data = await this.$apis.uesrApi.basic()
-            if (data.status == 1){
-                this.myAvatar = (data.data.profile || {}).user_avatar || '';
-            }
+            const data = await this.getBasicInfoData();
+            this.myAvatar = (data.profile || {}).user_avatar || '';
         },
         async acceptFriendApplication() {
             // 接受好友申请

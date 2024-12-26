@@ -1,15 +1,17 @@
 <template>
     <view class="crush-on-me-page">
         <NavBar title="对我心动的" />
-        <AuthTip authType="ws" v-if="false" />
-        <TextTip />
-        <div class="col">
-            <Card @click="onClick" v-for="item in loveMeList" :key="item.id" />
-        </div>
-        <view class="empty-text">没有更多记录了</view>
-        <div class="button">
-            开通荒野会员，解锁嘉宾资料
-        </div>
+        <view class="container">
+            <AuthTip authType="ws" v-if="false" />
+            <TextTip />
+            <view class="col">
+                <Card @click="onClick" v-for="item in loveMeList" :key="item.id" />
+            </view>
+            <view class="empty-text">没有更多记录了</view>
+            <view class="button">
+                开通荒野会员，解锁嘉宾资料
+            </view>
+        </view>
     </view>
 </template>
 
@@ -53,13 +55,15 @@ export default {
 <style lang="scss">
 
 .crush-on-me-page {
-    padding-left: 48rpx;
-	padding-right: 48rpx;
-	padding-bottom: 48rpx;
 	background-image: url("https://oss.derucci-smart.com/images/upload/info-bg_1734751826957.png");
 	background-position: top;
 	background-repeat: no-repeat;
     background-size: 100% 107px;
+    .container {
+        padding-left: 48rpx;
+        padding-right: 48rpx;
+        padding-bottom: 248rpx;
+    }
     .col {
         display: flex;
         flex-wrap: wrap;
