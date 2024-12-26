@@ -27,25 +27,25 @@ const request = ({url , data , method , ContentType, loadType,iscomplete})=>{
 			header: header,
 			success: (res) => {
 				if(loadType){
-					setTimeout(()=>{
-						reuqestcont--;
-						if(reuqestcont==0){
-							uni.hideLoading();
-						}	
-					},100)
+					reuqestcont--;
+					if(reuqestcont==0){
+						uni.hideLoading();
+					}	
 				}
-				
-				
 				if(iscomplete){
 					return resolve(res.data);
 				}
-				console.log(res)
 				if(res.data.status === 1){
-					
 					return resolve(res.data);
+				} else {
+					if(res.data.message){
+						uni.showToast({
+							title: res.data.message || '出现了问题，请稍后重试。',
+							icon: 'none'
+						});
+					}
+					return reject(res.data);
 				}
-				
-				
 			},
 			fail:(res)=>{
 				reuqestcont--;

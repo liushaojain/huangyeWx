@@ -42,7 +42,6 @@ export default {
         closePopup() {
             this.show = false;
         }
-
     }
 }
 </script>

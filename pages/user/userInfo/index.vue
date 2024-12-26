@@ -5,7 +5,7 @@
 				<image class="img" :src="member_profiles.user_avatar" mode="aspectFill"></image>
 			</navigator>
 			<text class="txt">{{member.nick_name}}</text>
-			<button @click="test" class="bnt">预览</button>
+			<button style="visibility: hidden;" @click="test" class="bnt">预览</button>
 		</view>
 		<view class="tabList">
 			<u-tabs :list="tabList" @click="tabChange" lineColor="#FF7390" lineWidth="25" :current='current'></u-tabs>
@@ -93,7 +93,7 @@
 				<view class="imgBox" v-else>
 					<view class="imgList">
 						<view class="item" v-for="item in photoList" :key="item.id">
-							<view class="img-container" :class="{ active: item.id === selectedPhone.id }">
+							<view @tap="onSelectItem(item)" class="img-container" :class="{ active: item.id === selectedPhoto.id }">
 								<image class="img" :src="item.photo_path" mode="aspectFill"></image>
 							</view>
 						</view>
@@ -103,7 +103,7 @@
 						<navigator url="/pages/user/InformationEntry/index?pageIndex=5" hover-class="none" class="edit">
 							<button class="bnt">上传照片</button>
 						</navigator>
-						<view class="delete">
+						<view class="delete" @tap="delPhone">
 							<u-icon label="删除" label-size="12" size="26" name="trash"></u-icon>
 						</view>
 					</view>
@@ -133,7 +133,7 @@
 				marriage_info: {},
 				expected_him: {},
 				photoList: [],
-				selectedPhone: {}
+				selectedPhoto: {}
 			}
 		},
 		computed:{
@@ -155,6 +155,20 @@
 			}
 		},
 		methods:{
+			delPhone() {
+				if (this.selectedPhoto.id) {
+					console.log("删除");
+				} else {
+					this.showToast("请选择要删除的照片");
+				}
+			},
+			onSelectItem(item) {
+				if (this.selectedPhoto.id) {
+					this.selectedPhoto = {};
+				} else {
+					this.selectedPhoto = item;
+				}
+			},
 			test() {
 				// console.log(222);
 				// wx.startFacialRecognitionVerify({
