@@ -51,6 +51,22 @@
 		async onShow() {
 			const res = await this.$apis.uesrApi.enum();
 			userStore.commit('setEnum',res.data);
+			await this.getBasicInfoData();
+			if (this.basicInfoData.profile.gender) {
+				this.type = 'age'
+			}
+			if (this.basicInfoData.profile.age) {
+				this.type = 'marital_status'
+			}
+			if (this.basicInfoData.marriage_info.marital_status) {
+				this.type = 'city'
+			}
+			if (this.basicInfoData.profile.hometown_province) {
+				this.type = 'none';
+				uni.switchTab({
+					url: '/pages/home/index'
+				})
+			}
 		},
 		methods:{
 			getSex(gender){

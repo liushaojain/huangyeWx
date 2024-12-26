@@ -4,7 +4,7 @@
 			<navigator url="/pages/user/InformationEntry/index?pageIndex=4" hover-class="none" class="edit">
 				<image class="img" :src="member_profiles.user_avatar" mode="aspectFill"></image>
 			</navigator>
-			{{ memberInfo.nick_name }}
+			{{ memberInfo.nick_name || '' }}
 		</view>
 		<view class="header" v-else @click="handleLogin">
 			<image class="img" src="https://oss.derucci-smart.com/images/upload/logo_1735172622543.png"
@@ -38,7 +38,7 @@
 				<view class="contentBodyBar">
 					<view class="item">
 						<view class="icon" @tap="handleUserInfo('/pages/user/userInfo/index')">
-							<image class="img" :src="imgBaseUrl + 'Group1000010633@2x.png'" mode=""></image>
+							<image class="img" src="https://oss.derucci-smart.com/images/upload/3_1735223280735.jpg" mode=""></image>
 						</view>
 						<view class="label">
 							基本信息
@@ -46,7 +46,7 @@
 					</view>
 					<view class="item">
 						<view class="icon" @tap="handleUserInfo('/pages/authentication/index')">
-							<image class="img" :src="imgBaseUrl + 'Group1000010630@2x.png'" mode=""></image>
+							<image class="img" src="https://oss.derucci-smart.com/images/upload/2_1735223226840.jpg" mode=""></image>
 						</view>
 						<view class="label">
 							认证信息
@@ -55,7 +55,7 @@
 
 					<view class="item">
 						<view class="icon" @tap="handleUserInfo('/pages/home/search/index')">
-							<image class="img" :src="imgBaseUrl + 'Group694@2x.png'" mode=""></image>
+							<image class="img" src="https://oss.derucci-smart.com/images/upload/1_1735223067104.jpg" mode=""></image>
 						</view>
 						<view class="label">
 							匹配设置
@@ -134,7 +134,7 @@ export default {
 		handleWeb(type) {
 			let url = ''
 			if(type === 1) {
-				url = 'https://www.baidu.com/';
+				url = 'http://192.168.1.14:8084/';
 			}
 			if(type === 2) {
 				url = 'https://www.baidu.com/';

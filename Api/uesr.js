@@ -169,6 +169,17 @@ const uesrApi = {
 		});
 	},
 
+
+	
+	// 人脸验证
+	getFaceResult(data){
+		return http({
+			url: 'api/config/getFaceResult',
+			data,
+			method: 'POST',
+			loadType: 1
+		});
+	},
 	
 }
 export default uesrApi

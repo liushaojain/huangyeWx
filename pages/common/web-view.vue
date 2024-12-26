@@ -16,15 +16,13 @@ export default {
         }
         let { url } = options;
         this.url = decodeURIComponent(url);
+        console.log({url});
     },
     methods: {
         loadData(e) {
-            console.log(e.detail.src);
-            if (url !== "") {
-                uni.reLaunch({
-                    url: url,
-                });
-            }
+            console.log("loadData");
+            console.log(e.detail);
+            console.log(e);
         },
     },
 };

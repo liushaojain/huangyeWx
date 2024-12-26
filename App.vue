@@ -38,8 +38,8 @@
 		},
 		onShareAppMessage:function(res){			
 			return {  
-				title: "3分钟搞定包装定制，省时，省力，省心！", 
-				imageUrl: "https://xpl-smallbatch.oos-gz.ctyunapi.cn/dzj/icon/share.png",
+				title: "实名脱单交友平台、真实、靠谱，在此牵手吧~", 
+				// imageUrl: "",
 				path: "/pages/home/index"
 			}  
 		}

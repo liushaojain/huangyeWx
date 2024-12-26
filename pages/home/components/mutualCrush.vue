@@ -11,7 +11,10 @@
                     <image mode="aspectFill" src="https://oss.derucci-smart.com/images/upload/1_1734844642484.jpg" alt="" />
                 </view>
             </view>
-            <button class="closeBtn" @click="closePopup">关闭</button>
+            <view class="tip-text">
+                互相心动！
+            </view>
+            <button class="closeBtn" @click="closePopup">开始聊天</button>
         </view>
     </u-popup>
 </template>
@@ -59,7 +62,7 @@ export default {
 .crush-box {
     width: 100%;
     position: relative;
-    height: 90%;
+    height: 686rpx;
     .img {
         position: absolute;
         width: 262rpx;
@@ -76,16 +79,16 @@ export default {
             right: -48rpx;
         }
         &.left {
-            left: 156rpx;
-            top: 80rpx;
+            left: 100rpx;
+            top: 120rpx;
             transform: rotateZ(-10deg);
             .icon {
                 top: -48rpx;
             }   
         }
         &.right {
-            right: 156rpx;
-            bottom: 140rpx;
+            right: 100rpx;
+            bottom: 30rpx;
             transform: rotateZ(16deg);
             .icon {
                 bottom: -48rpx;
@@ -97,8 +100,23 @@ export default {
 ::v-deep .u-popup__content {
     border-radius: 28rpx;
 }
-
+.tip-text {
+    font-weight: bold;
+    font-size: 36rpx;
+    color: #FF5C7E;
+    line-height: 42rpx;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 180rpx;
+}
 .closeBtn {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    bottom: 60rpx;
     width: 566rpx;
     height: 76rpx;
     background: linear-gradient(271deg, #F5496D 0%, #FF7592 100%);

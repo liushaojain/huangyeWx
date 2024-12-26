@@ -26,7 +26,7 @@
 				</view>
 				<view class="cHeadLine2">
 					<view class="txt">
-						<view v-if="memberInfo.profile" class="txtItem">{{ memberInfo.profile.age }}岁</view>
+						<view v-if="memberInfo.profile" class="txtItem">{{ memberInfo.profile.age || '' }}岁</view>
 						<view v-if="memberInfo.profile" class="txtItem">{{ getGeneration(memberInfo.profile.birth_date) }}</view>
 						<view v-if="memberInfo.profile" class="txtItem">{{ getZodiacFromDate(memberInfo.profile.birth_date) }}</view>
 					</view>
@@ -35,14 +35,14 @@
 						<view v-if="memberInfo.profile" class="txtItem">{{memberInfo.profile.weight || ''}}kg</view>
 					</view>
 				</view>
-				<view class="cHeadLine3">
+				<view class="cHeadLine3" v-if="memberInfo.profile">
 					<view class="item">
 						<image class="img1" :src="imgBaseUrl+'Group@2x(2).png'" mode=""></image>
 						{{memberInfo.profile.work}}
 					</view>
 					<view class="item">
 						<image class="img2" :src="imgBaseUrl+'Group@2x.png'" mode=""></image>
-						{{memberInfo.profile.province}}-{{memberInfo.profile.city}}
+						{{memberInfo.profile.province || ''}}-{{memberInfo.profile.city || ''}}
 					</view>
 				</view>
 			</view>
