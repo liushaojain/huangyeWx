@@ -163,6 +163,12 @@
 			"style": {
 				"navigationStyle":"custom"
 			}
+		},
+		{
+			"path": "pages/user/contactUs/index",
+			"style": {
+				"navigationStyle":"custom"
+			}
 		}
 		
 		

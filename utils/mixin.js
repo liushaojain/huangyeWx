@@ -8,7 +8,17 @@ export default {
 			imgBaseUrl: this.imgBaseUrl,
 		}
 	},
+	computed: {
+		isLogin() {
+			return !!userStore.state.token;
+		},
+	},
     methods: {
+		handleLogin() {
+			uni.navigateTo({
+				url: "/pages/user/login/index"
+			})
+		},
 		formatEnum(path, key) {
 			if (typeof path ==='string') {
 				path = path.split('.');

@@ -102,7 +102,7 @@
 				<view class="li">
 					<text class="label">家乡:</text>
 					<text
-						class="txt">{{memberInfo.profile.hometown_province}}-{{memberInfo.profile.hometown_city}}</text>
+						class="txt">{{memberInfo.profile.hometown_province}}/{{memberInfo.profile.hometown_city}}/{{memberInfo.profile.hometown_region}}</text>
 				</view>
 				<view class="li">
 					<text class="label">学历:</text>
@@ -110,7 +110,7 @@
 				</view>
 				<view class="li">
 					<text class="label">居住地:</text>
-					<text class="txt">{{memberInfo.profile.province}}--{{memberInfo.profile.city}} </text>
+					<text class="txt">{{memberInfo.profile.province}}/{{memberInfo.profile.city}}/{{memberInfo.profile.region}} </text>
 				</view>
 				<view class="li">
 					<text class="label">居住情况:</text>
@@ -309,7 +309,7 @@
 				this.nextMember();
 			},
 			openOtherInfo() {
-				EventBus.$emit('message-event', 'Hello from Brother A!');
+				EventBus.$emit('message-event', this.memberInfo);
 			},
 
 		}

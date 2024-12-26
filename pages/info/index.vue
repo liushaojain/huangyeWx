@@ -70,9 +70,6 @@ export default {
 		totalUnreadCount() {
 			return this.conversationList.reduce((accumulator, item) => accumulator + item.unreadCount, 0);
 		},
-		isLogin() {
-			return !!userStore.state.token;
-		},
 	},
 	async onShow() {
 		if (!this.isLogin) return;
@@ -94,11 +91,6 @@ export default {
 		handlerConversation(item) {
 			uni.navigateTo({
 				url: "/pages/info/message?conversationID=" + item.conversationID
-			})
-		},
-		handleLogin() {
-			uni.navigateTo({
-				url: "/pages/user/login/index"
 			})
 		},
 		handleToPath(url) {

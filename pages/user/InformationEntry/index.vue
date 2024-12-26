@@ -82,7 +82,9 @@
 			uni.setNavigationBarTitle({
 				title: this.pageList[this.pageIndex]
 			})
-			this.getBasic();
+			if(this.isLogin) {
+				this.getBasic();
+			}
 		},
 		onPageScroll(e) {
 			if(e.scrollTop >= 35){

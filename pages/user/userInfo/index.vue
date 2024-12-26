@@ -5,7 +5,7 @@
 				<image class="img" :src="member_profiles.user_avatar" mode="aspectFill"></image>
 			</navigator>
 			<text class="txt">{{member.nick_name}}</text>
-			<!-- <button @click="test" class="bnt">预览</button> -->
+			<button @click="test" class="bnt">预览</button>
 		</view>
 		<view class="tabList">
 			<u-tabs :list="tabList" @click="tabChange" lineColor="#FF7390" lineWidth="25" :current='current'></u-tabs>
@@ -23,10 +23,11 @@
 							<text v-if="member_profiles.height" class="tag">身高{{member_profiles.height}}cm</text>
 							<text v-if="member_profiles.gender" class="tag">{{formatEnum('MemberProfile.gender', member_profiles.gender)}}</text>
 							<text v-if="member_profiles.birth_date" class="tag">生日{{member_profiles.birth_date}}</text>
-							<text v-if="member_profiles.province" class="tag">{{member_profiles.province}}/{{member_profiles.city}}</text>
+							<text v-if="member_profiles.province" class="tag">现居住{{member_profiles.province}}/{{member_profiles.city}}/{{member_profiles.region}}</text>
+							<text v-if="member_profiles.province" class="tag">家乡是{{member_profiles.hometown_province}}/{{member_profiles.hometown_city}}/{{member_profiles.hometown_region}}</text>
 							<text v-if="member_profiles.work" class="tag">{{member_profiles.work}}</text>
 							<text v-if="member_profiles.living_status" class="tag">{{formatEnum('MemberProfile.living_status', member_profiles.living_status)}}</text>
-							<text v-if="member_profiles.weight" class="tag">{{member_profiles.weight}}kg</text>
+							<text v-if="member_profiles.weight" class="tag">体重{{member_profiles.weight}}kg</text>
 							<text v-if="member_profiles.education" class="tag">{{formatEnum('MemberProfile.education', member_profiles.education)}}</text>
 						</view>
 					</view>
@@ -148,8 +149,10 @@
 					that.statusBarHeight = statusBarHeight;
 				}
 			});
-			this.getBasic();
-			this.getPhoto();
+			if(this.isLogin) {
+				this.getBasic();
+				this.getPhoto();
+			}
 		},
 		methods:{
 			test() {

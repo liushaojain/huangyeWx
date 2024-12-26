@@ -4,7 +4,7 @@
 			<u-form-item label="昵称" prop="nick_name" borderBottom ref="item1">
 				<u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请输入" v-model="userInfo.nick_name" border="none"></u--input>
 			</u-form-item>
-			<u-form-item label="身高" prop="height" borderBottom ref="item1">
+			<u-form-item label="身高(cm)" prop="height" borderBottom ref="item1">
 				 <u--input suffixIcon="arrow-right" inputAlign="right" placeholder="请输入" v-model="userInfo.height" border="none"></u--input>
 			</u-form-item>
 			<u-form-item label="性别" prop="gender" borderBottom @click="showSex = true; hideKeyboard()" ref="item1">
@@ -25,7 +25,7 @@
 			<u-form-item label="居住状态" prop="living_status" borderBottom ref="item1" @click="showLivingStatus = true">
 				 <u--input suffixIcon="arrow-right" inputAlign="right" disabled  disabledColor="transparent" placeholder="请选择" border="none" :value="formatEnum('MemberProfile.living_status', userInfo.living_status)"></u--input>
 			</u-form-item>
-			<u-form-item label="体重" prop="weight" borderBottom ref="item1">
+			<u-form-item label="体重(kg)" prop="weight" borderBottom ref="item1">
 				 <u--input suffixIcon="arrow-right" inputAlign="right" border="none" v-model="userInfo.weight" placeholder="请输入"></u--input>
 			</u-form-item>
 			<u-form-item label="学历" prop="education" borderBottom ref="item1"  @click="showEducation = true">
@@ -38,14 +38,18 @@
 		<u-action-sheet :show="showLivingStatus" :actions="livingStatus" title="请选择" @close="showLivingStatus = false" @select="livingStatusSelect"></u-action-sheet>
 		<u-datetime-picker :show="datetimeShow" v-model="datetimeValue" mode="date" @confirm="Dateconfirm" @cancel="datetimeShow = false" ></u-datetime-picker>
 		
-		<barry-picker ref="placeDialog" @get-address="getPlace"></barry-picker>
-		<barry-picker ref="hometownDialog" @get-address="getHometown"></barry-picker>
+		<cityPicker v-if="hometownVisible" :column="3" :default-value="userInfo.hometown || []" :mask-close-able="true" @confirm="getHometown" @cancel="hometownVisible = false" :visible="hometownVisible"/>
+		<cityPicker v-if="placeVisible" :column="3" :default-value="userInfo.place || []" :mask-close-able="true" @confirm="getPlace" @cancel="placeVisible = false" :visible="placeVisible"/>
 	</view>
 </template>
 
 <script>
 	import {dateFormat} from '@/utils/util.js'
+	import cityPicker from '../../../../components/piaoyi-cityPicker/piaoyi-cityPicker.vue'
 	export default {
+        components: {
+            cityPicker
+        },
 		props: {
 			infoData: {
 				type: Object,
@@ -56,6 +60,8 @@
 		},
 		data() {
 			return {
+				hometownVisible: false,
+				placeVisible: false,
 				showSex: false,
 				showEducation: false,
 				showLivingStatus: false,
@@ -207,26 +213,22 @@
 			hideKeyboard(){
 				uni.hideKeyboard()
 			},
-			getHometown(e){
-				console.log(e)
-				this.userInfo.hometown = e.value || [];
-				this.$nextTick(()=>{
-					this.$refs.forms.validateField('hometown');
-				})
+			getHometown(val = {}){
+				// ['', '' ,'']
+				this.userInfo.hometown = [val.provinceName || '', val.cityName || '', val.areaName || ''];
+				this.hometownVisible = false;
+				this.placeVisible = false;
 			},
-			getPlace(e){
-				console.log(e)
-				this.userInfo.place = e.value || [];
-				this.$nextTick(()=>{
-					this.$refs.forms.validateField('place');
-				})
+			getPlace(val = {}){
+				this.userInfo.place = [val.provinceName || '', val.cityName || '', val.areaName || ''];
+				this.hometownVisible = false;
+				this.placeVisible = false;
 			},
 			openHometown(){
-				console.log(this.$refs.hometownDialog)
-				this.$refs.hometownDialog.show = true;
+				this.hometownVisible = true;
 			},
 			openPlace(){
-				this.$refs.placeDialog.show = true;
+				this.placeVisible = true;
 			},
 		},
 		mounted() {
@@ -241,8 +243,8 @@
 				...this.userInfo,
 				...(this.infoData.profile || {}),
 				nick_name: this.infoData.member.nick_name,
-				place: [this.infoData.profile.province, this.infoData.profile.city],
-				hometown: [this.infoData.profile.hometown_province, this.infoData.profile.hometown_city],
+				place: [this.infoData.profile.province || '', this.infoData.profile.city || '', this.infoData.profile.region || ''],
+				hometown: [this.infoData.profile.hometown_province || '', this.infoData.profile.hometown_city || '', this.infoData.profile.hometown_region || ''],
 			}
 			this.$nextTick(()=>{
 				this.$refs.forms.setRules(this.rules)

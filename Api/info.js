@@ -6,7 +6,7 @@ const infoApi = {
 			url: 'api/msg/myLove',
 			data,
 			method: 'POST',
-			loadType: 2
+			loadType: 1
 		});
 	},
     // 对我心动的
@@ -15,7 +15,7 @@ const infoApi = {
 			url: 'api/msg/loveMe',
 			data,
 			method: 'POST',
-			loadType: 2
+			loadType: 1
 		});
 	},
     // 互相心动的
@@ -24,7 +24,7 @@ const infoApi = {
 			url: 'api/msg/likeEachOther',
 			data,
 			method: 'POST',
-			loadType: 2
+			loadType: 1
 		});
 	},
     // 访客记录
@@ -33,7 +33,7 @@ const infoApi = {
 			url: 'api/msg/visitLog',
 			data,
 			method: 'POST',
-			loadType: 2
+			loadType: 1
 		});
 	},
     // 访客记录
@@ -42,7 +42,7 @@ const infoApi = {
 	// 		url: 'api/msg/visitLog',
 	// 		data,
 	// 		method: 'POST',
-	// 		loadType: 2
+	// 		loadType: 1
 	// 	});
 	// },
 
@@ -52,7 +52,7 @@ const infoApi = {
 			url: 'api/member/getUserList',
 			data: { id_list },
 			method: 'POST',
-			loadType: 2
+			loadType: 1
 		});
 	},
     // 用户消息签名
@@ -63,7 +63,7 @@ const infoApi = {
                 member_id
             },
 			method: 'POST',
-			loadType: 2
+			loadType: 1
 		});
     }
 }

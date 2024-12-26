@@ -1,5 +1,5 @@
 <template>
-	<u-popup :show="show" mode="center"  @close="close" @open="open" >
+	<u-popup :show="show" mode="center" @close="close" @open="open" >
 		<view class="popUp">
 			<view class="title">
 				认证信息
@@ -10,8 +10,8 @@
 				</view>
 				<view class="userInfo">
 					<view class="userInfoLeft">
-						<image class="img" src="../../../static/img/logo.png" mode=""></image>
-						<text class="name ft32">来自星星</text>						
+						<image class="img" :src="infoData.profile.user_avatar" mode=""></image>
+						<text class="name ft32">{{infoData.nick_name}}</text>						
 					</view>
 					<view class="userInfoRight">
 						<view class="pinkFont ft36">93%</view>
@@ -55,11 +55,13 @@
 			return {
 				show: false,
 				imgBaseUrl: this.imgBaseUrl,
+				infoData: {}
 			}
 		},
 		created() {
 			EventBus.$on('message-event', (data) => {
 				console.log(data)
+				this.infoData = data;
 				this.show = true;
 			});
 		},
@@ -107,6 +109,9 @@
 		.userInfoLeft{
 			display: flex;
 			align-items: center;
+			.img {
+				border-radius: 50%;
+			}
 		}
 		.userInfoRight{
 			font-size: 36rpx;
