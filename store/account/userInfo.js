@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import ImManager from '../../pages/info/utils/imManager.js'
-
+import { imKey } from '@/config.js'
 Vue.use(Vuex)
 
 const actions = {}
@@ -47,7 +47,7 @@ const loginIM = (id) => {
 	console.log("初始化IM-2", userID);
 	if (!userID) return;
 	ImManager.getInstance().init({
-		SDKAppID: "1600067113",
+		SDKAppID: imKey,
 		userID: `${userID}`
 	});
 }

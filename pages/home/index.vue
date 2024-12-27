@@ -12,10 +12,10 @@
 		<mutualCrush ref="mutualCrush" :memberInfo="memberInfo" v-if="isLogin"> </mutualCrush>
 		<view class="footerBtn" v-if="isLogin">
 			<view class="item">
-				<image class="img" @tap="dislike" :src="imgBaseUrl+'Group713@2x.png'" mode=""></image>
+				<image class="img" @tap="dislike" :src="imgBaseUrl + 'Group713@2x.png'" mode=""></image>
 			</view>
 			<view class="item">
-				<image class="img" @tap="like" :src="imgBaseUrl+'Group714@2x.png'" mode=""></image>
+				<image class="img" @tap="like" :src="imgBaseUrl + 'Group714@2x.png'" mode=""></image>
 			</view>
 		</view>
 		<view class="no-login-view" v-if="!isLogin">
@@ -44,7 +44,7 @@
 				titleHeight: 44,
 				headHeight: '',
 				bgColor: '',
-				memberInfo:{}
+				memberInfo: {}
 			}
 		},
 		computed: {
@@ -64,9 +64,11 @@
 					this.headHeight = info.statusBarHeight + this.titleHeight;
 				}
 			});
+			if (this.isLogin && this.memberList.length === 0) {
+				this.getMember();
+			}
 		},
 		onLoad() {
-			this.getMember();
 		},
 		methods: {
             onIdentification(data) {

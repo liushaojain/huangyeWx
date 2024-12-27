@@ -1,6 +1,8 @@
 // 引入用于发送网络请求的模块，在uni-app中可以使用uni.request
 const request = uni.request;
 
+import { mapKey } from '@/config.js'
+console.log({mapKey});
 // 这里填写你在腾讯地图开放平台申请的key
 const MAP_KEY = 'RWEBZ-3S3CI-VMZGO-5UDDA-JCXYE-MTBWZ';
 

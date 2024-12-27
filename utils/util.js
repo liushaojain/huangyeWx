@@ -1,28 +1,8 @@
-import $request from '@/utils/ajax.js'
 import uesrApi from "../Api/uesr.js"
 
-let basehost ="";
-let diyHost ="";
-if(process.env.NODE_ENV === 'development'){
-	if(process.env.isformal=='1'){
-		basehost="http://47.119.182.138:88/"
-	}else if(process.env.isformal=='2'){
-		basehost="http://47.119.182.138:88/"
-	}else if(process.env.isformal=='3'){
-		basehost="http://47.119.182.138:88/"
-	}else{
-		basehost="http://47.119.182.138:88/"
-	}
-}else{
-	if(process.env.isformal=='3'){
-		basehost="http://47.119.182.138:88/"
-	}else{
-		basehost = 'http://47.119.182.138:88/'		
-	}
-}
+import { basehost } from '@/config.js'
+export { basehost }
 
-export {basehost}
-export {diyHost}
 export function moneyFormat(val) {
   if (!val) return '0.00'
   let value = val.toString()
@@ -36,7 +16,7 @@ export function getWeixinCode(){
 		uni.login({
 		  provider: 'weixin',
 		  success: (loginRes) => {
-			  console.log(loginRes)
+            console.log(loginRes)
 			resolve(loginRes.code)
 		  },
 		  fail(res) {
@@ -56,12 +36,12 @@ export function dateFormat(timestamp) {
 }
 // 生成文件名随机字符串
 export function random_string(len) {
-　　const strLeng = len || 32;
-　　const chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';   
-　　const maxPos = chars.length;
-　　let pwd = '';
-　　for (let i = 0; i < strLeng; i++) {
-    　　pwd += chars.charAt(Math.floor(Math.random() * maxPos));
+    const strLeng = len || 32;
+    const chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';   
+    const maxPos = chars.length;
+    let pwd = '';
+    for (let i = 0; i < strLeng; i++) {
+        pwd += chars.charAt(Math.floor(Math.random() * maxPos));
     }
     return pwd;
 }

@@ -34,13 +34,14 @@
 </template>
 
 <script>
+	import { faceRedirectUrl } from "@/config.js";
 	export default {
 		data(){
 			return {
 				baseImg: this.imgBaseUrl,
 				formData:{
-					name: '林雄军',
-					id_card: '441522199202223050'
+					name: '',
+					id_card: ''
 				},
 				biz_token: ""
 			}
@@ -64,17 +65,16 @@
 			 	const res = await this.$apis.uesrApi.getFaceSign({
 					id_card,
 					name,
-					// redirect_url: "https://login.derucci-smart.com"
-					redirect_url: "http://192.168.1.14:8084"
+					redirect_url: faceRedirectUrl
 				});
 				this.biz_token = res.data.biz_token;
 				this.to(`/pages/common/web-view?url=${encodeURIComponent(res.data.url)}`);
 			},
 
 		    async getFaceResult(biz_token) {
+				console.log({biz_token});
 				console.log("校验是否成功");
 				const res = await this.$apis.uesrApi.getFaceResult({ biz_token });
-				console.log("校验是否成功", res);
 			}
 		},
 		onShow() {

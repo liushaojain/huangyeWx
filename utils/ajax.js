@@ -21,7 +21,7 @@ const request = ({url , data , method , ContentType, loadType,iscomplete})=>{
 	}
 	return new Promise((resolve, reject) => {
 		uni.request({
-			url: basehost+url,
+			url: basehost + url,
 			data: data,
 			method:method,
 			header: header,
