@@ -7,15 +7,15 @@
 				<image class="img" src="https://marries.oss-cn-beijing.aliyuncs.com/life_photo/AEK1PLYDwdoFb6ad46b79acd577983ed3d413c45510b.png" mode=""></image>
 			</view>
 		</view>
-		<homeContent v-if="isLogin"></homeContent>
-		<otherInfo v-if="isLogin"></otherInfo>
-		<mutualCrush v-if="isLogin"> </mutualCrush>
+		<homeContent :memberInfo="memberInfo" v-if="isLogin"></homeContent>
+		<otherInfo ref="otherInfo" :memberInfo="memberInfo" v-if="isLogin"></otherInfo>
+		<mutualCrush ref="mutualCrush" :memberInfo="memberInfo" v-if="isLogin"> </mutualCrush>
 		<view class="footerBtn" v-if="isLogin">
 			<view class="item">
-				<image class="img" @tap="handleNext" :src="imgBaseUrl+'Group713@2x.png'" mode=""></image>
+				<image class="img" @tap="dislike" :src="imgBaseUrl+'Group713@2x.png'" mode=""></image>
 			</view>
 			<view class="item">
-				<image class="img" @tap="handleLove" :src="imgBaseUrl+'Group714@2x.png'" mode=""></image>
+				<image class="img" @tap="like" :src="imgBaseUrl+'Group714@2x.png'" mode=""></image>
 			</view>
 		</view>
 		<view class="no-login-view" v-if="!isLogin">
@@ -30,7 +30,6 @@
 	import otherInfo from './components/otherInfo.vue'
 	import mutualCrush from './components/mutualCrush.vue'
 	
-	import { EventBus } from './components/eventBus'
 	export default {
 		components: {
 			homeContent,
@@ -67,10 +66,7 @@
 			});
 		},
 		onLoad() {
-			 EventBus.$on('laod_basic_member', (data) => {
-				console.log('接收到事件传递的数据:', data);
-				this.memberInfo = data;
-			});
+			this.getmember();
 		},
 		methods: {
 			handleSetting() {
@@ -80,18 +76,41 @@
 					this.handleLogin();
 				}
 			},
-			handleNext() {
-				EventBus.$emit('dislike');
-			},
-			handleLove() {
-				EventBus.$emit('like');
-			},
-			getmember() {
-				const memberList = this.$apis.homeApi.memberIndex({
+			async getmember() {
+				const memberList = await this.$apis.homeApi.memberIndex({
 					page: '1',
-					pageSize: '10'
+					pageSize: '100'
 				});
-				this.memberList = memberList;
+				this.memberList = memberList.data.data;
+				this.nextMember();
+			},
+			nextMember() {
+				this.memberInfo = this.memberList[this.memberIndex];
+				this.memberIndex += 1;
+				if (this.memberIndex >= this.memberList.length) {
+					this.memberIndex = 0;
+				}
+			},
+			async like() {
+				if (!this.isLogin) {
+					this.handleLogin();
+					return;
+				}
+				uni.vibrateShort();
+				await this.$apis.homeApi.like(this.memberInfo.id);
+				this.showToast("已标记为喜欢");
+				this.nextMember();
+			},
+            async dislike() {
+				if (!this.isLogin) {
+					this.handleLogin();
+					return;
+				}
+				console.log("dislike");
+				uni.vibrateShort();
+				await this.$apis.homeApi.dislike(this.memberInfo.id);
+				this.showToast("已标记为不喜欢");
+				this.nextMember();
 			},
 		},
 		onPageScroll(e) {

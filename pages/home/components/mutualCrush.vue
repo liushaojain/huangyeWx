@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import { EventBus } from './eventBus.js';
 export default {
     data() {
         return {
@@ -30,12 +29,12 @@ export default {
         }
     },
     created() {
-        EventBus.$on('crush-event', (data) => {
-            this.infoData = data;
-            this.show = true;
-        });
     },
     methods: {
+        show(data) {
+            this.infoData = data;
+            this.show = true;
+        },
         open() {
 
         },

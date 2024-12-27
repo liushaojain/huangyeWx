@@ -1,9 +1,9 @@
 <template>
 	<view class="homeContent">
 		<view class="hreader mt94">
-			<uni-swiper-dot :info="memberInfo.photo" :current="current" field="content" :mode="mode" :dotsStyles='dotsStyles'>
-				<swiper :style="{paddingTop: headHeight + 'px'}" class="swiper" circular :autoplay="autoplay"
-					:interval="interval" @change="change" :indicator-dots="false" :duration="duration">
+			<uni-swiper-dot :info="memberInfo.photo" :current="current" field="content" mode="round" :dotsStyles='dotsStyles'>
+				<swiper :style="{paddingTop: headHeight + 'px'}" class="swiper" circular :autoplay="true"
+					:interval="2000" @change="change" :indicator-dots="false" :duration="500">
 					<swiper-item v-for="(item,index) in memberInfo.photo" :key="index">
 						<view class="swiper-item uni-bg-red">
 							<view class="bg">
@@ -203,20 +203,21 @@
 </template>
 
 <script>
-	import { EventBus } from './eventBus.js';
+	import { userStore } from "@/store/account/userInfo.js"
 	import { getZodiacFromDate, getGeneration } from '../../../utils/util.js';
 	export default {
+		props: {
+			memberInfo: {
+				type: Object,
+				default() {
+					return {}
+				}
+			}
+		},
 		data() {
 			return {
 				imgBaseUrl: this.imgBaseUrl,
-				background: ['color1', 'color2', 'color3'],
-				indicatorDots: true,
-				autoplay: false,
-				interval: 2000,
-				duration: 500,
-				lifePhoneList: [],
 				current: 0,
-				mode: 'round',
 				dotsStyles: {
 					backgroundColor: 'rgba(255,255,255,0.35)',
 					border: 'none',
@@ -224,21 +225,33 @@
 					selectedBorder: 'none',
 					paddingTop: this.headHeight + 'px'
 				},
-				memberInfo: {},
-				memberIndex: 0,
-				statusBarHeight: '',
 				titleHeight: 44,
 				headHeight: '',
-				bgColor: '',
-				profile: {},
 				memberList: [],
-				MemberMarriageInfo: {},
-				memberHobbiesEnum: {},
-				expectedHimEnum: {},
 				memberIndex: 0
 			}
 		},
 		computed: {
+			profile() {
+				const Enum = userStore.state.Enum;
+				return Enum.MemberProfile;
+			},
+
+			MemberMarriageInfo() {
+				const Enum = userStore.state.Enum;
+				return Enum.MemberMarriageInfo;
+			},
+
+			memberHobbiesEnum() {
+				const Enum = userStore.state.Enum;
+				return Enum.MemberHobbie;
+			},
+
+			expectedHimEnum() {
+				const Enum = userStore.state.Enum;
+				return Enum.ExpectedHim;
+			},
+
 			birthDay() {
 				if (this.memberInfo.hasOwnProperty('profile')) {
 					return this.formatBirthday((this.memberInfo.profile || {}).birth_date)
@@ -249,8 +262,6 @@
 		created() {
 			uni.getSystemInfo({
 				success: (info) => {
-					var statusBarHeight = info.statusBarHeight;
-					this.statusBarHeight = statusBarHeight;
 					this.headHeight = info.statusBarHeight + this.titleHeight;
 				}
 			});
@@ -259,48 +270,6 @@
 		methods: {
 			getZodiacFromDate,
 			getGeneration,
-			init() {
-				this.getmember();
-				let Enum = uni.getStorageSync('Enum');
-				if (typeof(Enum) !== 'object') {
-					Enum = JSON.parse(Enum)
-				}
-				this.profile = Enum.MemberProfile
-				this.MemberMarriageInfo = Enum.MemberMarriageInfo
-				this.memberHobbiesEnum = Enum.MemberHobbie
-				this.expectedHimEnum = Enum.ExpectedHim
-				EventBus.$on('like', this.like);
-				EventBus.$on('dislike', this.dislike);
-			},
-			async like() {
-				if (!this.isLogin) {
-					this.handleLogin();
-					return;
-				}
-				uni.vibrateShort();
-				await this.$apis.homeApi.like(this.memberInfo.id);
-				this.showToast("已标记为喜欢");
-				this.nextMember();
-			},
-            async dislike() {
-				if (!this.isLogin) {
-					this.handleLogin();
-					return;
-				}
-				console.log("dislike");
-				uni.vibrateShort();
-				await this.$apis.homeApi.dislike(this.memberInfo.id);
-				this.showToast("已标记为不喜欢");
-				this.nextMember();
-			},
-			nextMember() {
-				this.memberInfo = this.memberList[this.memberIndex];
-				this.memberIndex += 1;
-				if(this.memberIndex >= this.memberList.length) {
-					this.memberIndex = 0;
-				}
-				EventBus.$emit('laod_basic_member', this.memberInfo);
-			},
 			change(e) {
 				this.current = e.detail.current;
 			},
@@ -311,18 +280,8 @@
 				const day = parts[2];
 				return `${month}月${day}日`;
 			},
-			async getmember() {
-				const memberList = await this.$apis.homeApi.memberIndex({
-					page: '1',
-					pageSize: '100'
-				});
-				this.memberList = memberList.data.data;
-				this.nextMember();
-			},
 			openOtherInfo() {
-				// EventBus.$emit('certification-event', this.memberInfo);
-				EventBus.$emit('crush-event', this.memberInfo);
-				
+				this.$emit("onCrush", this.memberInfo);
 			},
 
 		}

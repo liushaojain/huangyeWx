@@ -49,7 +49,6 @@
 </template>
 
 <script>
-	import { EventBus } from './eventBus.js';
 	export default {
 		data(){
 			return {
@@ -59,13 +58,13 @@
 			}
 		},
 		created() {
-			EventBus.$on('certification-event', (data) => {
+		},
+		methods:{
+			show(data) {
 				console.log(data)
 				this.infoData = data;
 				this.show = true;
-			});
-		},
-		methods:{
+			},
 			open(){
 				
 			},
