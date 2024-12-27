@@ -4,9 +4,8 @@
 			:style="{paddingTop: statusBarHeight+'px',height:titleHeight+'px',background:bgColor}">
 			<text class="txt">荒野</text>
 		</view>
-		<homeContent :memberInfo="memberInfo" v-if="isLogin"></homeContent>
+		<homeContent @onIdentification="onIdentification" :memberInfo="memberInfo" v-if="isLogin"></homeContent>
 		<otherInfo ref="otherInfo" :memberInfo="memberInfo" v-if="isLogin"></otherInfo>
-		<mutualCrush ref="mutualCrush" :memberInfo="memberInfo" v-if="isLogin"> </mutualCrush>
 		<view class="footerBtn" v-if="isLogin">
 			<view class="item">
 				<image class="img" @tap="dislike" :src="imgBaseUrl+'Group713@2x.png'" mode=""></image>
@@ -25,13 +24,11 @@
 <script>
 	import homeContent from './components/homeContent.vue'
 	import otherInfo from './components/otherInfo.vue'
-	import mutualCrush from './components/mutualCrush.vue'
 	
 	export default {
 		components: {
 			homeContent,
 			otherInfo,
-			mutualCrush
 		},
 		data() {
 			return {
@@ -66,6 +63,10 @@
 			this.getMemberDetail(id);
 		},
 		methods: {
+            onIdentification(data) {
+                console.log(this.$refs['otherInfo']);
+                this.$refs['otherInfo'].showThis(data);
+            },
 			handleSetting() {
 				if (this.isLogin) {
 					this.to('/pages/home/search/index');
@@ -76,6 +77,7 @@
 			async getMemberDetail(id) {
 				const res = await this.$apis.uesrApi.getMemberDetail({ member_id: id });
 				this.memberInfo = res.data;
+                this.$apis.uesrApi.setVisit({ visited_member_id: this.memberInfo.id });
 			},
 			async like() {
 				if (!this.isLogin) {

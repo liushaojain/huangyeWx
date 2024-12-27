@@ -280,7 +280,7 @@
 				return `${month}月${day}日`;
 			},
 			openOtherInfo() {
-				this.$emit("onCrush", this.memberInfo);
+				this.$emit("onIdentification", this.memberInfo);
 			},
 
 		}

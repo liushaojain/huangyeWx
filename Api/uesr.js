@@ -189,6 +189,16 @@ const uesrApi = {
 			method: 'POST',
 			loadType: 1
 		});
+	},
+
+	// 设置访问事件
+	setVisit(data) {
+		return http({
+			url: 'api/member/visit',
+			data,
+			method: 'POST',
+			loadType: 1
+		});
 	}
 	
 }

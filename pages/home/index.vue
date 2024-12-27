@@ -7,7 +7,7 @@
 				<image class="img" src="https://marries.oss-cn-beijing.aliyuncs.com/life_photo/AEK1PLYDwdoFb6ad46b79acd577983ed3d413c45510b.png" mode=""></image>
 			</view>
 		</view>
-		<homeContent :memberInfo="memberInfo" v-if="isLogin"></homeContent>
+		<homeContent @onIdentification="onIdentification" :memberInfo="memberInfo" v-if="isLogin"></homeContent>
 		<otherInfo ref="otherInfo" :memberInfo="memberInfo" v-if="isLogin"></otherInfo>
 		<mutualCrush ref="mutualCrush" :memberInfo="memberInfo" v-if="isLogin"> </mutualCrush>
 		<view class="footerBtn" v-if="isLogin">
@@ -66,9 +66,12 @@
 			});
 		},
 		onLoad() {
-			this.getmember();
+			this.getMember();
 		},
 		methods: {
+            onIdentification(data) {
+                this.$refs['otherInfo'].showThis(data);
+            },
 			handleSetting() {
 				if (this.isLogin) {
 					this.to('/pages/home/search/index');
@@ -76,7 +79,7 @@
 					this.handleLogin();
 				}
 			},
-			async getmember() {
+			async getMember() {
 				const memberList = await this.$apis.homeApi.memberIndex({
 					page: '1',
 					pageSize: '100'
@@ -86,6 +89,7 @@
 			},
 			nextMember() {
 				this.memberInfo = this.memberList[this.memberIndex];
+				this.$apis.uesrApi.setVisit({ visited_member_id: this.memberInfo.id });
 				this.memberIndex += 1;
 				if (this.memberIndex >= this.memberList.length) {
 					this.memberIndex = 0;
