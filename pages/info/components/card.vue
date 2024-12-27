@@ -63,8 +63,9 @@ export default {
 	
     methods: {
         click() {
+            this.to(`/pages/home/userDetails?id=${this.data.guest.id}`)
             this.$emit("click", this.data)
-        }
+        },
     },
 };
 </script>

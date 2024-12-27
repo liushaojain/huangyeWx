@@ -265,7 +265,6 @@
 					this.headHeight = info.statusBarHeight + this.titleHeight;
 				}
 			});
-			this.init();
 		},
 		methods: {
 			getZodiacFromDate,

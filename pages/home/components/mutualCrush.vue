@@ -31,7 +31,7 @@ export default {
     created() {
     },
     methods: {
-        show(data) {
+        showThis(data) {
             this.infoData = data;
             this.show = true;
         },

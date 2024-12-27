@@ -180,6 +180,16 @@ const uesrApi = {
 			loadType: 1
 		});
 	},
+
+	// 获取具体用户信息
+	getMemberDetail(data) {
+		return http({
+			url: 'api/member/memberDetail',
+			data,
+			method: 'POST',
+			loadType: 1
+		});
+	}
 	
 }
 export default uesrApi

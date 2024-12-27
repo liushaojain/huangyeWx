@@ -60,7 +60,7 @@
 		created() {
 		},
 		methods:{
-			show(data) {
+			showThis(data) {
 				console.log(data)
 				this.infoData = data;
 				this.show = true;

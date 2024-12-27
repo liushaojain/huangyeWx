@@ -50,9 +50,9 @@ export default {
         },
         onClick(item) {
             console.log(item);
-			uni.navigateTo({
-				url: `/pages/info/message?conversationID=C2C${item.guest.id}`
-			})
+			// uni.navigateTo({
+			// 	url: `/pages/info/message?conversationID=C2C${item.guest.id}`
+			// })
         }
     },
 };
