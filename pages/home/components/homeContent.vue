@@ -277,6 +277,7 @@
 					this.handleLogin();
 					return;
 				}
+				uni.vibrateShort();
 				await this.$apis.homeApi.like(this.memberInfo.id);
 				this.showToast("已标记为喜欢");
 				this.nextMember();
@@ -287,6 +288,7 @@
 					return;
 				}
 				console.log("dislike");
+				uni.vibrateShort();
 				await this.$apis.homeApi.dislike(this.memberInfo.id);
 				this.showToast("已标记为不喜欢");
 				this.nextMember();

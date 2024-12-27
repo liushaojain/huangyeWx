@@ -71,6 +71,12 @@
 				"navigationStyle":"custom"
 			}
 		},
+		{
+			"path": "pages/info/my-browsing",
+			"style": {
+				"navigationStyle":"custom"
+			}
+		},
 
 		{
 			"path": "pages/user/index",

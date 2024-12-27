@@ -163,7 +163,7 @@
 				}
 			},
 			onSelectItem(item) {
-				if (this.selectedPhoto.id) {
+				if (this.selectedPhoto.id && this.selectedPhoto.id === item.id) {
 					this.selectedPhoto = {};
 				} else {
 					this.selectedPhoto = item;

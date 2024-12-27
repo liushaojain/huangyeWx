@@ -12,15 +12,15 @@
 			去登录
 		</view>
 		<view class="Records">
-			<view class="item">
+			<view class="item" @tap="to('/pages/info/my-browsing')">
 				<text class="num">{{ memberInfo.viewed_count || 0 }}</text>
 				<text class="label">我的浏览</text>
 			</view>
-			<view class="item">
+			<view class="item" @tap="to('/pages/info/my-crush')">
 				<text class="num">{{ memberInfo.favorites_count || 0 }}</text>
 				<text class="label">我心动的</text>
 			</view>
-			<view class="item">
+			<view class="item" @tap="to('/pages/info/visitor-record')">
 				<text class="num">{{ memberInfo.recent_visitors_count || 0 }}</text>
 				<text class="label">最近来访</text>
 			</view>
