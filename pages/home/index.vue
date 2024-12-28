@@ -94,7 +94,7 @@
 				this.$apis.uesrApi.setVisit({ visited_member_id: this.memberInfo.id });
 				this.memberIndex += 1;
 				if (this.memberIndex >= this.memberList.length) {
-					this.memberIndex = 0;
+					this.showToast("没有更多嘉宾啦~~");
 				}
 			},
 			async like() {

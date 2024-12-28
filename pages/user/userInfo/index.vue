@@ -6,7 +6,7 @@
 				<image class="img" :src="member_profiles.user_avatar" mode="aspectFill"></image>
 			</view>
 			<text class="txt">{{member.nick_name}}</text>
-			<button style="visibility: hidden;" @click="test" class="bnt">预览</button>
+			<button @click="onPreview" class="bnt">预览</button>
 		</view>
 		<view class="tabList">
 			<u-tabs :list="tabList" @click="tabChange" lineColor="#FF7390" lineWidth="25" :current='current'></u-tabs>
@@ -158,6 +158,9 @@
 			}
 		},
 		methods:{
+			onPreview() {
+				this.to(`/pages/home/userDetails?id=${this.basicInfoData.member.id}&isSelf=true`)
+			},
 			delPhone() {
 				if (this.selectedPhoto.id) {
 					console.log("删除");

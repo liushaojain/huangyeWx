@@ -6,7 +6,7 @@
 		</view>
 		<homeContent @onIdentification="onIdentification" :memberInfo="memberInfo" v-if="isLogin"></homeContent>
 		<otherInfo ref="otherInfo" :memberInfo="memberInfo" v-if="isLogin"></otherInfo>
-		<view class="footerBtn" v-if="isLogin">
+		<view class="footerBtn" v-if="isLogin && !isSelf">
 			<view class="item">
 				<image class="img" @tap="dislike" :src="imgBaseUrl+'Group713@2x.png'" mode=""></image>
 			</view>
@@ -35,7 +35,8 @@
 				statusBarHeight: '',
 				titleHeight: 44,
 				bgColor: '',
-				memberInfo:{}
+				memberInfo:{},
+				isSelf: true
 			}
 		},
 		computed: {
@@ -55,7 +56,9 @@
 				}
 			});
 		},
-		onLoad(id) {
+		onLoad({ id, isSelf }) {
+			this.isSelf = !!isSelf;
+			console.log(id);
             if(!id) {
                 console.error("用户id不能为空");
                 return;

@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="header" :style="{'padding-top': statusBarHeight+'px'}">
-			<u-navbar class="uNavbar" @leftClick="leftClick" :autoBack="true" title="升级VIP提升聊天效率" :bgColor='bgColor'
+			<u-navbar class="uNavbar" :autoBack="true" title="升级VIP提升聊天效率" :bgColor='bgColor'
 				></u-navbar>
 		</view>
 		<view class="content">
@@ -12,28 +12,17 @@
 						<view class="hintTop">回复少？升级VIP更多曝光</view>
 						<view class="hintBottom">搭配曝光翻倍等权益，效果翻倍</view>
 					</view>
-					<!-- <button class="btn">去升级</button> -->
 				</view>
 				<view class="contentMain">
 					<view class="list">
-						<view class="item selected">
-							<view class="month">12个月</view>
-							<view class="money">￥<text class="num">388</text></view>
+						<view class="item" @tap="selectedVipItem = item" :class="{selected: item.id === selectedVipItem.id}" v-for="item in vipList" :key="item.id">
+							<view class="month">{{item.title}}</view>
+							<view class="money">￥<text class="num">{{item.price}}</text></view>
 							<view class="hint">日均1.06元</view>
 						</view>
-						<view class="item">
-							<view class="month">3个月</view>
-							<view class="money">￥<text class="num">348</text></view>
-							<view class="hint">日均3.8元</view>
-						</view>
-						<view class="item">
-							<view class="month">1个月</view>
-							<view class="money">￥<text class="num">248</text></view>
-							<view class="hint">日均8.2元</view>
-						</view>
 					</view>
-					<view class="btn">立即开通</view>
-					<view class="txt">开通前请阅读《会员服务协议》</view>
+					<view @tap="activateVIP" class="btn">立即开通</view>
+					<view @tap="readProtocol" class="txt">开通前请阅读《会员服务协议》</view>
 				</view>
 			</view>
 
@@ -78,17 +67,43 @@
 				imgBaseUrl: this.imgBaseUrl,
 				bgColor: 'transparent',
 				statusBarHeight: 0,
+				vipList: [],
+				selectedVipItem: {}
 			}
 		},
 		onShow() {
-			let that = this;
 			uni.getSystemInfo({
-				success: function(info) {
-					that.statusBarHeight = info.statusBarHeight;
+				success: (info) => {
+					this.statusBarHeight = info.statusBarHeight;
 				}
 			});
+			this.getVipList();
 		},
 		methods: {
+			async activateVIP() {
+				const id = this.selectedVipItem.id;
+				if (!id) {
+					this.showToast("请选择您要购买的VIP套餐");
+					return;
+				}
+				const res = await this.$apis.uesrApi.buyVip({
+					vip_price_id: id
+				});
+				if (res.status) {
+
+				}
+			},
+			readProtocol() {
+				let url = 'https://www.baidu.com/'
+				this.to(`/pages/common/web-view?url=${encodeURIComponent(url)}`);
+			},
+			async getVipList() {
+				const res = await this.$apis.uesrApi.getVipList();
+				this.vipList = res.data;
+				if (this.vipList && this.vipList.length) {
+					this.selectedVipItem = this.vipList[0];
+				}
+			},
 			leftClick() {
 				uni.navigateBack({
 					delta: 1

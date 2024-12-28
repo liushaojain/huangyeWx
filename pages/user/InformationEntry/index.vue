@@ -1,7 +1,7 @@
 <template>
 	<view class="container" :style="{'padding-top': statusBarHeight+'px'}">
 		<view class="header">
-			<u-navbar class="uNavbar" :autoBack="true" :title="pageList[pageIndex].title" :bgColor='bgColor' :height="titleHeight"></u-navbar>
+			<u-navbar class="uNavbar" @leftClick="onBack" :title="pageList[pageIndex].title" :bgColor='bgColor' :height="titleHeight"></u-navbar>
 		</view>
 		<template v-if="!isFinished">
 			<view class="hintImg">
@@ -18,7 +18,7 @@
 			</view>
 			<view class="footer">
 				<view class="infoListPage" v-if="type === 1">
-					<text v-for="(item, index) in pageList" :key="index" class="item" @click="pageIndex = index" :class="{'active':index===pageIndex}"></text>
+					<!-- <text v-for="(item, index) in pageList" :key="index" class="item" @click="pageIndex = index" :class="{'active':index===pageIndex}"></text> -->
 				</view>
 				<button class="confirmBtn" @click="formSubmit">确定</button>
 			</view>
@@ -48,7 +48,7 @@
 				</view>
 			</view>
 		</template>
-
+		<ZeroPrivacy ref="ZeroPrivacy" @agree="handleAgree" />
 	</view>
 </template>
 
@@ -60,7 +60,7 @@
 	import Avatar from "./components/Avatar.vue"
 	import LifePhoto from "./components/LifePhoto.vue"
 	import AboutMe from "./components/AboutMe.vue"
-	
+	import ZeroPrivacy from '@/components/zero-privacy/zero-privacy.vue'
 	export default {
 		data(){
 			return {
@@ -92,7 +92,8 @@
 			Expects,
 			Avatar,
 			LifePhoto,
-			AboutMe
+			AboutMe,
+			ZeroPrivacy
 		},
 		onShow() {
 			
@@ -123,6 +124,9 @@
 			}
 		},
 		methods:{
+			handleAgree() {
+				this.formSubmit(false);
+			},
 			async getBasic(){
 				const data = await this.getBasicInfoData();
 				this.isLoaded = true;
@@ -133,15 +137,18 @@
 					url
 				})
 			},
+			onBack() {
+				this.$refs.ZeroPrivacy.open("确定返回吗？");
+			},
 			back() {
 				uni.navigateBack();
 			},
-			async formSubmit(){
+			async formSubmit(needNext = true){
 				const activePage = this.pageList[this.pageIndex];
 				const ref = activePage.ref;
 				const data = await this.$refs[ref].submit();
 				console.log(this.pageIndex)
-				if(this.type === 1){
+				if(this.type === 1 && needNext){
 					if(data && data.status==1 && this.pageIndex < 6){
 						this.pageIndex++;
 					}else if(this.pageIndex >= 6){

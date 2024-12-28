@@ -199,7 +199,24 @@ const uesrApi = {
 			method: 'POST',
 			loadType: 1
 		});
+	},
+
+	// 获取VIP列表
+	getVipList() {
+		return http({
+			url: 'api/order/vipList',
+			method: 'POST',
+			loadType: 1
+		});
+	},
+	// 购买vip 
+	buyVip(data) {
+		return http({
+			url: 'api/order/buy',
+			data,
+			method: 'POST',
+			loadType: 1
+		});
 	}
-	
 }
 export default uesrApi
