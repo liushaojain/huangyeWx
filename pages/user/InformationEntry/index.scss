@@ -2,11 +2,88 @@ $bg-image-url: 'http://47.119.182.138:89/images/';
 page{
 	background: #FAF5F8;
 }
+.finished-content {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	padding: 48rpx;
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: column;
+	.title {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		.lobo-box {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.logo {
+			width: 80rpx;
+			height: 80rpx;
+			margin-right: 30rpx;
+		}
+		.logo-text {
+			font-weight: bold;
+			font-size: 38rpx;
+			color: #333333;
+			line-height: 54rpx;
+		}
+		.img {
+			margin-top: 30rpx;
+			width: 476rpx;
+			height: 33.33rpx;
+		}
+	}
+	.content {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		font-family: PingFang SC, PingFang SC;
+		font-weight: bold;
+		font-size: 28rpx;
+		color: #333333;
+		line-height: 42rpx;
+		.img {
+			width: 387rpx;
+			height: 298rpx;
+			margin-bottom: 10rpx;
+		}
+	}
+	.buttons {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		width: 100%;
+		.button {
+			height: 88rpx;
+			background: linear-gradient( 271deg, #F5496D 0%, #FF7592 100%);
+			border-radius: 200rpx 200rpx 200rpx 200rpx;
+			font-size: 28rpx;
+			color: #FFFFFF;
+			line-height: 88rpx;
+			text-align: center;
+			width: 100%;
+		}
+		.button-text {
+			padding-top: 36rpx;
+			font-size: 28rpx;
+			color: #999999;
+			line-height: 33rpx;
+			text-align: center;
+		}
+	}
+}
 .container{
 	background: url($bg-image-url+'Maskgroupuser@2x.png') no-repeat;
 	background-color: #FAF5F8;
 	background-size: contain;
 	padding-bottom: 150rpx;
+	height: 100vh;
 }
 .hintImg{
 	padding: 44rpx 0 78rpx 0;

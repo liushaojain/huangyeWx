@@ -1,26 +1,54 @@
 <template>
 	<view class="container" :style="{'padding-top': statusBarHeight+'px'}">
 		<view class="header">
-			<u-navbar class="uNavbar" @leftClick="leftClick" :autoBack="true" :title="pageList[pageIndex].title" :bgColor='bgColor' :height="titleHeight"></u-navbar>
+			<u-navbar class="uNavbar" :autoBack="true" :title="pageList[pageIndex].title" :bgColor='bgColor' :height="titleHeight"></u-navbar>
 		</view>
-		<view class="hintImg">
-			<image class="img" :src="imgBaseUrl+'loginText.png'" mode=""></image>
-		</view>
-		<view class="content" v-if="isLoaded">
-			<BaseInfo :infoData="infoData" ref="BaseInfo" v-if="pageIndex===0"></BaseInfo>
-			<MaritalStatus :infoData="infoData" ref="MaritalStatus" v-if="pageIndex===1"></MaritalStatus>
-			<BeFondOf :infoData="infoData" ref="BeFondOf" v-if="pageIndex===2"></BeFondOf>			
-			<Expects :infoData="infoData" ref="Expects" v-if="pageIndex===3"></Expects>
-			<Avatar :infoData="infoData" ref="Avatar" v-if="pageIndex===4"></Avatar>
-			<LifePhoto ref="LifePhoto" v-if="pageIndex===5"></LifePhoto>
-			<AboutMe :infoData="infoData" ref="AboutMe" v-if="pageIndex===6"></AboutMe>
-		</view>
-		<view class="footer">
-			<view class="infoListPage" v-if="type === 1">
-				<text v-for="(item,index) in pageList" :key="index" class="item" @click="pageIndex = index" :class="{'active':index===pageIndex}"></text>
+		<template v-if="!isFinished">
+			<view class="hintImg">
+				<image class="img" :src="imgBaseUrl+'loginText.png'" mode=""></image>
 			</view>
-			<button class="confirmBtn" @click="formSubmit">确定</button>
-		</view>
+			<view class="content" v-if="isLoaded">
+				<BaseInfo :infoData="infoData" ref="BaseInfo" v-if="pageIndex===0"></BaseInfo>
+				<MaritalStatus :infoData="infoData" ref="MaritalStatus" v-if="pageIndex===1"></MaritalStatus>
+				<BeFondOf :infoData="infoData" ref="BeFondOf" v-if="pageIndex===2"></BeFondOf>			
+				<Expects :infoData="infoData" ref="Expects" v-if="pageIndex===3"></Expects>
+				<Avatar :infoData="infoData" ref="Avatar" v-if="pageIndex===4"></Avatar>
+				<LifePhoto ref="LifePhoto" v-if="pageIndex===5"></LifePhoto>
+				<AboutMe :infoData="infoData" ref="AboutMe" v-if="pageIndex===6"></AboutMe>
+			</view>
+			<view class="footer">
+				<view class="infoListPage" v-if="type === 1">
+					<text v-for="(item, index) in pageList" :key="index" class="item" @click="pageIndex = index" :class="{'active':index===pageIndex}"></text>
+				</view>
+				<button class="confirmBtn" @click="formSubmit">确定</button>
+			</view>
+		</template>
+		<template v-else>
+			<view class="finished-content">
+				<view class="title">
+					<view class="lobo-box">
+						<image src="../../../static/img/logo.png" class="logo"></image>
+						<view class="logo-text">
+							荒野
+						</view>
+					</view>
+					<image class="img" :src="imgBaseUrl+'loginText.png'" mode=""></image>
+				</view>
+				<view class="content">
+					<image src="https://oss.derucci-smart.com/images/upload/success_1735357709088.png" class="img"></image>
+					<view>资料已完善</view>
+				</view>
+				<view class="buttons">
+					<view class="button" @tap="redirectTo('/pages/authentication/index')">
+						去完成认证
+					</view>
+					<view class="button-text" @tap="back">
+						先不认证
+					</view>
+				</view>
+			</view>
+		</template>
+
 	</view>
 </template>
 
@@ -48,11 +76,13 @@
 					{title: '头像上传', ref:'Avatar'},
 					{title: '上传生活照', ref:'LifePhoto'},
 					{title: '关于我', ref:'AboutMe'},
+					{title: '', ref:''},
 				],
 				pageIndex: 2,
 				type: 1,
 				infoData: {},
-				isLoaded: false
+				isLoaded: false,
+				isFinished: false
 			}
 		},
 		components:{
@@ -68,15 +98,14 @@
 			
 		},
 		onLoad(e) {
-			if(e.pageIndex){
-				this.type = 2
-			}
+			// if(e.pageIndex){
+			//   this.type = 2
+            // }
+
 			this.pageIndex = parseInt(e.pageIndex);
-			let that = this;
 			uni.getSystemInfo({
-			  success: function (info) {
-			    var statusBarHeight = info.statusBarHeight;
-				that.statusBarHeight = info.statusBarHeight + that.titleHeight;
+			  success: (info) => {
+				this.statusBarHeight = info.statusBarHeight + this.titleHeight;
 			  }
 			});
 			uni.setNavigationBarTitle({
@@ -99,20 +128,25 @@
 				this.isLoaded = true;
 				this.infoData = data;
 			},
-			leftClick(){
+			redirectTo(url) {
+				uni.redirectTo({
+					url
+				})
+			},
+			back() {
 				uni.navigateBack();
 			},
 			async formSubmit(){
 				const activePage = this.pageList[this.pageIndex];
 				const ref = activePage.ref;
 				const data = await this.$refs[ref].submit();
+				console.log(this.pageIndex)
 				if(this.type === 1){
-					if(data && data.status==1 && this.pageIndex<6){
+					if(data && data.status==1 && this.pageIndex < 6){
 						this.pageIndex++;
-					}else if(this.pageIndex==6){
-						uni.navigateTo({
-							url:'/pages/home/index'
-						})
+					}else if(this.pageIndex >= 6){
+						this.pageIndex++;
+						this.isFinished = true;
 					}	
 				}else{
 					uni.navigateBack()

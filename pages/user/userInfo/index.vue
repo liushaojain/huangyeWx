@@ -2,9 +2,9 @@
 	<view class="container" :style="{paddingTop: statusBarHeight+'px'}">
 		<NavBar fixed />
 		<view class="header">
-			<navigator url="/pages/user/InformationEntry/index?pageIndex=4" hover-class="none" class="edit">
+			<view @tap="to('/pages/user/InformationEntry/index?pageIndex=4')" hover-class="none" class="edit">
 				<image class="img" :src="member_profiles.user_avatar" mode="aspectFill"></image>
-			</navigator>
+			</view>
 			<text class="txt">{{member.nick_name}}</text>
 			<button style="visibility: hidden;" @click="test" class="bnt">预览</button>
 		</view>
@@ -17,7 +17,7 @@
 					<view class="item">
 						<view class="titleBox">
 							<text class="title">基本信息</text>
-							<navigator url="/pages/user/InformationEntry/index?pageIndex=0" hover-class="none" class="edit">编辑</navigator>
+							<view @tap="to('/pages/user/InformationEntry/index?pageIndex=0')" hover-class="none" class="edit">编辑</view>
 						</view>
 						<view class="tagList">
 							<text v-if="member_profiles.nick_name" class="tag">{{member_profiles.nick_name}}</text>
@@ -36,7 +36,7 @@
 					<view class="item">
 						<view class="titleBox">
 							<text class="title">婚姻资料</text>
-							<navigator url="/pages/user/InformationEntry/index?pageIndex=1" hover-class="none" class="edit">编辑</navigator>
+							<view @tap="to('/pages/user/InformationEntry/index?pageIndex=1')" hover-class="none" class="edit">编辑</view>
 						</view>
 						<view class="tagList">
 							<text v-if="marriage_info.marital_status" class="tag">{{formatEnum("MemberMarriageInfo.marital_status", marriage_info.marital_status)}}</text>
@@ -54,7 +54,7 @@
 					<view class="item">
 						<view class="titleBox">
 							<text class="title">生活爱好</text>
-							<navigator url="/pages/user/InformationEntry/index?pageIndex=2" hover-class="none" class="edit">编辑</navigator>
+							<view @tap="to('/pages/user/InformationEntry/index?pageIndex=2')" hover-class="none" class="edit">编辑</view>
 						</view>
 						<view class="tagList">
 							<text v-if="member_hobbies.exercise_frequency" class="tag">健身频率{{formatEnum('MemberHobbie.exercise_frequency', member_hobbies.exercise_frequency)}}</text>
@@ -71,7 +71,7 @@
 					<view class="item">
 						<view class="titleBox">
 							<text class="title">我理想中的TA</text>
-							<navigator url="/pages/user/InformationEntry/index?pageIndex=3" hover-class="none" class="edit">编辑</navigator>
+							<view @tap="to('/pages/user/InformationEntry/index?pageIndex=3')" hover-class="none" class="edit">编辑</view>
 						</view>
 						<view class="tagList">
 							<text v-if="expected_him.drinking" class="tag">{{formatEnum("ExpectedHim.drinking", expected_him.drinking)}}喝酒</text>
@@ -86,7 +86,7 @@
 					<view class="item">
 						<view class="titleBox">
 							<text class="title">关于我</text>
-							<navigator url="/pages/user/InformationEntry/index?pageIndex=6" hover-class="none" class="edit">编辑</navigator>
+							<view @tap="to('/pages/user/InformationEntry/index?pageIndex=6')" hover-class="none" class="edit">编辑</view>
 						</view>
 						<view class="aboutMe">{{ member_profiles.about_me || '未填写' }}</view>
 					</view>
@@ -101,9 +101,9 @@
 						<view v-if="photoList.length === 0" class="empty-text">暂无生活照，请上传</view>
 					</view>
 					<view class="imgFooter">
-						<navigator url="/pages/user/InformationEntry/index?pageIndex=5" hover-class="none" class="edit">
+						<view @tap="to('/pages/user/InformationEntry/index?pageIndex=5')" hover-class="none" class="edit">
 							<button class="bnt">上传照片</button>
-						</navigator>
+						</view>
 						<view class="delete" @tap="delPhone">
 							<u-icon label="删除" label-size="12" size="26" name="trash"></u-icon>
 						</view>

@@ -1,9 +1,9 @@
 <template>
 	<view class="container" :style="{ paddingTop: statusBarHeight + 'px' }">
 		<view class="header" v-if="isLogin">
-			<navigator url="/pages/user/InformationEntry/index?pageIndex=4" hover-class="none" class="edit">
+			<view @tap="to('/pages/user/InformationEntry/index?pageIndex=4')" hover-class="none" class="edit">
 				<image class="img" :src="member_profiles.user_avatar" mode="aspectFill"></image>
-			</navigator>
+			</view>
 			{{ memberInfo.nick_name || '' }}
 		</view>
 		<view class="header" v-else @click="handleLogin">
