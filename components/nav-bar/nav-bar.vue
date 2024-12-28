@@ -1,5 +1,5 @@
 <template>
-    <view class="info-nav-bar">
+    <view class="info-nav-bar" :class="{ fixed: fixed }">
         <view class="status-bar" :style="{ height: statusBarHeight + 'px' }"></view>
 		<view class="nav-bar" :style="[navbarInnerStyle]">
 			<view v-if="showArrow" class="arrow-left" @tap="goBack">
@@ -27,6 +27,10 @@ export default {
 		showArrow: {
 			type: Boolean,
 			default: true
+		},
+		fixed: {
+			type: Boolean,
+			default: false
 		}
     },
     data() {
@@ -61,6 +65,12 @@ export default {
 
 <style lang="scss">
 .info-nav-bar {
+	&.fixed {
+		position: fixed;
+		left: 0;
+		top: 0;
+		width: 100%;
+	}
     .status-bar {
 		width: 100%;
 	}

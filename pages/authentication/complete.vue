@@ -1,5 +1,6 @@
 <template>
 	<view class="container" :style="{'padding-top': statusBarHeight+'px'}">
+		<NavBar fixed />
 		<view class="content">
 			<image class="img" :src="imgBaseUrl+'Group_754@2x.png'" mode=""></image>
 			<view class="text1">
@@ -16,8 +17,9 @@
 </template>
 
 <script>
-	
+	import NavBar from '@/components/nav-bar/nav-bar.vue'
 	export default {
+		components: { NavBar },
 		data(){
 			return {
 				imgBaseUrl: this.imgBaseUrl

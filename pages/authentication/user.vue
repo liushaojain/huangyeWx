@@ -1,5 +1,6 @@
  <template>
 	 <view class="container">
+		<NavBar fixed />
 		 <view class="header">
 		 	<image class="img" :src="baseImg+'Maskgroupwhy@2x.png'" mode=""></image>
 		 </view>
@@ -35,7 +36,9 @@
 
 <script>
 	import { faceRedirectUrl } from "@/config.js";
+	import NavBar from '@/components/nav-bar/nav-bar.vue'
 	export default {
+		components: { NavBar },
 		data(){
 			return {
 				baseImg: this.imgBaseUrl,

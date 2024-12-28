@@ -32,7 +32,7 @@
 
 <script>
 import ImManager from './utils/imManager.js'
-import NavBar from './components/nav-bar.vue'
+import NavBar from '@/components/nav-bar/nav-bar.vue'
 import { userStore } from "@/store/account/userInfo.js"
 
 export default {

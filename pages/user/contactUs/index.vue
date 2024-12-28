@@ -1,5 +1,6 @@
 <template>
 	<view class="container">
+		<NavBar fixed />
 		<view class="content">
 			<view class="item logo">
 				<image class="img" src="../../../static/img/logo.png" mode="aspectFill"></image>
@@ -20,7 +21,10 @@
 </template>
 
 <script>
+	import NavBar from '@/components/nav-bar/nav-bar.vue'
+
 	export default {
+		components: { NavBar },
 		data() {
 			return {
 				Text: "weixin",

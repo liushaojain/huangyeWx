@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import NavBar from './components/nav-bar.vue'
+import NavBar from '@/components/nav-bar/nav-bar.vue'
 import AuthTip from './components/auth-tip.vue'
 import TextTip from './components/text-tip.vue'
 import Card from './components/card.vue'
