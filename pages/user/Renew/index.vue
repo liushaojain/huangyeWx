@@ -113,9 +113,7 @@
 						paySign: data.paySign,
 						success: (e) => {
 							this.showToast("恭喜您成为VIP");
-							setTimeout(() => {
-								this.getVipList();
-							}, 600)
+							this.getBasicInfoData();
 						},
 						fail: (err) => {
 							console.log(err);

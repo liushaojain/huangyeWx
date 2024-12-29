@@ -9,7 +9,7 @@
 			<view class="txt">
 				荒野是一个真人社交平台，我们需要确保你的真实信息，实名后匹配对象将会更精准，实名配对成功率提高50%
 			</view>
-			<view class="mt10">
+			<view class="mt10" v-if="status !== 'pending'">
 				<u--form labelPosition="top" :model="formData" ref="forms" label-width="80">
 					<u-form-item label="姓名" prop="name" ref="item1" border-bottom>
 						<u--input placeholder="请输入" v-model="formData.name" border="none"></u--input>
@@ -19,10 +19,20 @@
 					</u-form-item>
 				</u--form>	
 			</view>
+			<view class="mt10" v-else>
+				<u--form labelPosition="top" :model="formData" ref="forms" label-width="80">
+					<u-form-item label="姓名" prop="name" ref="item1" border-bottom>
+						<u--input placeholder="请输入" disabled value="******" border="none"></u--input>
+					</u-form-item>
+					<u-form-item label="身份证号码" prop="name" ref="item1" border-bottom>
+						<u--input placeholder="请输入" disabled value="******" border="none"></u--input>
+					</u-form-item>
+				</u--form>	
+			</view>
 		</view>
 		<view class="footer">
-			<view class="btnSubmit" @tap="getFaceSign">
-				立即去认证
+			<view class="btnSubmit" :class="{ disabled: status === 'pending' }" @tap="getFaceSign">
+				{{status === 'pending' ? '认证审核中': '立即认证'}}
 			</view>
 			<view class="text1">
 				百分百隐私安全
@@ -46,10 +56,15 @@
 					name: '',
 					id_card: ''
 				},
-				biz_token: ""
+				biz_token: "",
+				status: ""
 			}
 		},
 		methods:{
+			async identificationMy() {
+			 	const res = await this.$apis.uesrApi.identificationMy();
+				this.status = res.data.real_name_status;
+			},
 			async getFaceSign(){
 				const { name, id_card } = this.formData;
 				if (!name) {
@@ -78,11 +93,14 @@
 				console.log({biz_token});
 				console.log("校验是否成功");
 				const res = await this.$apis.uesrApi.getFaceResult({ biz_token });
+				console.log(res);
 			}
 		},
-		onShow() {
+		async onShow() {
 			if (this.biz_token) {
-				this.getFaceResult(this.biz_token);
+				await this.getFaceResult(this.biz_token);
+			} else {
+				this.identificationMy();
 			}
 		}
 	}
@@ -122,17 +140,7 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		.btnSubmit{
-			width: 654rpx;
-			height: 88rpx;
-			background: linear-gradient( 271deg, #F5496D 0%, #FF7592 100%);
-			border-radius: 200rpx;
-			color: white;
-			font-size: 36rpx;
-			line-height: 88rpx;
-			text-align: center;
-			margin-bottom: 48rpx;
-		}
+
 		.text1{
 			font-size: 28rpx;
 			color: #999999;

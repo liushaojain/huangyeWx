@@ -80,3 +80,18 @@ $uni-font-size-paragraph:30rpx;
     color: #999999;
     width: 100%;
 }
+
+.btnSubmit{
+    width: 654rpx;
+    height: 88rpx;
+    background: linear-gradient( 271deg, #F5496D 0%, #FF7592 100%);
+    border-radius: 200rpx;
+    color: white;
+    font-size: 36rpx;
+    line-height: 88rpx;
+    text-align: center;
+    margin-bottom: 48rpx;
+    &.disabled {
+        background: rgba(255, 117, 146, 0.4);
+    }
+}

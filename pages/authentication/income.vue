@@ -17,8 +17,8 @@
 			</view>
 		</view>
 		<view class="footer">
-			<view class="btnSubmit" @tap="onSubmit">
-				立即认证
+			<view class="btnSubmit" :class="{ disabled: status === 'pending' }" @tap="onSubmit">
+				{{status === 'pending' ? '认证审核中': '立即认证'}}
 			</view>
 			<view class="text1">
 				百分百隐私安全
@@ -38,12 +38,31 @@
 		data(){
 			return {
 				baseImg: this.imgBaseUrl,
-				fileList: []
+				fileList: [],
+				status: ''
+
 			}
 		},
 		methods:{
+			async identificationMy() {
+			 	const res =	await this.$apis.uesrApi.identificationMy();
+				this.fileList = res.data.income;
+				this.status = res.data.income_certification_status;
+			},
 			async onSubmit() {
+				if(this.status === 'pending') {
+					this.showToast('请耐心等待系统审核');
+					return;
+				}
+				if (this.fileList.length) {
+					this.showToast("认证资料不能为空");
+					return;
+				}
 				const res = await this.$apis.uesrApi.identificationIncome(this.fileList.map(item => item.url));
+				if (res.status) {
+					this.showToast('认证资料提交成果，请耐心等待系统审核');
+					this.identificationMy();
+				}
 			},
 			// 删除图片
 			deletePic(event) {
@@ -55,7 +74,7 @@
 			},
 		},
 		onShow() {
-			
+			this.identificationMy();
 		}
 	}
 </script>
@@ -94,17 +113,6 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
-		.btnSubmit{
-			width: 654rpx;
-			height: 88rpx;
-			background: linear-gradient( 271deg, #F5496D 0%, #FF7592 100%);
-			border-radius: 200rpx;
-			color: white;
-			font-size: 36rpx;
-			line-height: 88rpx;
-			text-align: center;
-			margin-bottom: 48rpx;
-		}
 		.text1{
 			font-size: 28rpx;
 			color: #999999;
