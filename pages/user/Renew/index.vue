@@ -4,6 +4,14 @@
 			<u-navbar class="uNavbar" :autoBack="true" title="升级VIP提升聊天效率" :bgColor='bgColor'
 				></u-navbar>
 		</view>
+		<view class="vip-header" v-if="isVip">
+			<image class="img" :src="basicInfoData.profile.user_avatar" mode="aspectFill"></image>
+			{{ basicInfoData.member.nick_name || '' }}
+			<div class="vip-tag">
+				<div class="label">VIP 会员</div>
+				<div class="time">会员有效期 9.12</div>
+			</div>
+		</view>
 		<view class="content">
 			<view class="contentBox">
 				<view class="contentTop">
@@ -78,9 +86,14 @@
 				}
 			});
 			this.getVipList();
+			this.getBasicInfoData();
 		},
 		methods: {
 			async activateVIP() {
+				if (this.isVip) {
+					this.showToast("您已经是VIP啦，无需再开通了");
+					return;
+				}
 				const id = this.selectedVipItem.id;
 				if (!id) {
 					this.showToast("请选择您要购买的VIP套餐");

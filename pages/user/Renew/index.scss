@@ -13,6 +13,40 @@
 		flex: 1;
 		overflow: auto;
 	}
+	.vip-header {
+		display: flex;
+		padding: 0 40rpx;
+		align-items: center;
+		font-weight: bold;
+		font-size: 32rpx;
+		position: relative;
+		.img{
+			height: 128rpx;
+			width: 128rpx;
+			margin-right: 36rpx;
+			border-radius: 50%;
+		}
+		.vip-tag {
+			margin-left: auto;
+			.label {
+				width: 156rpx;
+				height: 60rpx;
+				background: #FEEFF2;
+				border-radius: 400rpx 400rpx 400rpx 400rpx;
+				border: 2rpx solid #F64B6E;
+				font-size: 28rpx;
+				color: #F64B6E;
+				line-height: 60rpx;
+				text-align: center;
+			}
+			.time {
+				font-size: 22rpx;
+				color: #333333;
+				line-height: 26rpx;
+				text-align: center;
+			}
+		}
+	}
 }
 .content{
 	padding: 0 36rpx;
