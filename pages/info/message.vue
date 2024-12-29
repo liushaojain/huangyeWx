@@ -5,14 +5,14 @@
             <view class="arrow-left" @tap="goBack">
                 <u-icon name="arrow-left" color="#8B8B8B" size="18"></u-icon>
             </view>
-            <view>{{getNickName(toId)}}</view>
+            <view @tap="clearHistoryMessage">{{getNickName(toId)}}</view>
         </view>
         <view class="box-1">
             <scroll-view scroll-y refresher-background="transparent" style="height: 100%;"
                 @refresherrefresh="refresherrefresh" :refresher-enabled="true" :scroll-with-animation="false"
                 :refresher-triggered="scrollView.refresherTriggered" :scroll-into-view="scrollView.intoView">
                 <view class="talk-list">
-                    <view v-for="(item, index) in talkListForShow" :key="item.ID" :id="'msg-' + item.ID">
+                    <view v-for="(item) in talkListForShow" :key="item.ID" :id="'msg-' + item.ID">
                         <view v-if="item.type === 'TIMCustomElem'" class="private-msg">
                             <view class="card">
                                 <view class="hea">
@@ -56,7 +56,7 @@
         <view class="box-2" v-if="!hideInput">
             <view class="flex-col">
                 <view class="flex-grow" @tap="showOtherMsg = false">
-                    <input type="text" class="content" v-model="content" placeholder="请输入聊天内容"
+                    <input type="text" class="content" v-model="content" :placeholder="isFriend ? '请输入聊天内容' : '请输入私信内容'"
                         placeholder-style="color:#DDD;" :cursor-spacing="6">
                 </view>
                 <button class="send" v-if="content" @tap="handleSendClick">发送</button>
@@ -185,12 +185,14 @@ export default {
         async acceptFriendApplication() {
             // 接受好友申请
             await ImManager.getInstance().addFriend(this.toId, '', TencentCloudChat.TYPES.SNS_ADD_TYPE_BOTH);
+            await this.like();
             this.checkFriend();
-            this.showToast("已接受好友申请，可以开始聊天啦");
+            this.showToast("已接受私信，可以开始聊天啦");
         },
         async checkFriend() {
             const isFriend = await ImManager.getInstance().checkFriend(this.toId);
             this.isFriend = isFriend;
+            return this.isFriend;
         },
 		getAvatar(userID) {
 			return (ImManager.getInstance().userID2UserInfoMap[userID] || {}).user_avatar;
@@ -203,6 +205,9 @@ export default {
         },
         goBack() {
             uni.navigateBack();
+        },
+        clearHistoryMessage() {
+            ImManager.getInstance().clearHistoryMessage(this.conversationID);
         },
         // 下拉刷新
         refresherrefresh(e) {
@@ -271,7 +276,6 @@ export default {
                 return;
             }
             this.sendMessage(this.content, 'text');
-
             // 清空内容框中的内容
             this.content = '';
         },
@@ -333,8 +337,15 @@ export default {
                 }
                 // 非好友，并且没有任何聊天记录，那么应该是第一次聊天，那么需要发送私信，并且请求添加为好友
                 if (!this.isFriend && this.talkList.length === 0) {
-                    console.log("发送私信", this.toId, content);
-                    res = await ImManager.getInstance().createPrivateMessage(this.toId, content);
+                    console.log("发送私信，并把对方标记为喜欢", this.toId, content);
+                    await this.like();
+                    // 如果把对方标记为喜欢后，已经是互相喜欢了，直接可以开始聊天，否则发送私信好友邀请
+                    await this.checkFriend();
+                    if (this.isFriend) {
+                        res = await ImManager.getInstance().createTextMessage(this.toId, content);
+                    } else {
+                        res = await ImManager.getInstance().createPrivateMessage(this.toId, content);
+                    }
                 } else {
                     if(type === 'text') {
                         res = await ImManager.getInstance().createTextMessage(this.toId, content);
@@ -357,6 +368,13 @@ export default {
                 uni.hideLoading();
             } finally {
                 uni.hideLoading();
+            }
+        },
+        async like() {
+            try {
+                await this.$apis.homeApi.like(this.toId);
+            } catch (e) {
+                console.warn(e);
             }
         }
     }

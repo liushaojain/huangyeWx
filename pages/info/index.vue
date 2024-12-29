@@ -11,20 +11,20 @@
 			</view>
 		</view>
 		<view class="msg-list" v-if="isLogin">
-			<view class="msg-item" @tap="handlerConversation(item)" v-for="item in conversationList" :key="item.lastMessage.lastTime">
+			<view class="msg-item" @tap="handlerConversation(item)" v-for="(item, index) in conversationList" :key="index">
 				<view class="img">
 					<image :src="getAvatar(item.userProfile.userID)"></image>
 				</view>
 				<view class="info">
 					<view class="info-name">{{ getNickName(item.userProfile.userID) }}</view>
-					<view class="info-msg">{{item.lastMessage.messageForShow}}</view>
+					<view class="info-msg">{{ messageForShow(item.lastMessage.messageForShow) }}</view>
 				</view>
 				<view class="ext">
 					<view class="ext-time">{{ formatTimeStamp(item.lastMessage.lastTime) }}</view>
 					<view v-if="item.unreadCount > 0" class="ext-noread">{{ item.unreadCount }}</view>
 				</view>
 			</view>
-			<view @tap="chatTest" class="empty-text">没有更多聊天记录</view>
+			<view @tap="chatTest" class="empty-text">没有更多聊天记录了</view>
 		</view>
 		<button v-else class="button" @click="handleLogin">去登录</button>
 	</view>
@@ -83,12 +83,19 @@ export default {
 		getNickName(userID) {
 			return (this.userID2UserInfoMap[userID] || {}).nick_name;
 		},
+		messageForShow(msg) {
+			if(msg === '[自定义消息]') {
+				return '[私信]';
+			}
+			return msg;
+		},
 		chatTest() {
 			uni.navigateTo({
 				url: "/pages/info/message?conversationID=C2C9"
 			})
 		},
 		handlerConversation(item) {
+			console.log("跳转进入聊天详情：", item);
 			uni.navigateTo({
 				url: "/pages/info/message?conversationID=" + item.conversationID
 			})
@@ -107,6 +114,7 @@ export default {
 			this.userID2UserInfoMap = await ImManager.getInstance().setUserID2UserInfoMap((this.conversationList || []).map(item => item.userProfile.userID));
 		},
 		formatTimeStamp(timestamp) {
+			if (!timestamp) return '';
 			const now = new Date();
 			const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 			const targetDate = new Date(timestamp * 1000);

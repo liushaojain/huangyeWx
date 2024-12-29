@@ -111,9 +111,9 @@
 						package: data.package,
 						signType: data.signType,
 						paySign: data.paySign,
-						success: (e) => {
+						success: async (e) => {
+							await this.getBasicInfoData();
 							this.showToast("恭喜您成为VIP");
-							this.getBasicInfoData();
 						},
 						fail: (err) => {
 							console.log(err);

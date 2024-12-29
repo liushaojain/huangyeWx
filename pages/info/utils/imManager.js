@@ -72,7 +72,8 @@ export default class ImManager extends ImObserver {
             });
 		});
     }
-    // 会话列表
+
+    // 监听会话列表更新
     onConversationList() {
         this.chat.on(TencentCloudChat.EVENT.CONVERSATION_LIST_UPDATED, (event) => {
             // 会话列表有更新
@@ -83,15 +84,18 @@ export default class ImManager extends ImObserver {
         });
     }
 
+    // 获取聊天列表
     async getConversationList() {
         const res = await this.chat.getConversationList();
         if(res.code === 0) {
+            console.log("获取聊天列表", res.data.conversationList)
             return res.data.conversationList
         } else {
             return []
         }
     }
 
+    // 获取历史消息
     async getMessageList(conversationID, nextReqMessageID) {
         if(!conversationID) {
             console.error("conversationID不能为空");
@@ -102,6 +106,7 @@ export default class ImManager extends ImObserver {
         return imResponse.data;
     }
 
+    // 获取用户状态
     async getUserStatus(userID) {
         // userID - 用户 ID
         // statusType - 用户状态，枚举值及说明如下：
@@ -113,6 +118,7 @@ export default class ImManager extends ImObserver {
         return await this.chat.getUserStatus({userIDList: [`${userID}`]});
     }
 
+    // 创建文本消息
     async createTextMessage(to, text) {
         if(!to) {
             console.error("to不能为空");
@@ -132,6 +138,7 @@ export default class ImManager extends ImObserver {
         return await this.chat.sendMessage(message);
     }
 
+    // 创建地址消息
     async createLocationMessage(to, payload) {
         console.log(to, payload);
         let message = this.chat.createLocationMessage({
@@ -147,13 +154,15 @@ export default class ImManager extends ImObserver {
         return await this.chat.sendMessage(message);
     }
 
+    // 精确小数点10位
     toFixed(num) {
         let multiplier = Math.pow(10, 10);
         let rounded = Math.round(num * multiplier);
         let result = rounded / multiplier;
         return result;
     }
-
+    
+    // 创建图片信息
     async createImageMessage(to, file) {
         let message = this.chat.createImageMessage({
             to,
@@ -166,6 +175,7 @@ export default class ImManager extends ImObserver {
         return await this.chat.sendMessage(message);
     }
 
+    // 创建私聊信息
     async createPrivateMessage(to, text) {
         let message = this.chat.createCustomMessage({
             to,
@@ -183,7 +193,7 @@ export default class ImManager extends ImObserver {
         return res;
     }
 
-
+    // 创建视频信息
     async createVideoMessage(to, file) {
         let message = this.chat.createVideoMessage({
             to,
@@ -196,6 +206,7 @@ export default class ImManager extends ImObserver {
         return await this.chat.sendMessage(message);
     }
 
+    // 设置消息为已读
     async setMessageRead(conversationID) {
         return await this.chat.setMessageRead({ conversationID });
     }
@@ -208,6 +219,7 @@ export default class ImManager extends ImObserver {
 
     userID2UserInfoMap = {}
 
+    // 设置用户昵称和用户名
     async setUserID2UserInfoMap(id_list) {
         if(id_list && id_list.length > 0) {
             const res = await infoApi.getUserList(id_list);
@@ -222,42 +234,59 @@ export default class ImManager extends ImObserver {
         return this.userID2UserInfoMap;
     }
 
+    // 添加好友
     async addFriend(to, wording, type) {
-        await this.chat.addFriend({
-            to,
-            source: 'AddSource_Type_Web',
-            wording,
-            type: type || TencentCloudChat.TYPES.SNS_ADD_TYPE_SINGLE,
-        });
+        try {
+            await this.chat.addFriend({
+                to,
+                source: 'AddSource_Type_Web',
+                wording,
+                type: type || TencentCloudChat.TYPES.SNS_ADD_TYPE_SINGLE,
+            });
+        } catch(e) {
+            console.warn(e);
+        }
     }
 
+    // 检查是否是互为好友
     async checkFriend(id) {
-        const imResponse = await this.chat.checkFriend({
-            userIDList: [id],
-            type: TencentCloudChat.TYPES.SNS_CHECK_TYPE_BOTH,
-        });
-        console.log({imResponse});
-        const { successUserIDList, failureUserIDList } = imResponse.data;
-        let isFriend = false;
-        // 校验成功的 userIDList
-        successUserIDList.forEach((item) => {
-            const { userID, code, relation } = item; // 此时 code 始终为0
-            // 单向校验好友关系时可能的结果有：
-            // - relation: TencentCloudChat.TYPES.SNS_TYPE_NO_RELATION A 的好友表中没有 B，但无法确定 B 的好友表中是否有 A
-            // - relation: TencentCloudChat.TYPES.SNS_TYPE_A_WITH_B A 的好友表中有 B，但无法确定 B 的好友表中是否有 A
-            // 双向校验好友关系时可能的结果有：
-            // - relation: TencentCloudChat.TYPES.SNS_TYPE_NO_RELATION A 的好友表中没有 B，B 的好友表中也没有 A
-            // - relation: TencentCloudChat.TYPES.SNS_TYPE_A_WITH_B A 的好友表中有 B，但 B 的好友表中没有 A
-            // - relation: TencentCloudChat.TYPES.SNS_TYPE_B_WITH_A A 的好友表中没有 B，但 B 的好友表中有 A
-            // - relation: TencentCloudChat.TYPES.SNS_TYPE_BOTH_WAY A 的好友表中有 B，B 的好友表中也有 A
-            if(relation === TencentCloudChat.TYPES.SNS_TYPE_BOTH_WAY) {
-                // 双向校验好友关系成功，此时 A 和 B 互为好友
-                isFriend = true;
+        try {
+            const res = await infoApi.isLike(id);
+            if (res.status && res.data) {
+                return res.data.is_liked === 1;
             }
-        });
-        return isFriend;
+            return false;  
+        } catch(e) {
+            console.error(e);
+            return false;  
+        }
+        // const imResponse = await this.chat.checkFriend({
+        //     userIDList: [id],
+        //     type: TencentCloudChat.TYPES.SNS_CHECK_TYPE_BOTH,
+        // });
+        // console.log({imResponse});
+        // const { successUserIDList, failureUserIDList } = imResponse.data;
+        // let isFriend = false;
+        // // 校验成功的 userIDList
+        // successUserIDList.forEach((item) => {
+        //     const { userID, code, relation } = item; // 此时 code 始终为0
+        //     // 单向校验好友关系时可能的结果有：
+        //     // - relation: TencentCloudChat.TYPES.SNS_TYPE_NO_RELATION A 的好友表中没有 B，但无法确定 B 的好友表中是否有 A
+        //     // - relation: TencentCloudChat.TYPES.SNS_TYPE_A_WITH_B A 的好友表中有 B，但无法确定 B 的好友表中是否有 A
+        //     // 双向校验好友关系时可能的结果有：
+        //     // - relation: TencentCloudChat.TYPES.SNS_TYPE_NO_RELATION A 的好友表中没有 B，B 的好友表中也没有 A
+        //     // - relation: TencentCloudChat.TYPES.SNS_TYPE_A_WITH_B A 的好友表中有 B，但 B 的好友表中没有 A
+        //     // - relation: TencentCloudChat.TYPES.SNS_TYPE_B_WITH_A A 的好友表中没有 B，但 B 的好友表中有 A
+        //     // - relation: TencentCloudChat.TYPES.SNS_TYPE_BOTH_WAY A 的好友表中有 B，B 的好友表中也有 A
+        //     if(relation === TencentCloudChat.TYPES.SNS_TYPE_BOTH_WAY) {
+        //         // 双向校验好友关系成功，此时 A 和 B 互为好友
+        //         isFriend = true;
+        //     }
+        // });
+        // return isFriend;
     }
 
+    // 接受朋友邀请
     async acceptFriendApplication(userID) {
         await this.chat.acceptFriendApplication({
             userID,
@@ -266,5 +295,9 @@ export default class ImManager extends ImObserver {
         });
     }
 
+    // 清除历史消息
+    async clearHistoryMessage(conversationID) {
+        await this.chat.clearHistoryMessage(conversationID);
+    }
 
 }
