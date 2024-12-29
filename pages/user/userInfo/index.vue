@@ -164,7 +164,9 @@
 			async delPhone() {
 				if (this.selectedPhoto.id) {
 					console.log("删除");
-					// await this.$apis.uesrApi.deletePhoto({});
+					await this.$apis.uesrApi.deletePhoto({
+						id: this.selectedPhoto.id
+					});
 					this.getPhoto();
 				} else {
 					this.showToast("请选择要删除的照片");
