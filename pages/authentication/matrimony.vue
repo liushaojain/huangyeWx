@@ -10,7 +10,7 @@
 				荒野是一个真人社交平台，我们需要确保你的真实信息，实名后匹配对象将会更精准
 			</view>
 			<view class="mt10">
-				<u-upload :fileList="fileList" @afterRead="afterRead" @delete="deletePic" multiple :maxCount="4"></u-upload>
+				<u-upload :fileList="fileList" :disabled="status === 'pending'" @afterRead="afterRead" @delete="deletePic" multiple :maxCount="4"></u-upload>
 			</view>
 			<view class="txt">
 				<view class="c9">可上传婚姻登记机关出具的离婚证书； </view>

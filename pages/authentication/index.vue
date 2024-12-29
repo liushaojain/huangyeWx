@@ -72,20 +72,27 @@
 					key: 'income_certification_status',
 					map: 'Member.income_certification_status',
 					tip: '完成学历认证可以增加你的信誉，匹配对象将会更精准'
+				},{
+					title: "工作认证",
+					icon: "authentication(5).png",
+					path: "/pages/authentication/professional",
+					key: 'job_certification_status',
+					map: 'Member.job_certification_status',
+					tip: '完成工作认证可以增加你的信誉，匹配对象将会更精准'
 				}, {
 					title: "房子认证",
 					icon: "authentication(1).png",
 					path: "/pages/authentication/HouseProperty",
 					key: 'house_certification_status',
 					map: 'Member.house_certification_status',
-					tip: '工作认证可以增加你的信誉，匹配对象将会更精准'
+					tip: '完成房子认证可以增加你的信誉，匹配对象将会更精准'
 				}, {
 					title: "车辆认证",
 					icon: "authentication(2).png",
 					path: "/pages/authentication/Educational",
 					key: 'vehicle_certification_status',
 					map: 'Member.vehicle_certification_status',
-					tip: '车辆认证可以增加你的信誉，匹配对象将会更精准'
+					tip: '完成车辆认证可以增加你的信誉，匹配对象将会更精准'
 				}]
 			}
 		},

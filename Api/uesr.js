@@ -64,6 +64,14 @@ const uesrApi = {
 			loadType: 1
 		});
 	},
+	deletePhoto(data){
+		return http({
+			url: 'api/member/deletePhoto',
+			data,
+			method: 'POST',
+			loadType: 1
+		});
+	},
 	updAvatar(data){
 		return http({
 			url: 'api/member/updAvatar',

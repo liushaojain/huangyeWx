@@ -10,7 +10,7 @@
 				荒野是一个真人社交平台，我们需要确保你的真实信息，实名后匹配对象将会更精准
 			</view>
 			<view class="mt10">
-				<u-upload :fileList="fileList" @afterRead="afterRead" @delete="deletePic" multiple :maxCount="4"></u-upload>
+				<u-upload :fileList="fileList" :disabled="status === 'pending'" @afterRead="afterRead" @delete="deletePic" multiple :maxCount="4"></u-upload>
 			</view>
 			<view class="txt">
 				可上传毕业证、学生证、学信网最高学历验证报告、教育部留学服务中心《国外学历学位认证书》等其他证明

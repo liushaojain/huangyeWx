@@ -161,9 +161,11 @@
 			onPreview() {
 				this.to(`/pages/home/userDetails?id=${this.basicInfoData.member.id}&isSelf=true`)
 			},
-			delPhone() {
+			async delPhone() {
 				if (this.selectedPhoto.id) {
 					console.log("删除");
+					// await this.$apis.uesrApi.deletePhoto({});
+					this.getPhoto();
 				} else {
 					this.showToast("请选择要删除的照片");
 				}
