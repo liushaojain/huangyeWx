@@ -2,7 +2,10 @@
 	<view class="container">
 		<view class="flex-between title"
 			:style="{paddingTop: statusBarHeight+'px',height:titleHeight+'px',background:bgColor}">
-			<text class="txt">荒野</text>
+			<view class="txt" style="display: flex;" @tap="goBack">
+				<u-icon name="arrow-left" color="#ffffff" size="18"></u-icon>
+				<text style="margin-left: 20rpx;">荒野</text>
+			</view>
 		</view>
 		<homeContent @onIdentification="onIdentification" :memberInfo="memberInfo" v-if="isLogin"></homeContent>
 		<otherInfo ref="otherInfo" :memberInfo="memberInfo" v-if="isLogin"></otherInfo>
