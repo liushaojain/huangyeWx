@@ -1,12 +1,6 @@
 <template>
     <view class="container" :style="pageHeight">
-        <view class="status-bar" :style="{ height: statusBarHeight + 'px' }"></view>
-		<view class="nav-bar" :style="[navbarInnerStyle]">
-            <view class="arrow-left" @tap="goBack">
-                <u-icon name="arrow-left" color="#8B8B8B" size="18"></u-icon>
-            </view>
-            <view @tap="clearHistoryMessage">{{getNickName(toId)}}</view>
-        </view>
+        <NavBar @click="toUserDetails" :img="toAvatar" :title="getNickName(toId)" />
         <view class="box-1">
             <scroll-view scroll-y refresher-background="transparent" style="height: 100%;"
                 @refresherrefresh="refresherrefresh" :refresher-enabled="true" :scroll-with-animation="false"
@@ -28,7 +22,8 @@
                             </view>
                         </view>
                         <view v-else class="item flex-col" :class="item.flow == 'out' ? 'push' : 'pull'">
-                            <image :src="item.flow == 'out' ? myAvatar : toAvatar" mode="aspectFill" class="pic"></image>
+                            <image v-if="item.flow == 'out'" @tap="toUserDetails(true)"  :src="myAvatar" mode="aspectFill" class="pic"></image>
+                            <image v-else :src="toAvatar" @tap="toUserDetails" mode="aspectFill" class="pic"></image>
                             <view class="content">
                                 <template v-if="item.type === 'TIMImageElem'">
                                     <image :src="item.payload.imageInfoArray[0].url" mode="widthFix" @tap="openImage(item.payload.imageInfoArray[0].url)" style="width: 400rpx;"></image>
@@ -86,16 +81,14 @@
 import { getCurrentLocationAddress } from './utils/location.js'
 import ImManager from './utils/imManager.js'
 import TencentCloudChat from '@tencentcloud/chat';
-let systemInfo = uni.getSystemInfoSync();
-let menuButtonInfo = {};
-// #ifdef MP-WEIXIN || MP-BAIDU || MP-TOUTIAO || MP-QQ
-menuButtonInfo = uni.getMenuButtonBoundingClientRect();
-// #endif
+import NavBar from '@/components/nav-bar/nav-bar.vue'
+
 export default {
+    components: {
+		NavBar,
+	},
     data() {
         return {
-            menuButtonInfo: menuButtonInfo,
-			statusBarHeight: systemInfo.statusBarHeight,
             // 滚动容器
             scrollView: {
                 refresherTriggered: false,
@@ -133,21 +126,6 @@ export default {
             const list = JSON.parse(JSON.stringify(this.talkList))
             return list.reverse();
         },
-		navbarInnerStyle() {
-			let style = {};
-			style.height = this.navbarHeight + 'px';
-			console.log(style);
-			return style;
-		},
-		navbarHeight() {
-			// #ifdef APP-PLUS || H5
-			return this.height ? this.height : 44;
-			// #endif
-			// #ifdef MP
-			let height = systemInfo.platform == 'ios' ? 44 : 48;
-			return this.height ? this.height : height;
-			// #endif
-		},
         // 页面高度
         pageHeight() {
             const safeAreaHeight = this.scrollView.safeAreaHeight;
@@ -206,8 +184,13 @@ export default {
         goBack() {
             uni.navigateBack();
         },
-        clearHistoryMessage() {
-            ImManager.getInstance().clearHistoryMessage(this.conversationID);
+        toUserDetails(isSelf) {
+            // ImManager.getInstance().clearHistoryMessage(this.conversationID);
+            if (isSelf) {
+                this.to(`/pages/home/userDetails?id=${this.toId}&isSelf=true`)
+            } else {
+                this.to(`/pages/home/userDetails?id=${this.toId}`)
+            }
         },
         // 下拉刷新
         refresherrefresh(e) {

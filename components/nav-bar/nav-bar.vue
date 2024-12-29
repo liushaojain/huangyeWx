@@ -5,7 +5,10 @@
 			<view v-if="showArrow" class="arrow-left" @tap="goBack">
                 <u-icon name="arrow-left" color="#8B8B8B" size="18"></u-icon>
             </view>
-            <view>{{title}}</view>
+            <view class="title-box" @click="onClick">
+				<image class="img" v-if="img" :src="img" mode="aspectFill" />
+				{{title}}
+			</view>
 		</view>
     </view>
 </template>
@@ -31,6 +34,10 @@ export default {
 		fixed: {
 			type: Boolean,
 			default: false
+		},
+		img: {
+			type: String,
+            default: ""
 		}
     },
     data() {
@@ -58,13 +65,23 @@ export default {
 		},
 	},
     methods: {
-        
+        onClick() {
+			this.$emit("click");
+		}
     },
 };
 </script>
 
 <style lang="scss">
 .info-nav-bar {
+	.title-box {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		.img {
+			margin-right: 10rpx;
+		}
+	}
 	&.fixed {
 		position: fixed;
 		left: 0;
@@ -81,6 +98,11 @@ export default {
 		justify-content: center;
 		align-items: center;
 		position: relative;
+		.img {
+			width: 60rpx;
+			height: 60rpx;
+			border-radius: 50%;
+		}
 		.arrow-left {
 			position: absolute;
 			left: 0;
