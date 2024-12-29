@@ -14,7 +14,7 @@
 						<text class="name ft32">{{infoData.nick_name}}</text>						
 					</view>
 					<view class="userInfoRight">
-						<view class="pinkFont ft36">93%</view>
+						<view class="pinkFont ft36">{{identyInfo.trust_rate}}%</view>
 						<view class="ft28">可信度</view>
 					</view>
 				</view>
@@ -26,7 +26,7 @@
 					</view>
 					<view class="itemRight">
 						<image class="img" :src="imgBaseUrl+'Group_1@2x.png'" mode="aspectFill"></image>
-						<text>已认证</text>
+						<text>{{formatEnum('Member.real_name_status', identyInfo.real_name_status)}}</text>
 					</view>
 				</view>
 				<view class="infoItem flex-between">
@@ -36,7 +36,7 @@
 					</view>
 					<view class="itemRight">
 						<image class="img" :src="imgBaseUrl+'Group_1@2x.png'" mode="aspectFill"></image>
-						<text>已认证</text>
+						<text>{{formatEnum('Member.marriage_verification_status', identyInfo.marriage_verification_status)}}</text>
 					</view>
 				</view>
 			</view>
@@ -54,16 +54,24 @@
 			return {
 				show: false,
 				imgBaseUrl: this.imgBaseUrl,
-				infoData: {}
+				infoData: {},
+				identyInfo: {}
 			}
 		},
 		created() {
 		},
 		methods:{
-			showThis(data) {
+			async showThis(data) {
 				console.log(data)
 				this.infoData = data;
+				await this.guestIdentyInfo();
 				this.show = true;
+			},
+			async guestIdentyInfo() {
+				const res = await this.$apis.uesrApi.guestIdentyInfo({
+					guest_id: this.infoData.id
+				})
+				this.identyInfo = res.data;
 			},
 			open(){
 				

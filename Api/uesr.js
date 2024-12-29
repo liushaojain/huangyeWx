@@ -217,6 +217,36 @@ const uesrApi = {
 			method: 'POST',
 			loadType: 1
 		});
-	}
+	},
+
+	// 嘉宾认证信息
+	guestIdentyInfo(data) {
+		return http({
+			url: 'api/identification/guestIdentyInfo',
+			data,
+			method: 'POST',
+			loadType: 1
+		});
+	},
+
+	// 认证状态回显
+	identificationMy(data) {
+		return http({
+			url: 'api/identification/my',
+			data,
+			method: 'POST',
+			loadType: 1
+		});
+	},
+	
+	// 认证状态回显
+	// identificationMy(data) {
+	// 	return http({
+	// 		url: 'api/identification/my',
+	// 		data,
+	// 		method: 'POST',
+	// 		loadType: 1
+	// 	});
+	// },
 }
 export default uesrApi

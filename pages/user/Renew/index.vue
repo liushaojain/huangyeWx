@@ -90,7 +90,26 @@
 					vip_price_id: id
 				});
 				if (res.status) {
-
+					const data = res.data.pay_sign;
+					const payParams = {
+						provider: "wxpay",
+						timeStamp: data.timeStamp,
+						nonceStr: data.nonceStr,
+						package: data.package,
+						signType: data.signType,
+						paySign: data.paySign,
+						success: (e) => {
+							this.showToast("恭喜您成为VIP");
+							setTimeout(() => {
+								this.getVipList();
+							}, 600)
+						},
+						fail: (err) => {
+							console.log(err);
+							this.showToast(err);
+						},
+					};
+					uni.requestPayment(payParams);
 				}
 			},
 			readProtocol() {

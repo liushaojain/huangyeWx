@@ -26,6 +26,10 @@ const request = ({url , data , method , ContentType, loadType,iscomplete})=>{
 			method:method,
 			header: header,
 			success: (res) => {
+				console.log(`请求地址：${url}`);
+				console.log(`请求头：`, header);
+				console.log(`请求数据：`, data);
+				console.log(`响应数据：`, res.data);
 				if(loadType){
 					reuqestcont--;
 					if(reuqestcont==0){
@@ -48,6 +52,10 @@ const request = ({url , data , method , ContentType, loadType,iscomplete})=>{
 				}
 			},
 			fail:(res)=>{
+				console.log(`请求地址：${url}`);
+				console.log(`请求头：`, header);
+				console.log(`请求数据：`, data);
+				console.log(`响应错误：`, res);
 				reuqestcont--;
 				if(reuqestcont==0){
 					uni.hideLoading();

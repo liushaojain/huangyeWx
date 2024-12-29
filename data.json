@@ -1,0 +1,376 @@
+{
+	"MemberProfile": {
+		"gender": {
+			"male": "男",
+			"female": "女"
+		},
+		"education": {
+			"junior_high_and_below": "初中及以下",
+			"senior_high": "高中",
+			"junior_college": "大专",
+			"undergraduate": "本科",
+			"graduate": "研究生",
+			"doctoral": "博士"
+		},
+		"is_avatar_approved": ["未审核", "通过", "未通过"],
+		"is_nickname_approved": ["未审核", "通过", "未通过"],
+		"living_status": {
+			"independent_residence": "独立居住",
+			"live_with_others": "和他人居住"
+		},
+		"child_status": {
+			"no_child": "没有孩子",
+			"child_with_self": "孩子跟自己",
+			"child_with_other": "孩子跟对方"
+		},
+		"marital_status": {
+			"divorced": "离异",
+			"widowed": "丧偶"
+		}
+	},
+	"DatingRequirement": {
+		"marital_status": {
+			"divorced": "离异",
+			"widowed": "丧偶"
+		},
+		"child_status": {
+			"no_children": "无孩子",
+			"own_with_children": "有孩子自己带",
+			"other_with_children": "有孩子对方带",
+			"both_with_children_own": "双方都有孩子自己带",
+			"acceptable_all": "都可以接受"
+		}
+	},
+	"MemberMarriageInfo": {
+		"marital_status": {
+			"divorced": "离异",
+			"widowed": "丧偶"
+		},
+		"dating_purpose": {
+			"marriage": "结婚",
+			"love": "恋爱",
+			"not_sure": "还没有想好",
+			"experience": "先体验一下"
+		},
+		"child_status": {
+			"no_child": "没孩子",
+			"own_child": "自己带孩子",
+			"other_child": "对方带孩子"
+		},
+		"intention_to_have_children": {
+			"plan_to_have": "打算再要",
+			"no_plan_to_have": "不打算生娃"
+		},
+		"expected_marriage_time": {
+			"within_half_year": "半年内",
+			"within_one_year": "一年内",
+			"within_2_3_years": "2 - 3 年内",
+			"more_than_3_years": "3 年以上",
+			"no_marriage_plan": "无结婚计划"
+		},
+		"alimony_payment": {
+			"no_alimony": "无",
+			"0_1000": "0 - 1000",
+			"1000_3000": "1000 - 3000",
+			"3000_5000": "3000 - 5000",
+			"more_than_5000": "5000 以上"
+		},
+		"family_background": {
+			"only_child": "独生子女",
+			"non_only_child": "非独生子女"
+		}
+	},
+	"MachingExpectations": {
+		"marriage_time": {
+			"within_half_year": "半年内",
+			"within_one_year": "1 年内",
+			"within_two_years": "2 年内",
+			"more_than_two_years": "2 年以上"
+		},
+		"income_allocation": {
+			"male_main": "男方主支出",
+			"female_main": "女方主支出",
+			"equal": "平均支出"
+		},
+		"housework_allocation": {
+			"male_main": "男方主家务",
+			"female_main": "女方主家务",
+			"equal": "平均分工"
+		},
+		"marital_status": {
+			"divorced": "离异",
+			"widowed": "丧偶",
+			"any": "都可以接受"
+		},
+		"dating_purpose": {
+			"marriage": "结婚",
+			"love": "谈恋爱",
+			"wait_and_see": "看看再说"
+		},
+		"car_status": {
+			"own_car": "名下有车",
+			"accept_no_car": "可以接受名下无车"
+		},
+		"house_status": {
+			"own_house": "名下有房",
+			"accept_no_house": "可以接受没有名下房产"
+		},
+		"smoking_status": {
+			"accept_smoking": "可以接受抽烟",
+			"reject_smoking": "不接受吸烟"
+		},
+		"drinking_status": {
+			"accept_occasional_drinking": "可以接受聚会偶尔喝酒",
+			"accept_daily_drinking": "可以接受每天喝酒",
+			"reject_drinking": "不接受喝酒"
+		},
+		"education_level": {
+			"above_college": "专科以上",
+			"above_bachelor": "本科以上",
+			"above_master": "硕士以上",
+			"accept_below_bachelor": "可以接受本科以下"
+		},
+		"pet_status": {
+			"reject_large_pet": "不接受养大型宠物",
+			"accept_small_pet": "可以接受养小宠物",
+			"reject_all_pet": "不接受养宠物"
+		},
+		"exercise_frequency": {
+			"daily_exercise": "每天锻炼",
+			"weekly_exercise": "每周锻炼",
+			"occasional_exercise": "偶尔锻炼",
+			"accept_no_exercise": "可以接受几乎不锻炼"
+		},
+		"travel_frequency": {
+			"one_two_per_year": "1 年 1 - 2 次",
+			"three_six_per_year": "1 年 3 - 6 次",
+			"more_than_six_per_year": "1 年 6 次以上",
+			"accept_no_travel": "可以接受几乎不旅行"
+		},
+		"child_intention": {
+			"accept_no_child_intention": "可以接受不打算生娃",
+			"accept_child_intention": "可以再生娃"
+		},
+		"cooking_ability": {
+			"cook_for_one": "会做一个人的",
+			"cook_for_family": "可以做一家子的",
+			"accept_no_cooking": "可以接受不会做饭"
+		},
+		"identity_verification": {
+			"yes": "是",
+			"no": "否",
+			"any": "不限制"
+		},
+		"marriage_verification": {
+			"yes": "是",
+			"no": "否",
+			"any": "不限制"
+		},
+		"recommend_nearby_when_city_insufficient": {
+			"yes": "是",
+			"no": "否"
+		},
+		"child_status": {
+			"no_children": "无孩子",
+			"own_with_children": "有孩子自己带",
+			"other_with_children": "有孩子对方带",
+			"both_with_children_own": "双方都有孩子自己带",
+			"acceptable_all": "都可以接受"
+		},
+		"house_verification": {
+			"yes": "是",
+			"no": "否",
+			"any": "不限制"
+		},
+		"car_verification": {
+			"yes": "是",
+			"no": "否",
+			"any": "不限制"
+		},
+		"living_status": {
+			"independent_residence": "独立居住",
+			"live_with_others": "和他人居住"
+		}
+	},
+	"MemberHobbie": {
+		"smoking": {
+			"frequently": "经常",
+			"occasionally": "偶尔",
+			"never": "从不"
+		},
+		"drinking": {
+			"frequently": "经常",
+			"occasionally": "偶尔",
+			"never": "从不"
+		},
+		"exercise_frequency": {
+			"daily": "每天",
+			"several_times_a_week": "每周几次",
+			"rarely": "很少"
+		},
+		"pet": {
+			"cat": "猫",
+			"dog": "狗",
+			"other_pet": "其他宠物",
+			"no_pet": "没有宠物"
+		},
+		"travel_frequency": {
+			"one_two_per_year": "1 年 1 - 2 次",
+			"three_six_per_year": "1 年 3 - 6 次",
+			"more_than_six_per_year": "1 年 6 次以上",
+			"accept_no_travel": "可以接受几乎不旅行"
+		},
+		"housework_division": {
+			"male_main": "男方主家务",
+			"female_main": "女方主家务",
+			"equal": "平均分工"
+		},
+		"can_cook": {
+			"very_skilled": "非常擅长",
+			"somewhat_skilled": "会一些",
+			"not_skilled": "不会"
+		},
+		"income_distribution": {
+			"male_dominant_expenses": "男方支出大头",
+			"female_dominant_expenses": "女方支出大头",
+			"negotiated_expenses": "协商支出"
+		}
+	},
+	"ExpectedHim": {
+		"smoking": {
+			"frequently": "经常",
+			"occasionally": "偶尔",
+			"never": "从不"
+		},
+		"drinking": {
+			"frequently": "经常",
+			"occasionally": "偶尔",
+			"never": "从不"
+		},
+		"exercise_frequency": {
+			"daily": "每天",
+			"several_times_a_week": "每周几次",
+			"rarely": "很少"
+		},
+		"pet": {
+			"cat": "猫",
+			"dog": "狗",
+			"other_pet": "其他宠物",
+			"no_pet": "没有宠物"
+		},
+		"travel_frequency": {
+			"one_two_per_year": "1 年 1 - 2 次",
+			"three_six_per_year": "1 年 3 - 6 次",
+			"more_than_six_per_year": "1 年 6 次以上",
+			"accept_no_travel": "可以接受几乎不旅行"
+		},
+		"housework_division": {
+			"male_main": "男方主家务",
+			"female_main": "女方主家务",
+			"equal": "平均分工"
+		},
+		"can_cook": {
+			"very_skilled": "非常擅长",
+			"somewhat_skilled": "会一些",
+			"not_skilled": "不会"
+		},
+		"income_distribution": {
+			"male_dominant_expenses": "男方支出大头",
+			"female_dominant_expenses": "女方支出大头",
+			"negotiated_expenses": "协商支出"
+		},
+		"living_status": {
+			"independent_residence": "独立居住",
+			"acceptable_to_live_with_others": "可以接受和他人同住"
+		}
+	},
+	"Member": {
+		"status": {
+			"yes": "启用",
+			"no": "未启用"
+		},
+		"is_vip": ["否", "是"],
+		"certification_status": {
+			"pending": "待审核",
+			"success": "认证成功",
+			"failure": "认证失败"
+		},
+		"profile_completion_status": {
+			"incomplete": "未完善",
+			"under_review": "审核中",
+			"completed": "已完善"
+		},
+		"basic_info_status": {
+			"valid": "审核通过",
+			"invalid": "审核不通过",
+			"pending_verification": "待验证"
+		},
+		"marriage_info_verification_status": {
+			"pending": "待审核",
+			"approved": "审核通过",
+			"rejected": "审核不通过"
+		},
+		"expected_him_verification_status": {
+			"pending": "待审核",
+			"approved": "审核通过",
+			"rejected": "审核不通过"
+		},
+		"about_me_verification_status": {
+			"pending": "待审核",
+			"approved": "审核通过",
+			"rejected": "审核不通过"
+		},
+		"user_photo_verification_status": {
+			"pending": "待审核",
+			"approved": "审核通过",
+			"rejected": "审核不通过"
+		},
+		"user_avatar_verification_status": {
+			"pending": "待审核",
+			"approved": "审核通过",
+			"rejected": "审核不通过"
+		},
+		"income_certification_status": {
+			"pending": "待审核",
+			"success": "认证成功",
+			"failure": "认证失败"
+		},
+		"job_certification_status": {
+			"pending": "待审核",
+			"success": "认证成功",
+			"failure": "认证失败"
+		},
+		"vehicle_certification_status": {
+			"pending": "待审核",
+			"success": "认证成功",
+			"failure": "认证失败"
+		},
+		"house_certification_status": {
+			"pending": "待审核",
+			"success": "认证成功",
+			"failure": "认证失败"
+		},
+		"marriage_verification_status": {
+			"pending": "待审核",
+			"approved": "认证成功",
+			"rejected": "认证失败"
+		},
+		"education_certification_status": {
+			"pending": "待审核",
+			"success": "认证成功",
+			"failure": "认证失败"
+		},
+		"real_name_status": {
+			"pending": "待审核",
+			"success": "认证成功",
+			"failure": "认证失败"
+		}
+	},
+	"Order": {
+		"payment_status": {
+			"paid": "已支付",
+			"unpaid": "待支付",
+			"cancelled": "已取消"
+		}
+	}
+}

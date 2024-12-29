@@ -65,6 +65,18 @@ const infoApi = {
 			method: 'POST',
 			loadType: 1
 		});
-    }
+    },
+	// 是否相互心动
+	isLike(guest_id){
+		return http({
+			url: 'api/msg/isLike',
+			data: {
+                guest_id
+            },
+			method: 'POST',
+			loadType: 1
+		});
+    },
+	
 }
 export default infoApi
