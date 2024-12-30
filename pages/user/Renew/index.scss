@@ -28,6 +28,9 @@
 		}
 		.vip-tag {
 			margin-left: auto;
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
 			.label {
 				width: 156rpx;
 				height: 60rpx;
@@ -41,7 +44,8 @@
 			}
 			.time {
 				font-size: 22rpx;
-				color: #333333;
+				padding-top: 4rpx;
+				color: #515151;
 				line-height: 26rpx;
 				text-align: center;
 			}

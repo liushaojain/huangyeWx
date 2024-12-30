@@ -67,7 +67,7 @@
 			},
 			async getFaceSign(){
 				if (this.status === 'pending') {
-					this.showToast("认证审核中");
+					this.showToast('请耐心等待系统审核');
 					return;
 				}
 				const { name, id_card } = this.formData;

@@ -9,7 +9,7 @@
 			{{ basicInfoData.member.nick_name || '' }}
 			<div class="vip-tag">
 				<div class="label">VIP 会员</div>
-				<div class="time">会员有效期 9.12</div>
+				<div class="time">会员有效期 {{ expirationFormat(basicInfoData.member.vip_expiration) }}</div>
 			</div>
 		</view>
 		<view class="content">
@@ -89,6 +89,13 @@
 			this.getBasicInfoData();
 		},
 		methods: {
+			expirationFormat(dateStr) {
+				const date = new Date(dateStr);
+				const year = date.getFullYear();
+				const month = ("0" + (date.getMonth() + 1)).slice(-2);
+				const day = ("0" + date.getDate()).slice(-2);
+				return (year % 100) + "/" + month + "/" + day;
+			},
 			async activateVIP() {
 				if (this.isVip) {
 					this.showToast("您已经是VIP啦，无需再开通了");

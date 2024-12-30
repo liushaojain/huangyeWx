@@ -47,7 +47,7 @@
 		methods:{
 			async identificationMy() {
 			 	const res = await this.$apis.uesrApi.identificationMy();
-				this.fileList = res.data.marriage;
+				this.fileList = res.data.marriage.map(item => ({url: item.url}));
 				this.status = res.data.marriage_verification_status;
 			},
 			async onSubmit() {

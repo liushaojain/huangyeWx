@@ -45,7 +45,7 @@
 		methods:{
 			async identificationMy() {
 			 	const res = await this.$apis.uesrApi.identificationMy();
-				this.fileList = res.data.vehicle;
+				this.fileList = res.data.vehicle.map(item => ({url: item.url}));
 				this.status = res.data.vehicle_certification_status;
 			},
 			async onSubmit() {
