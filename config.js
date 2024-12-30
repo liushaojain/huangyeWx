@@ -9,4 +9,4 @@ export const mapKey = "RWEBZ-3S3CI-VMZGO-5UDDA-JCXYE-MTBWZ";
 export const imKey = '1600067113';
 
 // 人脸识别回调web地址
-export const faceRedirectUrl = 'https://login.derucci-smart.com';
+export const faceRedirectUrl = 'http://47.119.182.138:89/face_result.html';

@@ -66,6 +66,10 @@
 				this.status = res.data.real_name_status;
 			},
 			async getFaceSign(){
+				if (this.status === 'pending') {
+					this.showToast("认证审核中");
+					return;
+				}
 				const { name, id_card } = this.formData;
 				if (!name) {
 					this.showToast("姓名不能为空");
@@ -90,10 +94,11 @@
 			},
 
 		    async getFaceResult(biz_token) {
-				console.log({biz_token});
-				console.log("校验是否成功");
 				const res = await this.$apis.uesrApi.getFaceResult({ biz_token });
-				console.log(res);
+				if (res.status === 1) {
+					this.showToast("认证成功");
+					this.identificationMy();
+				}
 			}
 		},
 		async onShow() {

@@ -253,12 +253,13 @@ export default class ImManager extends ImObserver {
         try {
             const res = await infoApi.isLike(id);
             if (res.status && res.data) {
-                return res.data.is_liked === 1;
+                // 0 不喜欢 1 喜欢 2 互为喜欢
+                return res.data.is_liked === 2;
             }
             return false;  
         } catch(e) {
             console.error(e);
-            return false;  
+            return false;
         }
         // const imResponse = await this.chat.checkFriend({
         //     userIDList: [id],
